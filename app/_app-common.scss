@@ -1,0 +1,76 @@
+@import "@nativescript/theme/core";
+@import "@nativescript/theme/default";
+@import "variables.scss";
+// Place any CSS rules you want to apply on both iOS and Android here.
+// This is where the vast majority of your CSS code goes
+
+// Font icon classes
+.material-icons,
+.mi {
+  font-family: "maticons";
+  font-weight: normal;
+  font-style: normal;
+  /* Preferred icon size */
+  line-height: 1;
+}
+
+.fab {
+  font-family: "Font Awesome 5 Brands", "fa-brands-400";
+  font-weight: 400;
+}
+
+.fas {
+  font-family: "Font Awesome 5 Free", "fa-solid-900";
+  font-weight: 900;
+}
+
+.far {
+  font-family: "Font Awesome 5 Free", "fa-regular-400";
+  font-weight: 400;
+}
+
+// Common page class
+.page__content {
+  &-icon,
+  &-placeholder {
+    color: const(grey);
+    font-size: 20;
+    vertical-align: center;
+    horizontal-align: center;
+  }
+
+  &-icon {
+    font-size: 72;
+    vertical-align: top;
+    margin-top: 20%;
+  }
+}
+
+// Drawer navigation custom styles
+.nt-drawer__header-image {
+  color: var(--accent);
+}
+
+.menu {
+  font-size: 25px;
+}
+
+.nav-logo {
+  height: 20;
+}
+
+.action-bar {
+  background: var(--accent);
+}
+
+ActionBar > GridLayout > Label {
+  color: white;
+}
+
+Page {
+  background-color: var(--bg);
+}
+
+ActivityIndicator {
+  color: black;
+}

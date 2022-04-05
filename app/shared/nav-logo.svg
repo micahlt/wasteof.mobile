@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="336 312 188.943 94.471" xmlns="http://www.w3.org/2000/svg">
+  <mask id="w">
+    <path fill="#ffffff" d="M 336 312 L 524.943 312 L 524.943 406.471 L 336 406.471 Z" fill-rule="evenodd" style="" />
+    <path fill="black" d="M 347.808 335.618 L 360.715 382.889 L 374.612 382.889 L 382.764 353.152 L 383.344 353.152 L 391.496 382.889 L 405.421 382.889 L 418.299 335.618 L 405.025 335.618 L 397.793 367.188 L 397.397 367.188 L 389.613 335.618 L 376.551 335.618 L 368.895 367.372 L 368.47 367.372 L 361.111 335.618 Z" fill-rule="evenodd" style="" />
+  </mask>
+  <path fill="#ffffff" d="M 336 312 L 524.943 312 L 524.943 406.471 L 336 406.471 Z" fill-rule="evenodd" mask="url(#w)" />
+</svg>

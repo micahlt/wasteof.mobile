@@ -1,0 +1,179 @@
+<template>
+  <Page>
+    <ActionBar class="action-bar">
+      <NavigationButton visibility="hidden" />
+      <GridLayout columns="50, *">
+        <Image src="~/shared/nav-logo.png" colSpan="2" class="nav-logo" />
+        <Label class="mi menu" text="menu" @tap="onDrawerButtonTap" />
+      </GridLayout>
+    </ActionBar>
+    <ScrollView>
+      <StackLayout>
+        <ActivityIndicator busy="true" v-if="loading < 2" />
+        <FlexboxLayout
+          flexDirection="row"
+          class="header"
+          v-if="loading > 1"
+          :backgroundImage="`https://api.wasteof.money/users/${info.name}/banner`"
+        >
+          <Image
+            :src="`https://api.wasteof.money/users/${info.name}/picture`"
+            v-if="info.name != 'loading...'"
+            class="pfp"
+            loadMode="async"
+          />
+          <StackLayout class="header-info">
+            <FlexboxLayout flexDirection="row" class="username-wrapper">
+              <Label :text="info.name" class="username" />
+              <Button text="FOLLOW" @tap="onButtonTap" class="follow-button" />
+            </FlexboxLayout>
+            <Label :text="info.bio" class="bio" />
+            <Label :text="stats" class="stats" />
+          </StackLayout>
+        </FlexboxLayout>
+        <StackLayout class="posts" v-if="loading > 1">
+          <Post v-for="post in posts" :key="post._id" :post="post" />
+        </StackLayout>
+      </StackLayout>
+    </ScrollView>
+  </Page>
+</template>
+
+<script>
+import * as utils from "~/shared/utils";
+import { SelectedPageService } from "../shared/selected-page-service";
+import Post from "./Post.vue";
+export default {
+  props: {
+    username: {
+      default: "wasteof.money",
+    },
+  },
+  data() {
+    return {
+      info: {
+        name: "",
+        bio: "",
+      },
+      loading: 0,
+      posts: [],
+    };
+  },
+  methods: {
+    onButtonTap() {
+      console.log("Button was pressed");
+    },
+    dateOf(date) {
+      const d = Date(date);
+      return d.toLocaleString("en-US", {
+        hour: "numeric",
+        minute: "numeric",
+        hour12: true,
+      });
+    },
+    onDrawerButtonTap() {
+      utils.showDrawer();
+    },
+  },
+  mounted() {
+    SelectedPageService.getInstance().updateSelectedPage("Featured");
+    const username = this.username;
+    fetch(`https://api.wasteof.money/users/${username}`)
+      .then((r) => {
+        return r.json();
+      })
+      .then((json) => {
+        this.info = json;
+        this.loading++;
+      });
+    fetch(`https://api.wasteof.money/users/${username}/posts?page=1`)
+      .then((r) => {
+        return r.json();
+      })
+      .then((json) => {
+        json.posts.forEach((post, i) => {
+          post = utils.fixPost(post);
+        });
+        this.loading++;
+        this.posts = json.posts;
+      });
+  },
+  computed: {
+    stats() {
+      return `${this.info.stats.followers} followers • ${this.info.stats.following} following`;
+    },
+  },
+  components: { Post },
+};
+</script>
+
+<style scoped>
+.pfp {
+  border-radius: 100%;
+  width: 85;
+  height: 85;
+  background: white;
+}
+
+.header {
+  padding: 75px;
+  background-position: center;
+  background-size: cover;
+}
+
+.header-info {
+  margin-left: 50px;
+}
+
+.username {
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.stats {
+  opacity: 0.75;
+}
+
+.posts {
+  margin: 50px 75px;
+}
+
+.post {
+  padding: 50px;
+  background: #222;
+  border-radius: 20px;
+  margin-bottom: 20px;
+}
+
+.post-content {
+  font-size: 15px;
+  margin-bottom: 0;
+  padding-bottom: 0;
+  padding: 0;
+  background: #222;
+}
+
+.post-content p {
+  padding: 0;
+}
+
+.post-time {
+  opacity: 0.5;
+}
+
+.post-icon {
+  height: 35px;
+  margin-right: 20px;
+}
+
+.post-stat {
+  margin-right: 75px;
+}
+
+.follow-button {
+  font-size: 10px;
+  height: 125px;
+  margin: 0;
+  margin-left: 10;
+}
+</style>

@@ -1,0 +1,21 @@
+{
+  "name": "wasteof.mobile",
+  "main": "app/app.js",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "@akylas/nativescript-pulltorefresh": "^2.4.6",
+    "@nativescript-community/ui-material-ripple": "^7.0.3",
+    "@nativescript/core": "~8.2.0",
+    "@nativescript/theme": "~3.0.2",
+    "friendly-time": "^1.1.1",
+    "nativescript-ui-sidedrawer": "~10.0.2",
+    "nativescript-vue": "~2.9.0",
+    "rxjs": "~7.5.0"
+  },
+  "devDependencies": {
+    "@nativescript/android": "8.2.2",
+    "@nativescript/webpack": "~5.0.6",
+    "nativescript-vue-template-compiler": "~2.9.0"
+  }
+}
