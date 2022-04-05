@@ -159,6 +159,7 @@ PullToRefresh {
   margin-right: 0;
   border-radius: var(--br);
   background-color: var(--accent);
+  color: white;
   margin-bottom: 10;
 }
 
