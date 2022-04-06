@@ -2,4 +2,5 @@
 <resources>
 	<!-- You can override base colors from values/colors.xml here, for example: -->
 	<!-- <color name="ns_accent">#65ADF1</color> -->
+	<color name="ns_accent">#6466E9</color>
 </resources>

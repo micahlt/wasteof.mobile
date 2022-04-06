@@ -1,18 +1,26 @@
 <template>
   <StackLayout class="post">
-    <FlexboxLayout
+    <GridLayout
       flexDirection="row"
       class="post-user"
-      @tap="openUser(post.poster.name)"
       v-if="showUser"
+      columns="auto, auto, *, auto"
     >
       <Image
         :src="`https://api.wasteof.money/users/${post.poster.name}/picture`"
         class="pfp"
         loadMode="async"
+        col="0"
+        @tap="openUser"
       />
-      <Label :text="post.poster.name" class="post-username" />
-    </FlexboxLayout>
+      <Label
+        :text="post.poster.name"
+        class="post-username"
+        col="1"
+        @tap="openUser"
+      />
+      <Label text="launch" class="open-post mi" col="3" @tap="openPost" />
+    </GridLayout>
     <Image
       :src="post.image"
       v-if="post.image != undefined"
@@ -20,9 +28,14 @@
       loadMode="async"
     />
     <HtmlView :html="post.content" class="post-content" />
+    <Post :post="post.repost" v-if="post.repost" class="repost" />
     <GridLayout columns="auto, *">
       <FlexboxLayout flexDirection="row" col="0">
-        <Label text="favorite" class="post-icon mi" />
+        <Label
+          text="favorite"
+          :class="['post-icon', 'mi', { loved: loved }]"
+          @tap="lovePost"
+        />
         <Label :text="post.loves" class="post-stat" />
         <Label text="repeat" class="post-icon mi" />
         <Label :text="post.reposts" class="post-stat" />
@@ -36,6 +49,9 @@
 
 <script>
 import * as utils from "~/shared/utils";
+import { Utils } from "@nativescript/core";
+import { Http } from "@nativescript/core";
+import { ApplicationSettings } from "@nativescript/core";
 export default {
   props: {
     post: Object,
@@ -43,45 +59,65 @@ export default {
       type: Boolean,
       default: true,
     },
+    isRepost: {
+      type: Boolean,
+      default: false,
+    },
   },
-  /*
-  mounted() {
-    const c = this.post.content;
-    const p = () => {
-      if (c.includes("</p>")) {
-        this.post.content = c.replace("</p>", "<br>");
-        this.post.content = c.replace("<p>", "");
-        p();
-      }
-      if (c.includes("<img src")) {
-        alert("includes an image");
-        let startIndex = c.indexOf("<img src=");
-        let src = "";
-        let str = c.slice(startIndex + 10, c.length);
-        let i = 0;
-        while (true) {
-          if ((str[i] = '"')) {
-            break;
-          } else {
-            src += str[i];
-            i++;
-          }
-        }
-        alert(src);
-      }
+  data() {
+    return {
+      username: ApplicationSettings.getString("username") || null,
+      loved: false,
     };
-    p();
-  },*/
+  },
+
+  mounted() {
+    if (this.username) {
+      Http.getJSON(
+        `https://api.wasteof.money/posts/${this.post._id}/loves/${this.username}`
+      ).then((str) => {
+        if (str == true) {
+          this.loved = true;
+        }
+      });
+    }
+  },
   methods: {
     dateOf(date) {
       return utils.formatTime(date);
     },
-    openUser(name) {
+    openUser() {
+      const name = this.post.poster.name;
       this.$navigateTo("User", {
         props: {
           username: name,
         },
       });
+    },
+    openPost() {
+      Utils.openUrl(`https://wasteof.money/posts/${this.post._id}`);
+    },
+    lovePost() {
+      if (this.username) {
+        const token = ApplicationSettings.getString("token");
+        Http.request({
+          url: `https://api.wasteof.money/posts/${this.post._id}/loves`,
+          method: "POST",
+          headers: {
+            Authorization: token,
+          },
+        }).then((response) => {
+          if (response.statusCode != 200) {
+            alert(`Error code ${response.statusCode}, try again later.`);
+          } else {
+            this.loved = !this.loved;
+            const loves = response.content.toJSON().new.loves;
+            this.post.loves = loves;
+          }
+        });
+      } else {
+        alert("Sign in to love posts!");
+      }
     },
   },
 };
@@ -154,5 +190,20 @@ export default {
   background: white;
   border-radius: 5;
   margin: 5 0;
+}
+
+.open-post {
+  font-size: 20;
+  text-align: right;
+  opacity: 0.5;
+}
+
+.repost {
+  border-color: var(--border-clr);
+  border-width: 2;
+}
+
+.loved {
+  color: #ff0055;
 }
 </style>

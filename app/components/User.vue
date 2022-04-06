@@ -7,56 +7,54 @@
         <Label class="mi menu" text="menu" @tap="onDrawerButtonTap" />
       </GridLayout>
     </ActionBar>
-    <ScrollView>
-      <StackLayout>
-        <ActivityIndicator
-          busy="true"
-          v-if="loading < 2"
-          :color="indicatorColor"
-        />
-        <GridLayout v-if="loading > 1">
-          <GridLayout columns="90, *" class="header">
-            <Image
-              :src="`https://api.wasteof.money/users/${info.name}/picture`"
-              v-if="info.name != 'loading...'"
-              class="pfp"
-              loadMode="async"
-              col="0"
+    <PullToRefresh @refresh="loadUser">
+      <ScrollView>
+        <StackLayout>
+          <ActivityIndicator
+            busy="true"
+            v-if="loading < 2"
+            :color="indicatorColor"
+          />
+          <GridLayout v-if="loading > 1">
+            <GridLayout columns="90, *" class="header">
+              <Image
+                :src="`https://api.wasteof.money/users/${info.name}/picture`"
+                v-if="info.name != 'loading...'"
+                class="pfp"
+                loadMode="async"
+                col="0"
+              />
+              <StackLayout class="header-info" col="1">
+                <FlexboxLayout flexDirection="row" class="username-wrapper">
+                  <Label
+                    :text="info.name"
+                    class="username"
+                    textWrap="true"
+                    whiteSpace="normal"
+                  />
+                </FlexboxLayout>
+                <Label :text="info.bio" class="bio" />
+                <Label :text="stats" class="stats" />
+              </StackLayout>
+            </GridLayout>
+            <Label class="image-overlay" />
+            <Label
+              class="header-bg"
+              :backgroundImage="`https://api.wasteof.money/users/${info.name}/banner`"
             />
-            <StackLayout class="header-info" col="1">
-              <FlexboxLayout flexDirection="row" class="username-wrapper">
-                <Label
-                  :text="info.name"
-                  class="username"
-                  textWrap="true"
-                  whiteSpace="normal"
-                />
-              </FlexboxLayout>
-              <Label :text="info.bio" class="bio" />
-              <Label :text="stats" class="stats" />
-            </StackLayout>
           </GridLayout>
-          <Label class="image-overlay" />
-          <Label
-            class="header-bg"
-            :backgroundImage="`https://api.wasteof.money/users/${info.name}/banner`"
-          />
-        </GridLayout>
-        <StackLayout class="posts" v-if="loading > 1">
-          <Post
-            v-for="post in posts"
-            :key="post._id"
-            :post="post"
-            :showUser="false"
-          />
+          <StackLayout class="posts" v-if="loading > 1">
+            <Post v-for="post in posts" :key="post._id" :post="post" />
+          </StackLayout>
         </StackLayout>
-      </StackLayout>
-    </ScrollView>
+      </ScrollView>
+    </PullToRefresh>
   </Page>
 </template>
 
 <script>
 import { Application } from "@nativescript/core";
+import { Http } from "@nativescript/core";
 import * as utils from "~/shared/utils";
 import { SelectedPageService } from "../shared/selected-page-service";
 import Post from "./Post.vue";
@@ -91,29 +89,31 @@ export default {
     onDrawerButtonTap() {
       utils.showDrawer();
     },
-  },
-  mounted() {
-    SelectedPageService.getInstance().updateSelectedPage("Featured");
-    const username = this.username;
-    fetch(`https://api.wasteof.money/users/${username}`)
-      .then((r) => {
-        return r.json();
-      })
-      .then((json) => {
-        this.info = json;
-        this.loading++;
-      });
-    fetch(`https://api.wasteof.money/users/${username}/posts?page=1`)
-      .then((r) => {
-        return r.json();
-      })
-      .then((json) => {
+    loadUser(e) {
+      const username = this.username;
+      Http.getJSON(`https://api.wasteof.money/users/${username}`).then(
+        (json) => {
+          this.info = json;
+          this.loading++;
+        }
+      );
+      Http.getJSON(
+        `https://api.wasteof.money/users/${username}/posts?page=1`
+      ).then((json) => {
         json.posts.forEach((post, i) => {
           post = utils.fixPost(post);
         });
         this.loading++;
         this.posts = json.posts;
+        if (e) {
+          e.object.refreshing = false;
+        }
       });
+    },
+  },
+  mounted() {
+    SelectedPageService.getInstance().updateSelectedPage("Featured");
+    this.loadUser();
   },
   computed: {
     stats() {

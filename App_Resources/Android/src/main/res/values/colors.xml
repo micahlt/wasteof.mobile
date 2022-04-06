@@ -8,7 +8,6 @@
 
     <!-- The color of UI controls such as check boxes, radio buttons, and edit text boxes. -->
 	<color name="ns_accent">#6466E9</color>
-
     <!-- this is unused in the default themes, so we might want to remove it? -->
     <!-- <color name="ns_blue">#272734</color> -->
 </resources>

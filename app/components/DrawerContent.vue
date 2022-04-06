@@ -1,11 +1,15 @@
 <template lang="html">
     <GridLayout rows="auto, *" class="nt-drawer__content">
-        <StackLayout row="0" class="nt-drawer__header">
-            <Image class="nt-drawer__header-image mi t-36" src.decode="font://&#xe853;"/>
-            <Label class="nt-drawer__header-brand" text="Not Signed In"/>
-            <Label class="nt-drawer__header-footnote" text="coming soon"/>
-        </StackLayout>
-
+      <GridLayout>
+        <StackLayout row="0" class="nt-drawer__header" @tap="openUser">
+            <Image class="nt-drawer__header-image mi" src.decode="font://&#xe853;" v-if="username == 'Signed Out'"/>
+            <Image class="nt-drawer__header-image pfp" :src="pfp" v-else/>
+            <Label class="nt-drawer__header-brand" :text="formattedUsername"/>
+            <Label class="nt-drawer__header-footnote" text="sign in for more features" v-if="username == 'Signed Out'"/>
+            <Label class="nt-drawer__header-footnote" text="online" v-else/>
+          </StackLayout>
+          <Image :src="banner" class="banner" stretch="aspectFill" tintColor="#000000bb" />
+        </GridLayout>
         <ScrollView row="1" class="nt-drawer__body">
             <StackLayout>
                 <GridLayout columns="auto, *"
@@ -49,6 +53,7 @@ import Search from "./Search";
 import Settings from "./Settings";
 import * as utils from "~/shared/utils";
 import { SelectedPageService } from "~/shared/selected-page-service";
+import { ApplicationSettings } from "@nativescript/core";
 
 export default {
   mounted() {
@@ -63,6 +68,7 @@ export default {
       Search: Search,
       Settings: Settings,
       selectedPage: "",
+      username: ApplicationSettings.getString("username") || "Signed Out",
     };
   },
   components: {
@@ -77,6 +83,33 @@ export default {
         clearHistory: false,
       });
       utils.closeDrawer();
+    },
+    openUser() {
+      if (this.username != "Signed Out") {
+        this.$navigateTo("User", {
+          props: {
+            username: this.username,
+          },
+        });
+      } else {
+        this.$navigateTo(Settings);
+      }
+      utils.closeDrawer();
+    },
+  },
+  computed: {
+    pfp() {
+      return `https://api.wasteof.money/users/${this.username}/picture`;
+    },
+    banner() {
+      return `https://api.wasteof.money/users/${this.username}/banner`;
+    },
+    formattedUsername() {
+      if (this.username == "Signed Out") {
+        return this.username;
+      } else {
+        return "@" + this.username;
+      }
     },
   },
 };
@@ -103,5 +136,17 @@ export default {
 
 .nt-drawer__header-footnote {
   font-size: 13;
+}
+
+.pfp {
+  background-color: white;
+}
+
+.banner {
+  z-index: -1;
+}
+
+.nt-drawer__header {
+  background: transparent;
 }
 </style>

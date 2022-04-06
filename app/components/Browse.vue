@@ -51,10 +51,6 @@ export default {
   },
   data() {
     return {
-      info: {
-        name: "",
-        bio: "",
-      },
       loading: 1,
       posts: [],
       timePeriod: {
@@ -64,21 +60,19 @@ export default {
     };
   },
   methods: {
-    onButtonTap() {
-      console.log("Button was pressed");
-    },
     onDrawerButtonTap() {
       utils.showDrawer();
     },
     fetchPosts(e) {
+      this.posts = [];
       Http.getJSON(
         `https://api.wasteof.money/explore/posts/trending?timeframe=${this.timePeriod.slug}`
       ).then((json) => {
         json.posts.forEach((post, i) => {
           post = utils.fixPost(post);
         });
-        this.loading++;
         this.posts = json.posts;
+        this.loading = 2;
         if (e) {
           e.object.refreshing = false;
         }
@@ -120,9 +114,6 @@ export default {
     this.fetchPosts();
   },
   computed: {
-    stats() {
-      return `${this.info.stats.followers} followers • ${this.info.stats.following} following`;
-    },
     indicatorColor() {
       let theme = Application.systemAppearance();
       if (theme == "dark") {
