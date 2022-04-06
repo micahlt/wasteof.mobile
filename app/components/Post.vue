@@ -20,15 +20,17 @@
       loadMode="async"
     />
     <HtmlView :html="post.content" class="post-content" />
-    <WrapLayout orientation="horizontal">
-      <Label text="favorite" class="post-icon mi" />
-      <Label :text="post.loves" class="post-stat" />
-      <Label text="repeat" class="post-icon mi" />
-      <Label :text="post.reposts" class="post-stat" />
-      <Label text="comment" class="post-icon mi" />
-      <Label :text="post.comments" class="post-stat" />
-      <Label :text="dateOf(post.time)" class="post-time" />
-    </WrapLayout>
+    <GridLayout columns="auto, *">
+      <FlexboxLayout flexDirection="row" col="0">
+        <Label text="favorite" class="post-icon mi" />
+        <Label :text="post.loves" class="post-stat" />
+        <Label text="repeat" class="post-icon mi" />
+        <Label :text="post.reposts" class="post-stat" />
+        <Label text="comment" class="post-icon mi" />
+        <Label :text="post.comments" class="post-stat" />
+      </FlexboxLayout>
+      <Label :text="dateOf(post.time)" class="post-time" col="1" />
+    </GridLayout>
   </StackLayout>
 </template>
 
@@ -113,25 +115,26 @@ export default {
 
 .post-time {
   opacity: 0.5;
+  text-align: right;
+  margin-right: 2;
 }
 
 .post-icon {
   margin-right: 10;
-  font-size: 15;
+  font-size: 18;
   transform: translateY(1);
 }
 
 .post-stat {
   margin-right: 20;
+  font-size: 13;
 }
 
 .pfp {
   height: 30;
   width: 30;
   border-radius: 30;
-  background-image: url("~/shared/avatar-small.png");
-  background-position: center center;
-  background-size: cover;
+  background-color: white;
 }
 
 .post-user {

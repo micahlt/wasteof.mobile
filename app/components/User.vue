@@ -14,27 +14,34 @@
           v-if="loading < 2"
           :color="indicatorColor"
         />
-        <FlexboxLayout
-          flexDirection="row"
-          class="header"
-          v-if="loading > 1"
-          :backgroundImage="`https://api.wasteof.money/users/${info.name}/banner`"
-        >
-          <Image
-            :src="`https://api.wasteof.money/users/${info.name}/picture`"
-            v-if="info.name != 'loading...'"
-            class="pfp"
-            loadMode="async"
+        <GridLayout v-if="loading > 1">
+          <GridLayout columns="90, *" class="header">
+            <Image
+              :src="`https://api.wasteof.money/users/${info.name}/picture`"
+              v-if="info.name != 'loading...'"
+              class="pfp"
+              loadMode="async"
+              col="0"
+            />
+            <StackLayout class="header-info" col="1">
+              <FlexboxLayout flexDirection="row" class="username-wrapper">
+                <Label
+                  :text="info.name"
+                  class="username"
+                  textWrap="true"
+                  whiteSpace="normal"
+                />
+              </FlexboxLayout>
+              <Label :text="info.bio" class="bio" />
+              <Label :text="stats" class="stats" />
+            </StackLayout>
+          </GridLayout>
+          <Label class="image-overlay" />
+          <Label
+            class="header-bg"
+            :backgroundImage="`https://api.wasteof.money/users/${info.name}/banner`"
           />
-          <StackLayout class="header-info">
-            <FlexboxLayout flexDirection="row" class="username-wrapper">
-              <Label :text="info.name" class="username" />
-              <Button text="FOLLOW" @tap="onButtonTap" class="follow-button" />
-            </FlexboxLayout>
-            <Label :text="info.bio" class="bio" />
-            <Label :text="stats" class="stats" />
-          </StackLayout>
-        </FlexboxLayout>
+        </GridLayout>
         <StackLayout class="posts" v-if="loading > 1">
           <Post
             v-for="post in posts"
@@ -145,9 +152,28 @@ ActivityIndicator {
 }
 
 .header {
-  padding: 75px;
+  padding: 20;
+  height: 130;
+  z-index: 3;
+}
+
+.header-bg {
+  margin: 0;
   background-position: center;
   background-size: cover;
+  background-repeat: no-repeat;
+  height: 130;
+  width: 100%;
+  z-index: 1;
+}
+
+.image-overlay {
+  margin: 0;
+  background-color: black;
+  height: 130;
+  width: 100%;
+  opacity: 0.55;
+  z-index: 2;
 }
 
 .header-info {
