@@ -135,7 +135,9 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import "@nativescript/theme/scss/variables/blue";
 @import "../variables.scss";
+
 Page {
   background-color: var(--bg);
 }
@@ -155,6 +157,7 @@ ActivityIndicator {
   padding: 20;
   height: 130;
   z-index: 3;
+  color: white;
 }
 
 .header-bg {
@@ -191,38 +194,6 @@ ActivityIndicator {
 
 .posts {
   margin: 50px 75px;
-}
-
-.post {
-  padding: 50px;
-  background: #222;
-  border-radius: 20px;
-  margin-bottom: 20px;
-}
-
-.post-content {
-  font-size: 15px;
-  margin-bottom: 0;
-  padding-bottom: 0;
-  padding: 0;
-  background: #222;
-}
-
-.post-content p {
-  padding: 0;
-}
-
-.post-time {
-  opacity: 0.5;
-}
-
-.post-icon {
-  height: 35px;
-  margin-right: 20px;
-}
-
-.post-stat {
-  margin-right: 75px;
 }
 
 .follow-button {
