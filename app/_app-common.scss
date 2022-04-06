@@ -74,3 +74,16 @@ Page {
 ActivityIndicator {
   color: black;
 }
+
+* {
+  --bg: #fff;
+  --accent: #6466e9;
+  --card-bg: #f3f4f6;
+  --text-primary: #000;
+  --br: 5;
+  .ns-dark & {
+    --bg: #111827;
+    --card-bg: #1f2937;
+    --text-primary: #fff;
+  }
+}

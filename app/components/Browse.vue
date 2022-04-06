@@ -91,6 +91,7 @@ export default {
         actions: ["This Week", "This Month", "All Time"],
         cancelable: true,
       }).then((result) => {
+        const previousPeriod = this.timePeriod;
         if (result == "This Week") {
           this.timePeriod = {
             slug: "week",
@@ -107,8 +108,10 @@ export default {
             text: "All time popular",
           };
         }
-        this.loading = 1;
-        this.fetchPosts();
+        if (previousPeriod != this.timePeriod) {
+          this.loading = 1;
+          this.fetchPosts();
+        }
       });
     },
   },

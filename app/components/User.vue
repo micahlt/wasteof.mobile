@@ -9,7 +9,11 @@
     </ActionBar>
     <ScrollView>
       <StackLayout>
-        <ActivityIndicator busy="true" v-if="loading < 2" />
+        <ActivityIndicator
+          busy="true"
+          v-if="loading < 2"
+          :color="indicatorColor"
+        />
         <FlexboxLayout
           flexDirection="row"
           class="header"
@@ -32,7 +36,12 @@
           </StackLayout>
         </FlexboxLayout>
         <StackLayout class="posts" v-if="loading > 1">
-          <Post v-for="post in posts" :key="post._id" :post="post" />
+          <Post
+            v-for="post in posts"
+            :key="post._id"
+            :post="post"
+            :showUser="false"
+          />
         </StackLayout>
       </StackLayout>
     </ScrollView>
@@ -40,6 +49,7 @@
 </template>
 
 <script>
+import { Application } from "@nativescript/core";
 import * as utils from "~/shared/utils";
 import { SelectedPageService } from "../shared/selected-page-service";
 import Post from "./Post.vue";
@@ -102,12 +112,31 @@ export default {
     stats() {
       return `${this.info.stats.followers} followers • ${this.info.stats.following} following`;
     },
+    indicatorColor() {
+      let theme = Application.systemAppearance();
+      if (theme == "dark") {
+        return "#ffffff";
+      } else {
+        return "#6466e9";
+      }
+    },
   },
-  components: { Post },
+  components: {
+    Post,
+  },
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@import "../variables.scss";
+Page {
+  background-color: var(--bg);
+}
+
+ActivityIndicator {
+  margin: 20;
+}
+
 .pfp {
   border-radius: 100%;
   width: 85;

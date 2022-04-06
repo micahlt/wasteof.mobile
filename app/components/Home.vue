@@ -23,6 +23,7 @@ import Browse from "./Browse";
 export default {
   mounted() {
     SelectedPageService.getInstance().updateSelectedPage("Home");
+    this.$navigateTo(Browse);
   },
   methods: {
     onDrawerButtonTap() {

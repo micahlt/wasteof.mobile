@@ -4,6 +4,7 @@
       flexDirection="row"
       class="post-user"
       @tap="openUser(post.poster.name)"
+      v-if="showUser"
     >
       <Image
         :src="`https://api.wasteof.money/users/${post.poster.name}/picture`"
@@ -36,6 +37,10 @@ import * as utils from "~/shared/utils";
 export default {
   props: {
     post: Object,
+    showUser: {
+      type: Boolean,
+      default: true,
+    },
   },
   /*
   mounted() {
@@ -83,6 +88,7 @@ export default {
 <style scoped lang="scss">
 // Start custom common variables
 @import "@nativescript/theme/scss/variables/blue";
+@import "../variables.scss";
 // End custom common variables
 
 // Custom styles
@@ -98,7 +104,7 @@ export default {
   margin-bottom: 0;
   padding-bottom: 0;
   padding: 0;
-  background: var(--card-bg);
+  background-color: var(--card-bg);
 }
 
 .post-content p {
@@ -117,10 +123,6 @@ export default {
 
 .post-stat {
   margin-right: 20;
-}
-
-ActivityIndicator {
-  margin: 20;
 }
 
 .pfp {
@@ -148,5 +150,6 @@ ActivityIndicator {
   width: 100%;
   background: white;
   border-radius: 5;
+  margin: 5 0;
 }
 </style>
