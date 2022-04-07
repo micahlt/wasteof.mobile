@@ -1,82 +1,91 @@
 <template>
   <Page>
-    <ActionBar class="action-bar">
+    <ActionBar class="action-bar" ref="actionBar">
       <NavigationButton visibility="hidden" />
       <GridLayout columns="50, *">
         <Image src="~/shared/nav-logo.png" colSpan="2" class="nav-logo" />
         <Label class="mi menu" text="menu" @tap="onDrawerButtonTap" />
       </GridLayout>
     </ActionBar>
-    <ScrollView class="user-parent">
-      <TabView :selectedIndex="selectedTab">
-        <TabViewItem title="Posts">
-          <PullToRefresh @refresh="loadUser">
-            <ScrollView class="user">
-              <StackLayout>
-                <ActivityIndicator
-                  busy="true"
-                  v-if="loading < 2"
-                  :color="indicatorColor"
-                />
-                <GridLayout v-if="loading > 1">
-                  <GridLayout columns="90, *" class="header">
-                    <Image
-                      :src="`https://api.wasteof.money/users/${info.name}/picture`"
-                      v-if="info.name != 'loading...'"
-                      class="pfp"
-                      loadMode="async"
-                      col="0"
-                    />
-                    <StackLayout class="header-info" col="1">
-                      <FlexboxLayout
-                        flexDirection="row"
-                        class="username-wrapper"
-                      >
-                        <Label
-                          :text="info.name"
-                          class="username"
-                          textWrap="true"
-                          whiteSpace="normal"
-                        />
-                        <Button
-                          class="follow-button"
-                          v-if="following != null"
-                          :text="followText"
-                          @tap="follow"
-                        />
-                      </FlexboxLayout>
-                      <Label :text="info.bio" class="bio" />
-                      <Label :text="stats" class="stats" />
-                    </StackLayout>
-                  </GridLayout>
-                  <Label class="image-overlay" />
-                  <Label
-                    class="header-bg"
-                    :backgroundImage="`https://api.wasteof.money/users/${info.name}/banner`"
-                  />
-                </GridLayout>
-                <StackLayout class="posts" v-if="loading > 1">
-                  <Post v-for="post in posts" :key="post._id" :post="post" />
-                </StackLayout>
-              </StackLayout>
-            </ScrollView>
-          </PullToRefresh>
-        </TabViewItem>
-        <TabViewItem title="Wall">
-          <Label>Hello </Label>
-        </TabViewItem>
-      </TabView>
-    </ScrollView>
+    <GridLayout rows="auto, *">
+      <GridLayout v-if="!loadingUser" ref="header" row="0" height="120">
+        <GridLayout columns="90, *" class="header">
+          <Image
+            :src="`https://api.wasteof.money/users/${info.name}/picture`"
+            v-if="info.name != 'loading...'"
+            class="pfp"
+            loadMode="async"
+            col="0"
+          />
+          <StackLayout class="header-info" col="1">
+            <FlexboxLayout flexDirection="row" class="username-wrapper">
+              <Label
+                :text="info.name"
+                class="username"
+                textWrap="true"
+                whiteSpace="normal"
+              />
+              <Button
+                class="follow-button"
+                v-if="following != null"
+                :text="followText"
+                @tap="follow"
+              />
+            </FlexboxLayout>
+            <Label :text="info.bio" class="bio" />
+            <Label :text="stats" class="stats" />
+          </StackLayout>
+        </GridLayout>
+        <Image
+          :src="`https://api.wasteof.money/users/${info.name}/banner`"
+          stretch="aspectFill"
+          tintColor="#000000bb"
+          height="100%"
+        />
+      </GridLayout>
+      <GridLayout rows="auto, *" row="1">
+        <SegmentedBar row="0" @selectedIndexChanged="tab" ref="tabBar">
+          <SegmentedBarItem title="Posts" />
+          <SegmentedBarItem title="Wall" />
+        </SegmentedBar>
+        <PullToRefresh @refresh="loadPosts" row="1" v-if="currentTab == 0">
+          <ScrollView>
+            <StackLayout class="posts">
+              <Post v-for="post in posts" :key="post._id" :post="post" />
+            </StackLayout>
+          </ScrollView>
+        </PullToRefresh>
+        <PullToRefresh @refresh="loadWall" row="1" v-if="currentTab == 1">
+          <ScrollView>
+            <StackLayout class="comments">
+              <Comment
+                v-for="comment in wall"
+                :key="comment._id"
+                :comment="comment"
+              />
+            </StackLayout>
+          </ScrollView>
+        </PullToRefresh>
+        <ActivityIndicator
+          busy="true"
+          v-if="loadingUser || loadingPosts"
+          :color="indicatorColor"
+          row="1"
+        />
+      </GridLayout>
+    </GridLayout>
   </Page>
 </template>
 
 <script>
 import { ApplicationSettings } from "@nativescript/core";
 import { Application } from "@nativescript/core";
+import { Screen } from "@nativescript/core";
 import { Http } from "@nativescript/core";
 import * as utils from "~/shared/utils";
 import { SelectedPageService } from "../shared/selected-page-service";
 import Post from "./Post.vue";
+import Comment from "./Comment.vue";
 export default {
   props: {
     username: {
@@ -91,9 +100,12 @@ export default {
       },
       loading: 0,
       posts: [],
+      wall: [],
       myUsername: ApplicationSettings.getString("username") || null,
       following: null,
-      selectedTab: 0,
+      currentTab: 0,
+      loadingUser: true,
+      loadingPosts: true,
     };
   },
   methods: {
@@ -111,22 +123,43 @@ export default {
     onDrawerButtonTap() {
       utils.showDrawer();
     },
-    loadUser(e) {
-      const username = this.username;
-      Http.getJSON(`https://api.wasteof.money/users/${username}`).then(
+    loadUser() {
+      Http.getJSON(`https://api.wasteof.money/users/${this.username}`).then(
         (json) => {
           this.info = json;
-          this.loading++;
+          this.loadingUser = false;
         }
       );
+    },
+    loadPosts(e) {
       Http.getJSON(
-        `https://api.wasteof.money/users/${username}/posts?page=1`
+        `https://api.wasteof.money/users/${this.username}/posts?page=1`
       ).then((json) => {
-        json.posts.forEach((post, i) => {
+        json.posts.forEach((post) => {
           post = utils.fixPost(post);
         });
-        this.loading++;
+        this.loadingPosts = false;
         this.posts = json.posts;
+        if (e) {
+          e.object.refreshing = false;
+        }
+      });
+    },
+    tab(n) {
+      n = n.newIndex;
+      this.currentTab = n;
+      if (n == 1 && this.wall.length < 1) {
+        this.loadWall();
+      }
+    },
+    loadWall(e) {
+      Http.getJSON(
+        `https://api.wasteof.money/users/${this.username}/wall?page=1`
+      ).then((json) => {
+        json.comments.forEach((comment) => {
+          comment = utils.fixPost(comment);
+        });
+        this.wall = json.comments;
         if (e) {
           e.object.refreshing = false;
         }
@@ -152,6 +185,7 @@ export default {
   mounted() {
     SelectedPageService.getInstance().updateSelectedPage("Featured");
     this.loadUser();
+    this.loadPosts();
     if (this.myUsername) {
       Http.getJSON(
         `https://api.wasteof.money/users/${this.username}/followers/${this.myUsername}`
@@ -179,9 +213,16 @@ export default {
         return "FOLLOW";
       }
     },
+    scrollerHeight() {
+      let desiredHeight = 0;
+      const screenHeight = Screen.mainScreen.heightDIPs;
+      desiredHeight = screenHeight - 310;
+      return desiredHeight;
+    },
   },
   components: {
     Post,
+    Comment,
   },
 };
 </script>
@@ -249,8 +290,10 @@ PullToRefresh {
   opacity: 0.75;
 }
 
-.posts {
-  margin: 50px 75px;
+.posts,
+.comments {
+  padding: 15;
+  color: var(--text-primary);
 }
 
 .follow-button {
@@ -260,5 +303,9 @@ PullToRefresh {
   margin-left: 10;
   background-color: var(--accent);
   color: white;
+}
+
+.tabview {
+  height: 100;
 }
 </style>

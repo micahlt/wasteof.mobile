@@ -1,5 +1,9 @@
 $accent: #6466e9;
 $background-dark: #111827;
+$complementary-dark: #6466e9;
+$complementary: #6466e9;
+$background-secondary-dark: #1f2937;
+$background-secondary-light: #f3f4f6;
 @import "@nativescript/theme/core";
 @import "@nativescript/theme/default";
 @import "variables.scss";
@@ -60,10 +64,10 @@ $background-dark: #111827;
 .nav-logo {
   height: 20;
 }
-
+/*
 .action-bar {
   background: var(--accent);
-}
+}*/
 
 ActionBar > GridLayout > Label {
   color: white;

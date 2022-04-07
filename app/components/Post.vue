@@ -36,7 +36,7 @@
           :class="['post-icon', 'mi', { loved: loved }]"
           @tap="lovePost"
         />
-        <Label :text="post.loves" class="post-stat" />
+        <Label :text="post.loves" class="post-stat" @tap="lovePost" />
         <Label text="repeat" class="post-icon mi" />
         <Label :text="post.reposts" class="post-stat" />
         <Label text="comment" class="post-icon mi" />

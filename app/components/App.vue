@@ -10,28 +10,28 @@
 </template>
 
 <script>
-  import DrawerContent from './DrawerContent'
-  import Home from './Home'
-  import { SlideInOnTopTransition } from 'nativescript-ui-sidedrawer';
+import DrawerContent from "./DrawerContent";
+import Home from "./Home";
+import { SlideInOnTopTransition } from "nativescript-ui-sidedrawer";
 
-  export default {
-    data() {
-      return {
-        transition: new SlideInOnTopTransition()
-      }
-    },
+export default {
+  data() {
+    return {
+      transition: new SlideInOnTopTransition(),
+    };
+  },
 
-    components: {
-      DrawerContent,
-      Home
-    }
-  }
+  components: {
+    DrawerContent,
+    Home,
+  },
+};
 </script>
 
 <style scoped lang="scss">
-    // Start custom common variables
-    @import '@nativescript/theme/scss/variables/blue';
-    // End custom common variables
+// Start custom common variables
+@import "@nativescript/theme/scss/variables/blue";
+// End custom common variables
 
-    // Custom styles
+// Custom styles
 </style>
