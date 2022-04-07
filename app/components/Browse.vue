@@ -64,7 +64,6 @@ export default {
       utils.showDrawer();
     },
     fetchPosts(e) {
-      this.posts = [];
       Http.getJSON(
         `https://api.wasteof.money/explore/posts/trending?timeframe=${this.timePeriod.slug}`
       ).then((json) => {

@@ -75,7 +75,6 @@ export default {
       this.$navigateTo(Settings);
     },
     fetchPosts(e) {
-      this.posts = [];
       Http.getJSON(
         `https://api.wasteof.money/users/${this.username}/following/posts`
       ).then((json) => {

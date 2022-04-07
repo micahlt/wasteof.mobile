@@ -7,52 +7,71 @@
         <Label class="mi menu" text="menu" @tap="onDrawerButtonTap" />
       </GridLayout>
     </ActionBar>
-    <PullToRefresh @refresh="loadUser">
-      <ScrollView>
-        <StackLayout>
-          <ActivityIndicator
-            busy="true"
-            v-if="loading < 2"
-            :color="indicatorColor"
-          />
-          <GridLayout v-if="loading > 1">
-            <GridLayout columns="90, *" class="header">
-              <Image
-                :src="`https://api.wasteof.money/users/${info.name}/picture`"
-                v-if="info.name != 'loading...'"
-                class="pfp"
-                loadMode="async"
-                col="0"
-              />
-              <StackLayout class="header-info" col="1">
-                <FlexboxLayout flexDirection="row" class="username-wrapper">
+    <ScrollView class="user-parent">
+      <TabView :selectedIndex="selectedTab">
+        <TabViewItem title="Posts">
+          <PullToRefresh @refresh="loadUser">
+            <ScrollView class="user">
+              <StackLayout>
+                <ActivityIndicator
+                  busy="true"
+                  v-if="loading < 2"
+                  :color="indicatorColor"
+                />
+                <GridLayout v-if="loading > 1">
+                  <GridLayout columns="90, *" class="header">
+                    <Image
+                      :src="`https://api.wasteof.money/users/${info.name}/picture`"
+                      v-if="info.name != 'loading...'"
+                      class="pfp"
+                      loadMode="async"
+                      col="0"
+                    />
+                    <StackLayout class="header-info" col="1">
+                      <FlexboxLayout
+                        flexDirection="row"
+                        class="username-wrapper"
+                      >
+                        <Label
+                          :text="info.name"
+                          class="username"
+                          textWrap="true"
+                          whiteSpace="normal"
+                        />
+                        <Button
+                          class="follow-button"
+                          v-if="following != null"
+                          :text="followText"
+                          @tap="follow"
+                        />
+                      </FlexboxLayout>
+                      <Label :text="info.bio" class="bio" />
+                      <Label :text="stats" class="stats" />
+                    </StackLayout>
+                  </GridLayout>
+                  <Label class="image-overlay" />
                   <Label
-                    :text="info.name"
-                    class="username"
-                    textWrap="true"
-                    whiteSpace="normal"
+                    class="header-bg"
+                    :backgroundImage="`https://api.wasteof.money/users/${info.name}/banner`"
                   />
-                </FlexboxLayout>
-                <Label :text="info.bio" class="bio" />
-                <Label :text="stats" class="stats" />
+                </GridLayout>
+                <StackLayout class="posts" v-if="loading > 1">
+                  <Post v-for="post in posts" :key="post._id" :post="post" />
+                </StackLayout>
               </StackLayout>
-            </GridLayout>
-            <Label class="image-overlay" />
-            <Label
-              class="header-bg"
-              :backgroundImage="`https://api.wasteof.money/users/${info.name}/banner`"
-            />
-          </GridLayout>
-          <StackLayout class="posts" v-if="loading > 1">
-            <Post v-for="post in posts" :key="post._id" :post="post" />
-          </StackLayout>
-        </StackLayout>
-      </ScrollView>
-    </PullToRefresh>
+            </ScrollView>
+          </PullToRefresh>
+        </TabViewItem>
+        <TabViewItem title="Wall">
+          <Label>Hello </Label>
+        </TabViewItem>
+      </TabView>
+    </ScrollView>
   </Page>
 </template>
 
 <script>
+import { ApplicationSettings } from "@nativescript/core";
 import { Application } from "@nativescript/core";
 import { Http } from "@nativescript/core";
 import * as utils from "~/shared/utils";
@@ -72,6 +91,9 @@ export default {
       },
       loading: 0,
       posts: [],
+      myUsername: ApplicationSettings.getString("username") || null,
+      following: null,
+      selectedTab: 0,
     };
   },
   methods: {
@@ -110,10 +132,33 @@ export default {
         }
       });
     },
+    follow() {
+      const token = ApplicationSettings.getString("token");
+      Http.request({
+        url: `https://api.wasteof.money/users/${this.username}/followers`,
+        method: "POST",
+        headers: {
+          Authorization: token,
+        },
+      }).then((response) => {
+        if (response.statusCode == 200) {
+          this.following = !this.following;
+        } else {
+          alert(`Error code ${response.statusCode}, try again later.`);
+        }
+      });
+    },
   },
   mounted() {
     SelectedPageService.getInstance().updateSelectedPage("Featured");
     this.loadUser();
+    if (this.myUsername) {
+      Http.getJSON(
+        `https://api.wasteof.money/users/${this.username}/followers/${this.myUsername}`
+      ).then((res) => {
+        this.following = res;
+      });
+    }
   },
   computed: {
     stats() {
@@ -127,6 +172,13 @@ export default {
         return "#6466e9";
       }
     },
+    followText() {
+      if (this.following) {
+        return "UNFOLLOW";
+      } else {
+        return "FOLLOW";
+      }
+    },
   },
   components: {
     Post,
@@ -135,15 +187,20 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import "@nativescript/theme/scss/variables/blue";
+@import "@nativescript/theme/scss/variables/default";
 @import "../variables.scss";
-
-Page {
-  background-color: var(--bg);
-}
 
 ActivityIndicator {
   margin: 20;
+}
+
+PullToRefresh {
+  color: var(--accent);
+  margin: 0;
+}
+
+.user {
+  color: var(--text-primary);
 }
 
 .pfp {
@@ -201,5 +258,7 @@ ActivityIndicator {
   height: 125px;
   margin: 0;
   margin-left: 10;
+  background-color: var(--accent);
+  color: white;
 }
 </style>

@@ -75,8 +75,8 @@ export default {
     if (this.username) {
       Http.getJSON(
         `https://api.wasteof.money/posts/${this.post._id}/loves/${this.username}`
-      ).then((str) => {
-        if (str == true) {
+      ).then((res) => {
+        if (res == true) {
           this.loved = true;
         }
       });
@@ -125,7 +125,7 @@ export default {
 
 <style scoped lang="scss">
 // Start custom common variables
-@import "@nativescript/theme/scss/variables/blue";
+@import "@nativescript/theme/scss/variables/default";
 @import "../variables.scss";
 // End custom common variables
 

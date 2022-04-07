@@ -12,7 +12,7 @@
         <SearchBar
           hint="Search posts"
           @submit="search"
-          textFieldHintColor="gray"
+          textFieldHintColor="white"
           class="searchbar"
           v-model="query"
         />
@@ -71,19 +71,21 @@ export default {
 
 // Custom styles
 .searchbar-parent {
-  background-color: white;
+  background-color: var(--border-clr);
   border-radius: var(--br);
   margin: 10;
   padding: 5;
   height: 50;
   box-shadow: 0 2 5 rgba(0, 0, 0, 0.5);
   z-index: 2;
+  placeholder-color: var(--text-primary);
 }
 
 .searchbar {
-  background-color: white;
-  color: black;
+  background-color: var(--border-clr);
+  color: var(--text-primary);
   font-size: 18.5;
+  placeholder-color: var(--text-primary);
 }
 
 Page {
