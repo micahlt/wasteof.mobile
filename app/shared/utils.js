@@ -42,10 +42,14 @@ export const fixPost = (post) => {
     post.image = src;
   }
   if (ApplicationSettings.getBoolean("filter")) {
-    c = filter.clean(c);
+    //alert("FILTERING");
+    //alert(filter.clean(c));
+    post.content = filter.clean(c);
+    return post;
+  } else {
+    post.content = c;
+    return post;
   }
-  post.content = c;
-  return post;
 };
 
 export const fixComment = (comment) => {

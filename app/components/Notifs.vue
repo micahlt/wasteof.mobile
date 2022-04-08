@@ -24,6 +24,13 @@
           </StackLayout>
         </v-template>
       </ListView>
+      <ListView for="notif in readNotifs" v-else row="1" class="notifs">
+        <v-template>
+          <StackLayout class="notif-parent">
+            <Notification :notif="notif" />
+          </StackLayout>
+        </v-template>
+      </ListView>
     </GridLayout>
   </Page>
 </template>
@@ -59,10 +66,9 @@ export default {
     tab(n) {
       n = n.newIndex;
       this.currentTab = n;
-      /*
-      if (n == 1 && this.wall.length < 1) {
-        this.loadUnread()
-      } */
+      if (n == 1 && this.readNotifs.length < 1) {
+        this.loadRead();
+      }
     },
     loadUnread() {
       Http.request({
@@ -79,6 +85,23 @@ export default {
           }
         });
         this.unreadNotifs = json.unread;
+      });
+    },
+    loadRead() {
+      Http.request({
+        url: "https://api.wasteof.money/messages/read",
+        method: "GET",
+        headers: {
+          Authorization: this.token,
+        },
+      }).then((response) => {
+        const json = response.content.toJSON();
+        json.read.forEach((notif) => {
+          if (notif.type.includes("comment")) {
+            notif = utils.fixComment(notif.data.comment);
+          }
+        });
+        this.readNotifs = json.read;
       });
     },
   },

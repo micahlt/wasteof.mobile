@@ -288,8 +288,8 @@ PullToRefresh {
 }
 
 .verification {
-  bottom: 3;
-  right: 3;
+  top: 62;
+  left: 62;
   background-color: var(--accent);
   font-size: 17;
   padding: 3;

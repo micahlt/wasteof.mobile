@@ -112,7 +112,9 @@ export default {
       return `https://api.wasteof.money/users/${this.username}/picture`;
     },
     banner() {
-      return `https://api.wasteof.money/users/${this.username}/banner`;
+      return this.username != null
+        ? `https://api.wasteof.money/users/${this.username}/banner`
+        : "https://api.wasteof.money/users/jeffalo/banner";
     },
     formattedUsername() {
       if (this.username == "Signed Out") {
