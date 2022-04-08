@@ -34,6 +34,12 @@
         >
         <Button text="SIGN OUT" @tap="signOut" class="auth-button" />
       </StackLayout>
+      <StackLayout class="settings">
+        <FlexboxLayout>
+          <Switch v-model="filterEnabled" />
+          <Label class="setting-descriptor">Filter profanity</Label>
+        </FlexboxLayout>
+      </StackLayout>
     </StackLayout>
   </Page>
 </template>
@@ -49,6 +55,14 @@ import { SelectedPageService } from "../shared/selected-page-service";
 export default {
   mounted() {
     SelectedPageService.getInstance().updateSelectedPage("Settings");
+    if (this.filterEnabled == null) {
+      this.filterEnabled = false;
+    }
+  },
+  watch: {
+    filterEnabled(newSetting) {
+      ApplicationSettings.setBoolean("filter", newSetting);
+    },
   },
   methods: {
     onDrawerButtonTap() {
@@ -105,6 +119,7 @@ export default {
       token: ApplicationSettings.getString("token") || null,
       username: "",
       password: "",
+      filterEnabled: ApplicationSettings.getBoolean("filter") || null,
     };
   },
 };
@@ -161,5 +176,10 @@ Page {
 
 .preface-text {
   opacity: 0.5;
+}
+
+.setting-descriptor {
+  padding-top: 16;
+  font-size: 15;
 }
 </style>

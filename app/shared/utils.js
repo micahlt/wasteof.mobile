@@ -1,6 +1,10 @@
 import { Application } from "@nativescript/core";
+import { ApplicationSettings } from "@nativescript/core";
 import { first } from "rxjs";
-var friendlyTime = require("friendly-time");
+const friendlyTime = require("friendly-time");
+const Filter = require("bad-words");
+const filter = new Filter({ placeHolder: "█" });
+filter.removeWords("god");
 
 export const showDrawer = () => {
   let drawerNativeView = Application.getRootView();
@@ -37,6 +41,20 @@ export const fixPost = (post) => {
     c = c.replace(c.slice(firstIndex, i + 2), "");
     post.image = src;
   }
+  if (ApplicationSettings.getBoolean("filter")) {
+    c = filter.clean(c);
+  }
   post.content = c;
   return post;
+};
+
+export const fixComment = (comment) => {
+  let c = comment.content;
+  c = c.replace(/<\/p>/g, "<br/>");
+  c = c.replace(/<p>/g, "");
+  if (ApplicationSettings.getBoolean("filter")) {
+    c = filter.clean(c);
+  }
+  comment.content = c;
+  return comment;
 };

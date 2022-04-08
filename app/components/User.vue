@@ -1,6 +1,6 @@
 <template>
   <Page>
-    <ActionBar class="action-bar" ref="actionBar">
+    <ActionBar class="action-bar">
       <NavigationButton visibility="hidden" />
       <GridLayout columns="50, *">
         <Image src="~/shared/nav-logo.png" colSpan="2" class="nav-logo" />
@@ -8,15 +8,31 @@
       </GridLayout>
     </ActionBar>
     <GridLayout rows="auto, *">
-      <GridLayout v-if="!loadingUser" ref="header" row="0" height="120">
+      <GridLayout v-if="!loadingUser" row="0" height="130">
         <GridLayout columns="90, *" class="header">
-          <Image
-            :src="`https://api.wasteof.money/users/${info.name}/picture`"
-            v-if="info.name != 'loading...'"
-            class="pfp"
-            loadMode="async"
-            col="0"
-          />
+          <AbsoluteLayout col="0" class="pfp-wrapper">
+            <Image
+              :src="`https://api.wasteof.money/users/${info.name}/picture`"
+              v-if="info.name != 'loading...'"
+              class="pfp"
+              loadMode="async"
+              col="0"
+              decodeWidth="85"
+              decodeHeight="85"
+            />
+            <Label
+              text="verified"
+              class="mi verification"
+              v-if="info.verified"
+              @tap="explainVerified"
+            />
+            <Label
+              text="verified_user"
+              class="mi verification"
+              v-if="info.permissions.admin"
+              @tap="explainAdmin"
+            />
+          </AbsoluteLayout>
           <StackLayout class="header-info" col="1">
             <FlexboxLayout flexDirection="row" class="username-wrapper">
               <Label
@@ -44,7 +60,7 @@
         />
       </GridLayout>
       <GridLayout rows="auto, *" row="1">
-        <SegmentedBar row="0" @selectedIndexChanged="tab" ref="tabBar">
+        <SegmentedBar row="0" @selectedIndexChanged="tab">
           <SegmentedBarItem title="Posts" />
           <SegmentedBarItem title="Wall" />
         </SegmentedBar>
@@ -81,6 +97,7 @@
 import { ApplicationSettings } from "@nativescript/core";
 import { Application } from "@nativescript/core";
 import { Screen } from "@nativescript/core";
+import { Dialogs } from "@nativescript/core";
 import { Http } from "@nativescript/core";
 import * as utils from "~/shared/utils";
 import { SelectedPageService } from "../shared/selected-page-service";
@@ -118,6 +135,20 @@ export default {
         hour: "numeric",
         minute: "numeric",
         hour12: true,
+      });
+    },
+    explainVerified() {
+      Dialogs.alert({
+        title: "Verified User",
+        message: `This user has been verified by the moderation team and is a reputable user of wasteof.money.`,
+        okButtonText: "Okay",
+      });
+    },
+    explainAdmin() {
+      Dialogs.alert({
+        title: "Administrator",
+        message: `This user has admin (moderator) access to wasteof.money and can edit and delete your posts.`,
+        okButtonText: "Okay",
       });
     },
     onDrawerButtonTap() {
@@ -244,16 +275,29 @@ PullToRefresh {
   color: var(--text-primary);
 }
 
+.pfp-wrapper {
+  height: 85;
+  width: 85;
+}
+
 .pfp {
-  border-radius: 100%;
+  border-radius: 85;
   width: 85;
   height: 85;
   background: white;
 }
 
+.verification {
+  bottom: 3;
+  right: 3;
+  background-color: var(--accent);
+  font-size: 17;
+  padding: 3;
+  border-radius: 20;
+}
+
 .header {
   padding: 20;
-  height: 130;
   z-index: 3;
   color: white;
 }

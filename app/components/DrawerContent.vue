@@ -33,6 +33,13 @@
                     <Label col="1" text="Search" class="p-r-10"/>
                 </GridLayout>
 
+                <GridLayout columns="auto, *"
+                            :class="'nt-drawer__list-item' + (selectedPage === 'Notifs' ? ' -selected': '')"
+                            @tap="onNavigationItemTap(Notifs)">
+                    <Label col="0" text="notifications" class="page-icon mi"/>
+                    <Label col="1" text="Notifications" class="p-r-10"/>
+                </GridLayout>
+
                 <StackLayout class="hr"/>
 
                 <GridLayout columns="auto, *"
@@ -51,6 +58,7 @@ import Home from "./Home";
 import Browse from "./Browse";
 import Search from "./Search";
 import Settings from "./Settings";
+import Notifs from "./Notifs";
 import * as utils from "~/shared/utils";
 import { SelectedPageService } from "~/shared/selected-page-service";
 import { ApplicationSettings } from "@nativescript/core";
@@ -67,6 +75,7 @@ export default {
       Browse: Browse,
       Search: Search,
       Settings: Settings,
+      Notifs: Notifs,
       selectedPage: "",
       username: ApplicationSettings.getString("username") || "Signed Out",
     };
@@ -76,6 +85,7 @@ export default {
     Browse,
     Search,
     Settings,
+    Notifs,
   },
   methods: {
     onNavigationItemTap(component) {

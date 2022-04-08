@@ -22,14 +22,16 @@
               horizontalAlignment="left"
               col="0"
             />
-            <Button
-              text.decode="&#xe7f4;"
-              class="time-change mi"
-              alignSelf="flex-end"
-              textWrap="false"
-              @tap="openSettings"
-              col="1"
-            />
+            <GridLayout columns="*" alignSelf="flex-end" col="1">
+              <Button
+                text.decode="&#xe7f4;"
+                :class="['time-change', 'mi', { unread: messageCount > 0 }]"
+                textWrap="false"
+                @tap="openNotifs"
+                col="0"
+              />
+              <Label class="notifs-unread" col="0" text="•" />
+            </GridLayout>
           </GridLayout>
           <Post v-for="post in posts" :key="post._id" :post="post" />
         </StackLayout>
@@ -50,7 +52,7 @@
 <script>
 import Post from "./Post";
 import Browse from "./Browse";
-import Settings from "./Settings";
+import Notifs from "./Notifs";
 import { Application } from "@nativescript/core";
 import { ApplicationSettings } from "@nativescript/core";
 import { Http } from "@nativescript/core";
@@ -62,23 +64,44 @@ export default {
   },
   data() {
     return {
-      loading: 1,
+      loading: 0,
       posts: [],
       username: ApplicationSettings.getString("username") || null,
+      token: ApplicationSettings.getString("token") || null,
+      messageCount: 0,
     };
   },
   methods: {
     onDrawerButtonTap() {
       utils.showDrawer();
     },
-    openSettings() {
-      this.$navigateTo(Settings);
+    openNotifs() {
+      this.$navigateTo(Notifs);
     },
     fetchPosts(e) {
+      if (this.username) {
+        Http.request({
+          url: "https://api.wasteof.money/messages/count",
+          method: "GET",
+          headers: {
+            Authorization: this.token,
+          },
+        }).then((response) => {
+          if (response.statusCode == 200) {
+            const json = response.content.toJSON();
+            this.messageCount = json.count;
+          } else {
+            alert(`Error ${response.statusCode}, try again later.`);
+          }
+          this.loading++;
+        });
+      } else {
+        this.loading++;
+      }
       Http.getJSON(
         `https://api.wasteof.money/users/${this.username}/following/posts`
       ).then((json) => {
-        json.posts.forEach((post, i) => {
+        json.posts.forEach((post) => {
           post = utils.fixPost(post);
         });
         this.loading++;
@@ -133,14 +156,16 @@ PullToRefresh {
 .time-change {
   text-transform: uppercase;
   font-size: 24;
-  width: 40;
+  text-align: center;
   margin: 0;
+  width: 40;
   height: 40;
   margin-right: 0;
   border-radius: var(--br);
   background-color: var(--accent);
   color: white;
   margin-bottom: 10;
+  right: 0;
 }
 
 .time-current {
@@ -163,23 +188,15 @@ PullToRefresh {
 .switcher {
   width: 100%;
 }
-.time-change {
-  text-transform: uppercase;
-  font-size: 24;
-  width: 40;
-  margin: 0;
-  height: 40;
-  margin-right: 0;
-  border-radius: var(--br);
-  background-color: var(--accent);
-  color: white;
-  margin-bottom: 10;
-}
 
 .time-current {
   font-size: 18;
   margin-top: 5;
   margin-left: 5;
   font-weight: bold;
+}
+
+.unread {
+  background-color: #ff0055;
 }
 </style>
