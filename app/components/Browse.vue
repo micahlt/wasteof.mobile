@@ -54,8 +54,8 @@ export default {
       loading: 1,
       posts: [],
       timePeriod: {
-        slug: "week",
-        text: "Trending this week",
+        slug: "day",
+        text: "Trending today",
       },
     };
   },
@@ -81,11 +81,16 @@ export default {
       Dialogs.action({
         title: "Time Period",
         cancelButtonText: "Cancel",
-        actions: ["This Week", "This Month", "All Time"],
+        actions: ["Today", "This Week", "This Month", "All Time"],
         cancelable: true,
       }).then((result) => {
         const previousPeriod = this.timePeriod;
-        if (result == "This Week") {
+        if (result == "Today") {
+          this.timePeriod = {
+            slug: "day",
+            text: "Trending today",
+          };
+        } else if (result == "This Week") {
           this.timePeriod = {
             slug: "week",
             text: "Trending this week",
