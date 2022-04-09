@@ -21,11 +21,26 @@
       <Label text="launch" class="open-notif mi" col="3" @tap="openNotif" />
     </GridLayout>
     <HtmlView
-      :html="notif.data.comment.content"
+      :html="
+        notif.data.comment
+          ? notif.data.comment.content
+          : notif.data.post.content
+      "
       class="notif-content"
-      v-if="hasContent"
+      v-if="viewHtml"
     />
-    <Label :text="dateOf(notif.time)" class="notif-time" col="1" />
+    <Post
+      v-if="notif.type == 'post_mention'"
+      :post="notif.data.post"
+      :showUser="false"
+      class="repost"
+    />
+    <Label
+      :text="dateOf(notif.time)"
+      class="notif-time"
+      col="1"
+      v-if="notif.type != 'post_mention'"
+    />
   </StackLayout>
 </template>
 
@@ -33,6 +48,7 @@
 import * as utils from "~/shared/utils";
 import { Utils } from "@nativescript/core";
 import { ApplicationSettings } from "@nativescript/core";
+import Post from "./Post.vue";
 export default {
   props: {
     notif: Object,
@@ -61,10 +77,13 @@ export default {
         case "follow": {
           return `followed you`;
         }
+        case "post_mention": {
+          return `mentioned you in a post`;
+        }
       }
     },
-    hasContent() {
-      return this.notif.type != "follow";
+    viewHtml() {
+      return !["follow", "post_mention"].includes(this.notif.type);
     },
   },
   methods: {
@@ -72,7 +91,7 @@ export default {
       return utils.formatTime(date);
     },
     openUser() {
-      const name = this.notif.poster.name;
+      const name = this.notif.data.actor.name;
       this.$navigateTo("User", {
         props: {
           username: name,
@@ -112,9 +131,16 @@ export default {
           );
           break;
         }
+        case "post_mention": {
+          Utils.openUrl(
+            `https://wasteof.money/posts/${this.notif.data.post._id}`
+          );
+          break;
+        }
       }
     },
   },
+  components: { Post },
 };
 </script>
 

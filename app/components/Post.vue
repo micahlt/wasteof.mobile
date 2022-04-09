@@ -59,10 +59,6 @@ export default {
       type: Boolean,
       default: true,
     },
-    isRepost: {
-      type: Boolean,
-      default: false,
-    },
   },
   data() {
     return {

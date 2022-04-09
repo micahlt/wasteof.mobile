@@ -38,7 +38,7 @@
               <Label
                 :text="info.name"
                 class="username"
-                textWrap="true"
+                textWrap="false"
                 whiteSpace="normal"
               />
               <Button
@@ -107,6 +107,7 @@ export default {
   props: {
     username: {
       default: "wasteof.money",
+      type: String,
     },
   },
   data() {

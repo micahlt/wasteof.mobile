@@ -99,6 +99,8 @@ export default {
         json.read.forEach((notif) => {
           if (notif.type.includes("comment")) {
             notif = utils.fixComment(notif.data.comment);
+          } else if (notif.type == "post_mention") {
+            notif = utils.fixPost(notif.data.post);
           }
         });
         this.readNotifs = json.read;
