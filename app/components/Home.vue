@@ -8,7 +8,7 @@
       </GridLayout>
     </ActionBar>
     <PullToRefresh @refresh="fetchPosts" v-if="username">
-      <ScrollView v-if="username != null">
+      <ScrollView v-if="username != null" @scroll="scroll">
         <ActivityIndicator
           busy="true"
           v-if="loading < 2"
@@ -34,6 +34,11 @@
             </GridLayout>
           </GridLayout>
           <Post v-for="post in posts" :key="post._id" :post="post" />
+          <ActivityIndicator
+            busy="true"
+            v-if="isInfiniteLoading"
+            :color="indicatorColor"
+          />
         </StackLayout>
       </ScrollView>
     </PullToRefresh>
@@ -69,6 +74,9 @@ export default {
       username: ApplicationSettings.getString("username") || null,
       token: ApplicationSettings.getString("token") || null,
       messageCount: 0,
+      page: 1,
+      isInfiniteLoading: false,
+      initialLoad: true,
     };
   },
   methods: {
@@ -79,7 +87,12 @@ export default {
       this.$navigateTo(Notifs);
     },
     fetchPosts(e) {
-      if (this.username) {
+      if (!this.isInfiniteLoading) {
+        this.posts = [];
+        this.page = 1;
+        this.initialLoad = true;
+      }
+      if (this.username && (this.initialLoad || e)) {
         Http.request({
           url: "https://api.wasteof.money/messages/count",
           method: "GET",
@@ -99,17 +112,29 @@ export default {
         this.loading++;
       }
       Http.getJSON(
-        `https://api.wasteof.money/users/${this.username}/following/posts`
+        `https://api.wasteof.money/users/${this.username}/following/posts?page=${this.page}`
       ).then((json) => {
         json.posts.forEach((post) => {
           post = utils.fixPost(post);
+          this.posts.push(post);
         });
         this.loading++;
-        this.posts = json.posts;
+        this.isInfiniteLoading = false;
         if (e) {
           e.object.refreshing = false;
         }
       });
+      this.initialLoad = false;
+    },
+    scroll(e) {
+      if (
+        e.scrollY > e.object.scrollableHeight - 400 &&
+        !this.isInfiniteLoading
+      ) {
+        this.isInfiniteLoading = true;
+        this.page++;
+        this.fetchPosts();
+      }
     },
   },
   mounted() {

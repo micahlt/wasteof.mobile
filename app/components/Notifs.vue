@@ -24,13 +24,28 @@
           </StackLayout>
         </v-template>
       </ListView>
-      <ListView for="notif in readNotifs" v-else row="1" class="notifs">
+      <ListView
+        for="notif in readNotifs"
+        v-else
+        row="1"
+        class="notifs"
+        ref="notifs"
+      >
         <v-template>
           <StackLayout class="notif-parent">
             <Notification :notif="notif" />
           </StackLayout>
         </v-template>
       </ListView>
+      <fab
+        row="1"
+        text.decode="&#xf18b;"
+        rippleColor="#f1f1f1"
+        androidScaleType="centerInside"
+        class="fab-button mi"
+        v-if="currentTab == 0"
+        hideOnSwipeOfView="notifs"
+      />
     </GridLayout>
   </Page>
 </template>
@@ -126,5 +141,15 @@ export default {
 
 .notif-parent {
   margin: 5;
+}
+
+.fab-button {
+  height: 70;
+  width: 70;
+  margin: 15;
+  background-color: var(--accent);
+  horizontal-align: right;
+  vertical-align: bottom;
+  font-size: 7;
 }
 </style>

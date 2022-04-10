@@ -14,6 +14,10 @@ Vue.registerElement(
   "PullToRefresh",
   () => require("@Akylas/nativescript-pulltorefresh").PullToRefresh
 );
+Vue.registerElement(
+  "Fab",
+  () => require("@nstudio/nativescript-floatingactionbutton").Fab
+);
 import App from "./components/App";
 
 Vue.config.silent = false;

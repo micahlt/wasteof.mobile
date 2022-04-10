@@ -8,6 +8,7 @@
     "@nativescript-community/ui-material-ripple": "^7.0.3",
     "@nativescript/core": "~8.2.2",
     "@nativescript/theme": "~3.0.2",
+    "@nstudio/nativescript-floatingactionbutton": "^3.0.4",
     "bad-words": "^1.6.5",
     "friendly-time": "^1.1.1",
     "nativescript-ui-sidedrawer": "~10.0.2",
