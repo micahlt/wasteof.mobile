@@ -128,7 +128,7 @@ export default {
     },
     scroll(e) {
       if (
-        e.scrollY > e.object.scrollableHeight - 400 &&
+        e.scrollY > e.object.scrollableHeight - 200 &&
         !this.isInfiniteLoading
       ) {
         this.isInfiniteLoading = true;
@@ -204,10 +204,6 @@ PullToRefresh {
   text-align: center;
   font-size: 15;
   opacity: 0.5;
-}
-
-.big-icon {
-  font-size: 64;
 }
 
 .switcher {

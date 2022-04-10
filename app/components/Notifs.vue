@@ -12,9 +12,17 @@
         <SegmentedBarItem title="Unread" />
         <SegmentedBarItem title="Read" />
       </SegmentedBar>
+      <StackLayout
+        v-if="currentTab == 0 && unreadNotifs.length < 1"
+        row="1"
+        class="no-messages"
+      >
+        <Label text="mark_email_read" class="mi big-icon" />
+        <Label>All done!</Label>
+      </StackLayout>
       <ListView
         for="notif in unreadNotifs"
-        v-if="currentTab == 0"
+        v-if="currentTab == 0 && unreadNotifs.length > 0"
         row="1"
         class="notifs"
       >
@@ -24,9 +32,17 @@
           </StackLayout>
         </v-template>
       </ListView>
+      <StackLayout
+        v-if="currentTab == 1 && readNotifs.length < 1"
+        row="1"
+        class="no-messages"
+      >
+        <Label text="quiz" class="mi big-icon" />
+        <Label>Can't find any messages</Label>
+      </StackLayout>
       <ListView
         for="notif in readNotifs"
-        v-else
+        v-if="currentTab == 1 && readNotifs.length > 0"
         row="1"
         class="notifs"
         ref="notifs"
@@ -45,6 +61,7 @@
         class="fab-button mi"
         v-if="currentTab == 0"
         hideOnSwipeOfView="notifs"
+        color="white"
       />
     </GridLayout>
   </Page>
@@ -150,6 +167,12 @@ export default {
   background-color: var(--accent);
   horizontal-align: right;
   vertical-align: bottom;
-  font-size: 7;
+  font-size: 9;
+}
+
+.no-messages {
+  padding-top: 20;
+  height: 100%;
+  text-align: center;
 }
 </style>
