@@ -67,6 +67,7 @@
         <PullToRefresh @refresh="loadPosts" row="1" v-if="currentTab == 0">
           <ScrollView>
             <StackLayout class="posts">
+              <Post v-if="pinned" :post="pinned" :pinned="true" />
               <Post v-for="post in posts" :key="post._id" :post="post" />
             </StackLayout>
           </ScrollView>
@@ -124,6 +125,7 @@ export default {
       currentTab: 0,
       loadingUser: true,
       loadingPosts: true,
+      pinned: null,
     };
   },
   methods: {
@@ -167,6 +169,9 @@ export default {
       Http.getJSON(
         `https://api.wasteof.money/users/${this.username}/posts?page=1`
       ).then((json) => {
+        if (json.pinned.length > 0) {
+          this.pinned = utils.fixPost(json.pinned[0]);
+        }
         json.posts.forEach((post) => {
           post = utils.fixPost(post);
         });

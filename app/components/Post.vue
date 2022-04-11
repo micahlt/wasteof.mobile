@@ -4,7 +4,7 @@
       flexDirection="row"
       class="post-user"
       v-if="showUser"
-      columns="auto, auto, *, auto"
+      columns="auto, auto, *, auto, auto"
     >
       <Image
         :src="`https://api.wasteof.money/users/${post.poster.name}/picture`"
@@ -19,7 +19,13 @@
         col="1"
         @tap="openUser"
       />
-      <Label text="launch" class="open-post mi" col="3" @tap="openPost" />
+      <Label
+        text="push_pin"
+        class="post-icon mi pinned"
+        col="3"
+        v-if="pinned"
+      />
+      <Label text="launch" class="open-post mi" col="4" @tap="openPost" />
     </GridLayout>
     <Image
       :src="post.image"
@@ -58,6 +64,10 @@ export default {
     showUser: {
       type: Boolean,
       default: true,
+    },
+    pinned: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
@@ -199,7 +209,12 @@ export default {
   border-width: 2;
 }
 
-.loved {
+.loved,
+.pinned {
   color: #ff0055;
+}
+
+.pinned {
+  font-size: 20;
 }
 </style>
