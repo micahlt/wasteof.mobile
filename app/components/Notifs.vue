@@ -13,7 +13,7 @@
         <SegmentedBarItem title="Read" />
       </SegmentedBar>
       <StackLayout
-        v-if="currentTab == 0 && unreadNotifs.length < 1"
+        v-if="currentTab == 0 && unreadNotifs.length < 1 && !loading"
         row="1"
         class="no-messages"
       >
@@ -33,7 +33,7 @@
         </v-template>
       </ListView>
       <StackLayout
-        v-if="currentTab == 1 && readNotifs.length < 1"
+        v-if="currentTab == 1 && readNotifs.length < 1 && !loading"
         row="1"
         class="no-messages"
       >
@@ -53,6 +53,12 @@
           </StackLayout>
         </v-template>
       </ListView>
+      <ActivityIndicator
+        busy="true"
+        v-if="loading"
+        :color="indicatorColor"
+        row="1"
+      />
       <fab
         row="1"
         text.decode="&#xf18b;"
@@ -69,6 +75,7 @@
 
 <script>
 import { Http } from "@nativescript/core";
+import { Application } from "@nativescript/core";
 import { ApplicationSettings } from "@nativescript/core";
 import * as utils from "~/shared/utils";
 import Notification from "./Notification";
@@ -89,6 +96,7 @@ export default {
       readNotifs: [],
       unreadNotifs: [],
       currentTab: 0,
+      loading: true,
     };
   },
   methods: {
@@ -103,6 +111,7 @@ export default {
       }
     },
     loadUnread() {
+      this.loading = true;
       Http.request({
         url: "https://api.wasteof.money/messages/unread",
         method: "GET",
@@ -117,9 +126,11 @@ export default {
           }
         });
         this.unreadNotifs = json.unread;
+        this.loading = false;
       });
     },
     loadRead() {
+      this.loading = true;
       Http.request({
         url: "https://api.wasteof.money/messages/read",
         method: "GET",
@@ -136,7 +147,18 @@ export default {
           }
         });
         this.readNotifs = json.read;
+        this.loading = false;
       });
+    },
+  },
+  computed: {
+    indicatorColor() {
+      let theme = Application.systemAppearance();
+      if (theme == "dark") {
+        return "#ffffff";
+      } else {
+        return "#6466e9";
+      }
     },
   },
 };
@@ -167,12 +189,13 @@ export default {
   background-color: var(--accent);
   horizontal-align: right;
   vertical-align: bottom;
-  font-size: 9;
+  font-size: 7;
 }
 
 .no-messages {
-  padding-top: 20;
+  padding-top: 30;
   height: 100%;
   text-align: center;
+  opacity: 0.7;
 }
 </style>

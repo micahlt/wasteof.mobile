@@ -294,10 +294,10 @@ PullToRefresh {
 }
 
 .verification {
-  top: 62;
-  left: 62;
+  top: 58;
+  left: 58;
   background-color: var(--accent);
-  font-size: 17;
+  font-size: 20;
   padding: 3;
   border-radius: 20;
 }
