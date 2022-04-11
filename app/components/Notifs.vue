@@ -7,69 +7,71 @@
         <Label class="mi menu" text="menu" @tap="onDrawerButtonTap" />
       </GridLayout>
     </ActionBar>
-    <GridLayout rows="auto, *">
-      <SegmentedBar row="0" @selectedIndexChanged="tab">
-        <SegmentedBarItem title="Unread" />
-        <SegmentedBarItem title="Read" />
-      </SegmentedBar>
-      <StackLayout
-        v-if="currentTab == 0 && unreadNotifs.length < 1 && !loading"
-        row="1"
-        class="no-messages"
-      >
-        <Label text="mark_email_read" class="mi big-icon" />
-        <Label>All done!</Label>
-      </StackLayout>
-      <ListView
-        for="notif in unreadNotifs"
-        v-if="currentTab == 0 && unreadNotifs.length > 0"
-        row="1"
-        class="notifs"
-      >
-        <v-template>
-          <StackLayout class="notif-parent">
-            <Notification :notif="notif" />
-          </StackLayout>
-        </v-template>
-      </ListView>
-      <StackLayout
-        v-if="currentTab == 1 && readNotifs.length < 1 && !loading"
-        row="1"
-        class="no-messages"
-      >
-        <Label text="quiz" class="mi big-icon" />
-        <Label>Can't find any messages</Label>
-      </StackLayout>
-      <ListView
-        for="notif in readNotifs"
-        v-if="currentTab == 1 && readNotifs.length > 0"
-        row="1"
-        class="notifs"
-        ref="notifs"
-      >
-        <v-template>
-          <StackLayout class="notif-parent">
-            <Notification :notif="notif" />
-          </StackLayout>
-        </v-template>
-      </ListView>
-      <ActivityIndicator
-        busy="true"
-        v-if="loading"
-        :color="indicatorColor"
-        row="1"
-      />
-      <fab
-        row="1"
-        text.decode="&#xf18b;"
-        rippleColor="#f1f1f1"
-        androidScaleType="centerInside"
-        class="fab-button mi"
-        v-if="currentTab == 0"
-        hideOnSwipeOfView="notifs"
-        color="white"
-      />
-    </GridLayout>
+    <PullToRefresh @refresh="chooseToReload">
+      <GridLayout rows="auto, *" class="notifs">
+        <SegmentedBar row="0" @selectedIndexChanged="tab">
+          <SegmentedBarItem title="Unread" />
+          <SegmentedBarItem title="Read" />
+        </SegmentedBar>
+        <StackLayout
+          v-if="currentTab == 0 && unreadNotifs.length < 1 && !loading"
+          row="1"
+          class="no-messages"
+        >
+          <Label text="mark_email_read" class="mi big-icon" />
+          <Label>All done!</Label>
+        </StackLayout>
+        <ListView
+          for="notif in unreadNotifs"
+          v-if="currentTab == 0 && unreadNotifs.length > 0"
+          row="1"
+          class="notifs"
+        >
+          <v-template>
+            <StackLayout class="notif-parent">
+              <Notification :notif="notif" />
+            </StackLayout>
+          </v-template>
+        </ListView>
+        <StackLayout
+          v-if="currentTab == 1 && readNotifs.length < 1 && !loading"
+          row="1"
+          class="no-messages"
+        >
+          <Label text="quiz" class="mi big-icon" />
+          <Label>Can't find any messages</Label>
+        </StackLayout>
+        <ListView
+          for="notif in readNotifs"
+          v-if="currentTab == 1 && readNotifs.length > 0"
+          row="1"
+          class="notifs"
+          ref="notifs"
+        >
+          <v-template>
+            <StackLayout class="notif-parent">
+              <Notification :notif="notif" />
+            </StackLayout>
+          </v-template>
+        </ListView>
+        <ActivityIndicator
+          busy="true"
+          v-if="loading"
+          :color="indicatorColor"
+          row="1"
+        />
+        <fab
+          row="1"
+          text.decode="&#xf18b;"
+          rippleColor="#f1f1f1"
+          androidScaleType="centerInside"
+          class="fab-button mi"
+          v-if="currentTab == 0"
+          hideOnSwipeOfView="notifs"
+          color="white"
+        />
+      </GridLayout>
+    </PullToRefresh>
   </Page>
 </template>
 
@@ -110,7 +112,7 @@ export default {
         this.loadRead();
       }
     },
-    loadUnread() {
+    loadUnread(e) {
       this.loading = true;
       Http.request({
         url: "https://api.wasteof.money/messages/unread",
@@ -127,9 +129,12 @@ export default {
         });
         this.unreadNotifs = json.unread;
         this.loading = false;
+        if (e) {
+          e.object.refreshing = false;
+        }
       });
     },
-    loadRead() {
+    loadRead(e) {
       this.loading = true;
       Http.request({
         url: "https://api.wasteof.money/messages/read",
@@ -148,7 +153,19 @@ export default {
         });
         this.readNotifs = json.read;
         this.loading = false;
+        if (e) {
+          e.object.refreshing = false;
+        }
       });
+    },
+    chooseToReload(e) {
+      if (this.currentTab == 0) {
+        this.unreadNotifs = [];
+        this.loadUnread(e);
+      } else {
+        this.readNotifs = [];
+        this.loadRead(e);
+      }
     },
   },
   computed: {
@@ -171,11 +188,17 @@ export default {
 // End custom common variables
 
 // Custom styles
+PullToRefresh {
+  color: var(--accent);
+  margin: 0;
+}
+
 .notifs {
   margin: 0;
   padding: 0;
   padding-top: 0;
   width: 100%;
+  color: var(--text-primary);
 }
 
 .notif-parent {
