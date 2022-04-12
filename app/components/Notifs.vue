@@ -7,71 +7,75 @@
         <Label class="mi menu" text="menu" @tap="onDrawerButtonTap" />
       </GridLayout>
     </ActionBar>
-    <PullToRefresh @refresh="chooseToReload">
-      <GridLayout rows="auto, *" class="notifs">
-        <SegmentedBar row="0" @selectedIndexChanged="tab">
-          <SegmentedBarItem title="Unread" />
-          <SegmentedBarItem title="Read" />
-        </SegmentedBar>
-        <StackLayout
-          v-if="currentTab == 0 && unreadNotifs.length < 1 && !loading"
-          row="1"
-          class="no-messages"
-        >
+    <GridLayout rows="auto, *" class="notifs">
+      <SegmentedBar row="0" @selectedIndexChanged="tab">
+        <SegmentedBarItem title="Unread" />
+        <SegmentedBarItem title="Read" />
+      </SegmentedBar>
+      <PullToRefresh
+        @refresh="loadUnread"
+        row="1"
+        v-if="currentTab == 0 && unreadNotifs.length < 1 && !loading"
+      >
+        <StackLayout class="no-messages">
           <Label text="mark_email_read" class="mi big-icon" />
           <Label>All done!</Label>
         </StackLayout>
-        <ListView
-          for="notif in unreadNotifs"
-          v-if="currentTab == 0 && unreadNotifs.length > 0"
-          row="1"
-          class="notifs"
-        >
-          <v-template>
-            <StackLayout class="notif-parent">
-              <Notification :notif="notif" />
-            </StackLayout>
-          </v-template>
-        </ListView>
-        <StackLayout
-          v-if="currentTab == 1 && readNotifs.length < 1 && !loading"
-          row="1"
-          class="no-messages"
-        >
+      </PullToRefresh>
+      <RadListView
+        for="notif in unreadNotifs"
+        v-if="currentTab == 0 && unreadNotifs.length > 0"
+        class="notifs-list"
+        row="1"
+        pullToRefresh="true"
+        @pullToRefreshInitiated="loadUnread"
+        :pullToRefreshStyle="pullToRefreshStyle"
+      >
+        <v-template>
+          <Notification :notif="notif" />
+        </v-template>
+      </RadListView>
+      <PullToRefresh
+        @refresh="loadRead"
+        row="1"
+        v-if="currentTab == 1 && readNotifs.length < 1 && !loading"
+      >
+        <StackLayout class="no-messages">
           <Label text="quiz" class="mi big-icon" />
           <Label>Can't find any messages</Label>
         </StackLayout>
-        <ListView
-          for="notif in readNotifs"
-          v-if="currentTab == 1 && readNotifs.length > 0"
-          row="1"
-          class="notifs"
-          ref="notifs"
-        >
-          <v-template>
-            <StackLayout class="notif-parent">
-              <Notification :notif="notif" />
-            </StackLayout>
-          </v-template>
-        </ListView>
-        <ActivityIndicator
-          busy="true"
-          v-if="loading"
-          :color="indicatorColor"
-          row="1"
-        />
-        <fab
-          row="1"
-          text.decode="&#xf18b;"
-          rippleColor="#f1f1f1"
-          androidScaleType="centerInside"
-          class="fab-button mi"
-          v-if="currentTab == 0"
-          hideOnSwipeOfView="notifs"
-          color="white"
-        />
-      </GridLayout>
-    </PullToRefresh>
+      </PullToRefresh>
+      <RadListView
+        for="notif in readNotifs"
+        v-if="currentTab == 1 && readNotifs.length > 0"
+        class="notifs-list"
+        ref="notifs"
+        row="1"
+        pullToRefresh="true"
+        @pullToRefreshInitiated="loadRead"
+        :pullToRefreshStyle="pullToRefreshStyle"
+      >
+        <v-template>
+          <Notification :notif="notif" />
+        </v-template>
+      </RadListView>
+      <ActivityIndicator
+        busy="true"
+        v-if="loading && initialLoad"
+        :color="indicatorColor"
+        row="1"
+      />
+      <fab
+        row="1"
+        text.decode="&#xf18b;"
+        rippleColor="#f1f1f1"
+        androidScaleType="centerInside"
+        class="fab-button mi"
+        v-if="currentTab == 0"
+        hideOnSwipeOfView="notifs"
+        color="white"
+      />
+    </GridLayout>
   </Page>
 </template>
 
@@ -82,6 +86,7 @@ import { ApplicationSettings } from "@nativescript/core";
 import * as utils from "~/shared/utils";
 import Notification from "./Notification";
 import { SelectedPageService } from "../shared/selected-page-service";
+import * as colorModule from "tns-core-modules/color";
 export default {
   components: {
     Notification,
@@ -99,6 +104,10 @@ export default {
       unreadNotifs: [],
       currentTab: 0,
       loading: true,
+      pullToRefreshStyle: {
+        indicatorColor: new colorModule.Color("#6466e9"),
+      },
+      initialLoad: true,
     };
   },
   methods: {
@@ -129,8 +138,14 @@ export default {
         });
         this.unreadNotifs = json.unread;
         this.loading = false;
+        this.initialLoad = false;
         if (e) {
           e.object.refreshing = false;
+          try {
+            e.object.notifyPullToRefreshFinished();
+          } catch {
+            console.log("Couldn't cancel refresh.");
+          }
         }
       });
     },
@@ -153,19 +168,16 @@ export default {
         });
         this.readNotifs = json.read;
         this.loading = false;
+        this.initialLoad = false;
         if (e) {
           e.object.refreshing = false;
+          try {
+            e.object.notifyPullToRefreshFinished();
+          } catch {
+            console.log("Couldn't cancel refresh.");
+          }
         }
       });
-    },
-    chooseToReload(e) {
-      if (this.currentTab == 0) {
-        this.unreadNotifs = [];
-        this.loadUnread(e);
-      } else {
-        this.readNotifs = [];
-        this.loadRead(e);
-      }
     },
   },
   computed: {
@@ -201,8 +213,8 @@ PullToRefresh {
   color: var(--text-primary);
 }
 
-.notif-parent {
-  margin: 5;
+.notifs-list {
+  margin-top: 5;
 }
 
 .fab-button {

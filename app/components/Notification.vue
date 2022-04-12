@@ -155,7 +155,7 @@ export default {
   padding: 15;
   background: var(--card-bg);
   border-radius: var(--br);
-  margin: 0;
+  margin: 5 10;
 }
 
 .notif-content {

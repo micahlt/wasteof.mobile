@@ -11,9 +11,11 @@
     "@nstudio/nativescript-floatingactionbutton": "^3.0.4",
     "bad-words": "^1.6.5",
     "friendly-time": "^1.1.1",
+    "nativescript-ui-listview": "^10.0.2",
     "nativescript-ui-sidedrawer": "~10.0.2",
     "nativescript-vue": "~2.9.1",
-    "rxjs": "~7.5.5"
+    "rxjs": "~7.5.5",
+    "tns-core-modules": "^6.5.27"
   },
   "devDependencies": {
     "@nativescript/android": "8.2.2",
