@@ -74,6 +74,7 @@
         v-if="currentTab == 0"
         hideOnSwipeOfView="notifs"
         color="white"
+        @tap="markRead"
       />
     </GridLayout>
   </Page>
@@ -179,6 +180,28 @@ export default {
         }
       });
     },
+    markRead() {
+      let toMarkRead = [];
+      this.unreadNotifs.forEach((notif) => {
+        toMarkRead.push(notif._id);
+      });
+      Http.request({
+        url: "https://api.wasteof.money/messages/mark/read",
+        method: "POST",
+        headers: {
+          Authorization: this.token,
+          "Content-Type": "application/json",
+        },
+        content: JSON.stringify({
+          messages: toMarkRead,
+        }),
+      }).then((response) => {
+        if (response.statusCode == 200) {
+          this.unreadNotifs = [];
+          this.loadUnread();
+        }
+      });
+    },
   },
   computed: {
     indicatorColor() {
@@ -232,5 +255,6 @@ PullToRefresh {
   height: 100%;
   text-align: center;
   opacity: 0.7;
+  color: var(--text-primary);
 }
 </style>
