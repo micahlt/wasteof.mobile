@@ -13,9 +13,9 @@
         <SegmentedBarItem title="Read" />
       </SegmentedBar>
       <PullToRefresh
-        @refresh="loadUnread($event, true)"
+        @refresh="loadUnread($event, 'ptr')"
         row="1"
-        v-if="currentTab == 0 && unreadNotifs.length < 1 && !loading"
+        v-if="currentTab == 0 && unreadNotifs.length < 1 && !initialLoad.u"
       >
         <StackLayout class="no-messages">
           <Label text="mark_email_read" class="mi big-icon" />
@@ -24,11 +24,11 @@
       </PullToRefresh>
       <RadListView
         for="notif in unreadNotifs"
-        v-if="currentTab == 0 && unreadNotifs.length > 0"
+        v-if="currentTab == 0"
         class="notifs-list"
         row="1"
         pullToRefresh="true"
-        @pullToRefreshInitiated="loadUnread"
+        @pullToRefreshInitiated="loadUnread($event, 'rad')"
         :pullToRefreshStyle="pullToRefreshStyle"
       >
         <v-template>
@@ -36,9 +36,9 @@
         </v-template>
       </RadListView>
       <PullToRefresh
-        @refresh="loadRead($event, true)"
+        @refresh="loadRead($event, 'ptr')"
         row="1"
-        v-if="currentTab == 1 && readNotifs.length < 1 && !loading"
+        v-if="currentTab == 1 && readNotifs.length < 1 && !initialLoad.r"
       >
         <StackLayout class="no-messages">
           <Label text="quiz" class="mi big-icon" />
@@ -47,12 +47,12 @@
       </PullToRefresh>
       <RadListView
         for="notif in readNotifs"
-        v-if="currentTab == 1 && readNotifs.length > 0"
+        v-if="currentTab == 1"
         class="notifs-list"
         ref="notifs"
         row="1"
         pullToRefresh="true"
-        @pullToRefreshInitiated="loadRead"
+        @pullToRefreshInitiated="loadRead($event, 'rad')"
         :pullToRefreshStyle="pullToRefreshStyle"
       >
         <v-template>
@@ -61,7 +61,7 @@
       </RadListView>
       <ActivityIndicator
         busy="true"
-        v-if="loading && initialLoad"
+        v-if="loading && (initialLoad.r || initialLoad.u)"
         :color="indicatorColor"
         row="1"
       />
@@ -108,7 +108,10 @@ export default {
       pullToRefreshStyle: {
         indicatorColor: new colorModule.Color("#6466e9"),
       },
-      initialLoad: true,
+      initialLoad: {
+        r: true,
+        u: true,
+      },
     };
   },
   methods: {
@@ -122,7 +125,7 @@ export default {
         this.loadRead();
       }
     },
-    loadUnread(e, isFromRefresh) {
+    loadUnread(e, source) {
       this.loading = true;
       Http.request({
         url: "https://api.wasteof.money/messages/unread",
@@ -139,13 +142,15 @@ export default {
         });
         this.unreadNotifs = json.unread;
         this.loading = false;
-        this.initialLoad = false;
-        if (isFromRefresh) {
+        this.initialLoad.u = false;
+        if (source == "rad") {
           e.object.notifyPullToRefreshFinished();
+        } else {
+          e.object.refreshing = false;
         }
       });
     },
-    loadRead(e, isFromRefresh) {
+    loadRead(e, source) {
       this.loading = true;
       Http.request({
         url: "https://api.wasteof.money/messages/read",
@@ -164,9 +169,11 @@ export default {
         });
         this.readNotifs = json.read;
         this.loading = false;
-        this.initialLoad = false;
-        if (isFromRefresh) {
+        this.initialLoad.r = false;
+        if (source == "rad") {
           e.object.notifyPullToRefreshFinished();
+        } else {
+          e.object.refreshing = false;
         }
       });
     },
