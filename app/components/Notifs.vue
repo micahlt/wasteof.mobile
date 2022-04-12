@@ -13,7 +13,7 @@
         <SegmentedBarItem title="Read" />
       </SegmentedBar>
       <PullToRefresh
-        @refresh="loadUnread"
+        @refresh="loadUnread($event, true)"
         row="1"
         v-if="currentTab == 0 && unreadNotifs.length < 1 && !loading"
       >
@@ -36,7 +36,7 @@
         </v-template>
       </RadListView>
       <PullToRefresh
-        @refresh="loadRead"
+        @refresh="loadRead($event, true)"
         row="1"
         v-if="currentTab == 1 && readNotifs.length < 1 && !loading"
       >
@@ -122,7 +122,7 @@ export default {
         this.loadRead();
       }
     },
-    loadUnread(e) {
+    loadUnread(e, isFromRefresh) {
       this.loading = true;
       Http.request({
         url: "https://api.wasteof.money/messages/unread",
@@ -140,17 +140,12 @@ export default {
         this.unreadNotifs = json.unread;
         this.loading = false;
         this.initialLoad = false;
-        if (e) {
-          e.object.refreshing = false;
-          try {
-            e.object.notifyPullToRefreshFinished();
-          } catch {
-            console.log("Couldn't cancel refresh.");
-          }
+        if (isFromRefresh) {
+          e.object.notifyPullToRefreshFinished();
         }
       });
     },
-    loadRead(e) {
+    loadRead(e, isFromRefresh) {
       this.loading = true;
       Http.request({
         url: "https://api.wasteof.money/messages/read",
@@ -170,13 +165,8 @@ export default {
         this.readNotifs = json.read;
         this.loading = false;
         this.initialLoad = false;
-        if (e) {
-          e.object.refreshing = false;
-          try {
-            e.object.notifyPullToRefreshFinished();
-          } catch {
-            console.log("Couldn't cancel refresh.");
-          }
+        if (isFromRefresh) {
+          e.object.notifyPullToRefreshFinished();
         }
       });
     },
