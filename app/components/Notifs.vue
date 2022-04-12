@@ -112,6 +112,8 @@ export default {
         r: true,
         u: true,
       },
+      readPage: 1,
+      unreadPage: 1,
     };
   },
   methods: {
@@ -127,8 +129,12 @@ export default {
     },
     loadUnread(e, source) {
       this.loading = true;
+      if (source == "rad" || source == "ptr") {
+        this.unreadNotifs = [];
+        this.unreadPage = 1;
+      }
       Http.request({
-        url: "https://api.wasteof.money/messages/unread",
+        url: `https://api.wasteof.money/messages/unread?page=${this.unreadPage}`,
         method: "GET",
         headers: {
           Authorization: this.token,
@@ -137,23 +143,39 @@ export default {
         const json = response.content.toJSON();
         json.unread.forEach((notif) => {
           if (notif.type.includes("comment")) {
-            notif = utils.fixComment(notif.data.comment);
+            notif.data.comment = utils.fixComment(notif.data.comment);
+          } else if (notif.type == "post_mention") {
+            notif.data.post = utils.fixPost(notif.data.post);
           }
+          this.unreadNotifs.push(notif);
         });
-        this.unreadNotifs = json.unread;
         this.loading = false;
         this.initialLoad.u = false;
+        this.unreadPage++;
         if (source == "rad") {
           e.object.notifyPullToRefreshFinished();
-        } else {
+        } else if (source == "ptr") {
           e.object.refreshing = false;
+        } else if (source == "inf") {
+          if (!json.last) {
+            e.object.notifyAppendItemsOnDemandFinished(json.unread.length);
+          } else {
+            e.object.notifyAppendItemsOnDemandFinished(
+              json.unread.length,
+              true
+            );
+          }
         }
       });
     },
     loadRead(e, source) {
       this.loading = true;
+      if (source == "rad" || source == "ptr") {
+        this.readNotifs = [];
+        this.readPage = 1;
+      }
       Http.request({
-        url: "https://api.wasteof.money/messages/read",
+        url: `https://api.wasteof.money/messages/read?page=${this.readPage}`,
         method: "GET",
         headers: {
           Authorization: this.token,
@@ -162,18 +184,25 @@ export default {
         const json = response.content.toJSON();
         json.read.forEach((notif) => {
           if (notif.type.includes("comment")) {
-            notif = utils.fixComment(notif.data.comment);
+            notif.data.comment = utils.fixComment(notif.data.comment);
           } else if (notif.type == "post_mention") {
-            notif = utils.fixPost(notif.data.post);
+            notif.data.post = utils.fixPost(notif.data.post);
           }
+          this.readNotifs.push(notif);
         });
-        this.readNotifs = json.read;
         this.loading = false;
         this.initialLoad.r = false;
+        this.readPage++;
         if (source == "rad") {
           e.object.notifyPullToRefreshFinished();
-        } else {
+        } else if (source == "ptr") {
           e.object.refreshing = false;
+        } else if (source == "inf") {
+          if (!json.last) {
+            e.object.notifyAppendItemsOnDemandFinished(json.read.length);
+          } else {
+            e.object.notifyAppendItemsOnDemandFinished(json.read.length, true);
+          }
         }
       });
     },
@@ -198,6 +227,13 @@ export default {
           this.loadUnread();
         }
       });
+    },
+    loadMore(e, t) {
+      if (t == "read") {
+        this.loadRead(e, "inf");
+      } else {
+        this.loadUnread(e, "inf");
+      }
     },
   },
   computed: {

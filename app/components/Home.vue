@@ -77,6 +77,7 @@ export default {
       page: 1,
       isInfiniteLoading: false,
       initialLoad: true,
+      last: false,
     };
   },
   methods: {
@@ -120,6 +121,7 @@ export default {
         });
         this.loading++;
         this.isInfiniteLoading = false;
+        this.last = json.last;
         if (e) {
           e.object.refreshing = false;
         }
@@ -129,7 +131,8 @@ export default {
     scroll(e) {
       if (
         e.scrollY > e.object.scrollableHeight - 200 &&
-        !this.isInfiniteLoading
+        !this.isInfiniteLoading &&
+        !this.last
       ) {
         this.isInfiniteLoading = true;
         this.page++;

@@ -6,7 +6,7 @@
       columns="auto, auto, *, auto"
     >
       <Image
-        :src="`https://api.wasteof.money/users/${notif.data.actor.name}/picture`"
+        :src="`https://api.wasteof.money/users/${actor}/picture`"
         class="pfp"
         loadMode="async"
         col="0"
@@ -14,7 +14,7 @@
       />
       <Label class="notif-username" col="1" @tap="openUser">
         <FormattedString>
-          <span fontWeight="bold">@{{ notif.data.actor.name }} </span>
+          <span fontWeight="bold">@{{ actor }} </span>
           <span>{{ notifLabel }}</span>
         </FormattedString>
       </Label>
@@ -59,6 +59,16 @@ export default {
     };
   },
   computed: {
+    actor() {
+      const n = this.notif;
+      if (n.data) {
+        return n.data.actor.name;
+      } else if (n.poster) {
+        return n.poster.name;
+      } else {
+        return "unknown";
+      }
+    },
     notifLabel() {
       const t = this.notif.type;
       switch (t) {
