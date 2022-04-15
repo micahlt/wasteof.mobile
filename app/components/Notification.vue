@@ -46,8 +46,8 @@
 
 <script>
 import * as utils from "~/shared/utils";
-import { Utils } from "@nativescript/core";
-import { ApplicationSettings } from "@nativescript/core";
+import { InAppBrowser } from "nativescript-inappbrowser";
+import { ApplicationSettings, Utils } from "@nativescript/core";
 import Post from "./Post.vue";
 export default {
   props: {
@@ -108,43 +108,53 @@ export default {
         },
       });
     },
-    openNotif() {
+    async openNotif() {
       const t = this.notif.type;
+      let open;
+      if (await InAppBrowser.isAvailable()) {
+        open = (url) => {
+          InAppBrowser.open(url, {
+            toolbarColor: "#6466e9",
+            enableDefaultShare: false,
+            showInRecents: false,
+          });
+        };
+      } else {
+        open = (url) => {
+          Utils.openUrl(url);
+        };
+      }
       switch (t) {
         case "wall_comment_reply": {
-          Utils.openUrl(
+          open(
             `https://wasteof.money/users/${this.myUsername}/wall#comments-${this.notif.data.comment._id}`
           );
           break;
         }
         case "wall_comment": {
-          Utils.openUrl(
+          open(
             `https://wasteof.money/users/${this.myUsername}/wall#comments-${this.notif.data.comment._id}`
           );
           break;
         }
         case "comment_reply": {
-          Utils.openUrl(
+          open(
             `https://wasteof.money/posts/${this.notif.data.comment.post}#comments-${this.notif.data.comment._id}`
           );
           break;
         }
         case "comment": {
-          Utils.openUrl(
+          open(
             `https://wasteof.money/posts/${this.notif.data.comment.post}#comments-${this.notif.data.comment._id}`
           );
           break;
         }
         case "follow": {
-          Utils.openUrl(
-            `https://wasteof.money/users/${this.notif.data.actor.name}`
-          );
+          open(`https://wasteof.money/users/${this.notif.data.actor.name}`);
           break;
         }
         case "post_mention": {
-          Utils.openUrl(
-            `https://wasteof.money/posts/${this.notif.data.post._id}`
-          );
+          open(`https://wasteof.money/posts/${this.notif.data.post._id}`);
           break;
         }
       }

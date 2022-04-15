@@ -153,17 +153,19 @@ Page {
 .auth-field {
   font-size: 17;
   padding: 10;
+  width: 80%;
+  margin: auto;
 }
 
 .username-field {
-  margin-top: 10;
+  margin-top: 15 !important;
 }
 
 .auth-button {
   text-transform: uppercase;
   width: 120;
   margin: auto;
-  margin-top: 10;
+  margin-top: 15;
   height: 40;
   border-radius: var(--br);
   background-color: var(--accent);

@@ -55,7 +55,7 @@
 
 <script>
 import * as utils from "~/shared/utils";
-import { Utils } from "@nativescript/core";
+import { InAppBrowser } from "nativescript-inappbrowser";
 import { Http } from "@nativescript/core";
 import { ApplicationSettings } from "@nativescript/core";
 export default {
@@ -100,8 +100,17 @@ export default {
         },
       });
     },
-    openPost() {
-      Utils.openUrl(`https://wasteof.money/posts/${this.post._id}`);
+    async openPost() {
+      if (await InAppBrowser.isAvailable()) {
+        const b = InAppBrowser.open(
+          `https://wasteof.money/posts/${this.post._id}`,
+          {
+            toolbarColor: "#6466e9",
+            enableDefaultShare: false,
+            showInRecents: false,
+          }
+        );
+      }
     },
     lovePost() {
       if (this.username) {

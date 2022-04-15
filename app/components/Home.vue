@@ -7,50 +7,66 @@
         <Label class="mi menu" text="menu" @tap="onDrawerButtonTap" />
       </GridLayout>
     </ActionBar>
-    <PullToRefresh @refresh="fetchPosts" v-if="username">
-      <ScrollView v-if="username != null" @scroll="scroll">
-        <ActivityIndicator
-          busy="true"
-          v-if="loading < 2"
-          :color="indicatorColor"
-        />
-        <StackLayout class="posts" v-if="loading > 1">
-          <GridLayout columns="*, 40" class="switcher">
-            <Label
-              text="Your feed"
-              class="time-current"
-              horizontalAlignment="left"
-              col="0"
-            />
-            <GridLayout columns="*" alignSelf="flex-end" col="1">
-              <Button
-                text.decode="&#xe7f4;"
-                :class="['time-change', 'mi', { unread: messageCount > 0 }]"
-                textWrap="false"
-                @tap="openNotifs"
-                col="0"
-              />
-              <Label class="notifs-unread" col="0" text="•" />
-            </GridLayout>
-          </GridLayout>
-          <Post v-for="post in posts" :key="post._id" :post="post" />
+    <GridLayout rows="auto, *" class="parent">
+      <PullToRefresh @refresh="fetchPosts" v-if="username" row="1">
+        <ScrollView v-if="username != null" @scroll="scroll" id="scrollingView">
           <ActivityIndicator
             busy="true"
-            v-if="isInfiniteLoading"
+            v-if="loading < 2"
             :color="indicatorColor"
           />
-        </StackLayout>
-      </ScrollView>
-    </PullToRefresh>
-    <StackLayout class="sign-in-ad" v-else>
-      <Label class="mi big-icon" text="vpn_key" horizontalAlignment="center" />
-      <Label
-        class="ad-text"
-        editable="false"
-        text="Sign in to your wasteof.money account for personalized content!"
-        textWrap="true"
+          <StackLayout class="posts" v-if="loading > 1">
+            <GridLayout columns="*, 40" class="switcher">
+              <Label
+                text="Your feed"
+                class="time-current"
+                horizontalAlignment="left"
+                col="0"
+              />
+              <GridLayout columns="*" alignSelf="flex-end" col="1">
+                <Button
+                  text.decode="&#xe7f4;"
+                  :class="['time-change', 'mi', { unread: messageCount > 0 }]"
+                  textWrap="false"
+                  @tap="openNotifs"
+                  col="0"
+                />
+                <Label class="notifs-unread" col="0" text="•" />
+              </GridLayout>
+            </GridLayout>
+            <Post v-for="post in posts" :key="post._id" :post="post" />
+            <ActivityIndicator
+              busy="true"
+              v-if="isInfiniteLoading"
+              :color="indicatorColor"
+            />
+          </StackLayout>
+        </ScrollView>
+      </PullToRefresh>
+      <StackLayout class="sign-in-ad" v-else row="1">
+        <Label
+          class="mi big-icon"
+          text="vpn_key"
+          horizontalAlignment="center"
+        />
+        <Label
+          class="ad-text"
+          editable="false"
+          text="Sign in to your wasteof.money account for personalized content!"
+          textWrap="true"
+        />
+      </StackLayout>
+      <fab
+        row="1"
+        text.decode="&#xe145;"
+        rippleColor="#f1f1f1"
+        androidScaleType="centerInside"
+        class="fab-button mi"
+        hideOnSwipeOfView="scrollingView"
+        color="white"
+        @tap="newPost"
       />
-    </StackLayout>
+    </GridLayout>
   </Page>
 </template>
 
@@ -58,9 +74,13 @@
 import Post from "./Post";
 import Browse from "./Browse";
 import Notifs from "./Notifs";
-import { Application } from "@nativescript/core";
-import { ApplicationSettings } from "@nativescript/core";
-import { Http } from "@nativescript/core";
+import { InAppBrowser } from "nativescript-inappbrowser";
+import {
+  Application,
+  Utils,
+  ApplicationSettings,
+  Http,
+} from "@nativescript/core";
 import * as utils from "~/shared/utils";
 import { SelectedPageService } from "../shared/selected-page-service";
 export default {
@@ -137,6 +157,17 @@ export default {
         this.isInfiniteLoading = true;
         this.page++;
         this.fetchPosts();
+      }
+    },
+    async newPost() {
+      if (await InAppBrowser.isAvailable()) {
+        const b = InAppBrowser.open("https://wasteof.money/posts/new", {
+          toolbarColor: "#6466e9",
+          enableDefaultShare: false,
+          showInRecents: false,
+        });
+      } else {
+        Utils.open("https://wasteof.money/posts/new");
       }
     },
   },
@@ -222,5 +253,15 @@ PullToRefresh {
 
 .unread {
   background-color: #ff0055;
+}
+
+.fab-button {
+  height: 70;
+  width: 70;
+  margin: 15;
+  background-color: var(--accent);
+  horizontal-align: right;
+  vertical-align: bottom;
+  font-size: 7;
 }
 </style>

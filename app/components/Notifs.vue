@@ -30,6 +30,8 @@
         pullToRefresh="true"
         @pullToRefreshInitiated="loadUnread($event, 'rad')"
         :pullToRefreshStyle="pullToRefreshStyle"
+        id="notifs"
+        ref="notifs"
       >
         <v-template>
           <Notification :notif="notif" />
@@ -49,7 +51,6 @@
         for="notif in readNotifs"
         v-if="currentTab == 1"
         class="notifs-list"
-        ref="notifs"
         row="1"
         pullToRefresh="true"
         @pullToRefreshInitiated="loadRead($event, 'rad')"
