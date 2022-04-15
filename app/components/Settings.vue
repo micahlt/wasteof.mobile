@@ -40,6 +40,7 @@
           <Switch v-model="filterEnabled" />
           <Label class="setting-descriptor">Filter profanity</Label>
         </FlexboxLayout>
+        <Label class="version">Version {{ version }}</Label>
       </StackLayout>
     </StackLayout>
   </Page>
@@ -121,6 +122,7 @@ export default {
       username: "",
       password: "",
       filterEnabled: ApplicationSettings.getBoolean("filter") || null,
+      version: "0.4.0",
     };
   },
 };
@@ -189,5 +191,11 @@ Page {
 .setting-descriptor {
   padding-top: 16;
   font-size: 15;
+  margin-left: -9;
+}
+
+.version {
+  font-size: 15;
+  margin-left: 5%;
 }
 </style>

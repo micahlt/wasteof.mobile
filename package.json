@@ -1,7 +1,7 @@
 {
   "name": "wasteof.mobile",
   "main": "app/app.js",
-  "version": "1.0.0",
+  "version": "0.4.0",
   "private": true,
   "dependencies": {
     "@akylas/nativescript-pulltorefresh": "^2.4.6",
