@@ -22,5 +22,8 @@
     "@nativescript/android": "8.2.2",
     "@nativescript/webpack": "~5.0.6",
     "nativescript-vue-template-compiler": "~2.9.1"
+  },
+  "nativescript": {
+    "id": "com.micahlindley.wasteofmobile"
   }
 }

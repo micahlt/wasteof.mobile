@@ -1,7 +1,7 @@
 import { NativeScriptConfig } from '@nativescript/core';
 
 export default {
-  id: 'org.nativescript.wasteofmobile',
+  id: 'com.micahlindley.wasteofmobile',
   appPath: 'app',
   appResourcesPath: 'App_Resources',
   android: {
