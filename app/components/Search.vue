@@ -71,7 +71,7 @@ export default {
 
 // Custom styles
 .searchbar-parent {
-  background-color: var(--border-clr);
+  background-color: var(--card-bg);
   border-radius: var(--br);
   margin: 10;
   padding: 5;
@@ -82,7 +82,7 @@ export default {
 }
 
 .searchbar {
-  background-color: var(--border-clr);
+  background-color: var(--card-bg);
   color: var(--text-primary);
   font-size: 18.5;
   placeholder-color: var(--text-primary);

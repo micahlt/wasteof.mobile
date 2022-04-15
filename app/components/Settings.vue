@@ -2,13 +2,14 @@
   <Page class="page">
     <ActionBar class="action-bar">
       <NavigationButton visibility="hidden" />
-      <GridLayout columns="50, *">
-        <Image src="~/shared/nav-logo.png" colSpan="2" class="nav-logo" />
-        <Label class="mi menu" text="menu" @tap="onDrawerButtonTap" />
+      <GridLayout columns="50, *, 50">
+        <Label class="mi menu" text="menu" @tap="onDrawerButtonTap" col="0" />
+        <Image src="~/shared/nav-logo.png" col="1" class="nav-logo" />
       </GridLayout>
     </ActionBar>
     <StackLayout>
       <StackLayout class="settings" v-if="!currentUsername">
+        <Image src="~/shared/nav-logo.png" class="logo" />
         <TextField
           hint="username"
           v-model="username"
@@ -142,6 +143,11 @@ Page {
   border-radius: var(--br);
   margin-bottom: 10;
   padding-bottom: 30;
+}
+
+.logo {
+  margin-top: 20;
+  width: 80;
 }
 
 .auth-field {
