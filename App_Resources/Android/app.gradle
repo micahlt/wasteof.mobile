@@ -13,8 +13,8 @@ android {
     // targetSdkVersion 32
     applicationId "com.micahlindley.wasteofmobile"
     // Version Information
-    versionCode 2
-    versionName "0.4.0"
+    versionCode 3
+    versionName "0.4.5"
     
     generatedDensities = []
   }

@@ -37,6 +37,12 @@
           </StackLayout>
           <StackLayout>
             <Notification v-for="n in readNotifs" :notif="n" :key="n._id" />
+            <ActivityIndicator
+              busy="true"
+              v-if="isInfiniteLoading"
+              :color="indicatorColor"
+              class="infinite"
+            />
           </StackLayout>
         </ScrollView>
       </PullToRefresh>
@@ -205,7 +211,7 @@ export default {
     },
     scrollUnread(e) {
       if (
-        e.scrollY > e.object.scrollableHeight - 200 &&
+        e.scrollY > e.object.scrollableHeight - 350 &&
         !this.isInfiniteLoading &&
         !this.last.u &&
         !this.initialLoad.u
@@ -217,7 +223,7 @@ export default {
     },
     scrollRead(e) {
       if (
-        e.scrollY > e.object.scrollableHeight - 200 &&
+        e.scrollY > e.object.scrollableHeight - 350 &&
         !this.isInfiniteLoading &&
         !this.last.r &&
         !this.initialLoad.r
@@ -281,5 +287,9 @@ PullToRefresh {
   text-align: center;
   opacity: 0.7;
   color: var(--text-primary);
+}
+
+.infinite {
+  margin: 15;
 }
 </style>

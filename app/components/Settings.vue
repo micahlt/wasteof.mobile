@@ -122,7 +122,7 @@ export default {
       username: "",
       password: "",
       filterEnabled: ApplicationSettings.getBoolean("filter") || null,
-      version: "0.4.0",
+      version: "0.4.5",
     };
   },
 };

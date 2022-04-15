@@ -150,7 +150,7 @@ export default {
     },
     scroll(e) {
       if (
-        e.scrollY > e.object.scrollableHeight - 200 &&
+        e.scrollY > e.object.scrollableHeight - 350 &&
         !this.isInfiniteLoading &&
         !this.last &&
         !this.initialLoad
