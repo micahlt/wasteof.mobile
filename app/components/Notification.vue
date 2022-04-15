@@ -176,6 +176,7 @@ export default {
   background: var(--card-bg);
   border-radius: var(--br);
   margin: 5 10;
+  color: var(--text-primary);
 }
 
 .notif-content {

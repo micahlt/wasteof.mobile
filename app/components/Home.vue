@@ -152,7 +152,8 @@ export default {
       if (
         e.scrollY > e.object.scrollableHeight - 200 &&
         !this.isInfiniteLoading &&
-        !this.last
+        !this.last &&
+        !this.initialLoad
       ) {
         this.isInfiniteLoading = true;
         this.page++;

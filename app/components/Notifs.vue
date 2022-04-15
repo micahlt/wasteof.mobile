@@ -12,54 +12,34 @@
         <SegmentedBarItem title="Unread" />
         <SegmentedBarItem title="Read" />
       </SegmentedBar>
-      <PullToRefresh
-        @refresh="loadUnread($event, 'ptr')"
-        row="1"
-        v-if="currentTab == 0 && unreadNotifs.length < 1 && !initialLoad.u"
-      >
-        <StackLayout class="no-messages">
-          <Label text="mark_email_read" class="mi big-icon" />
-          <Label>All done!</Label>
-        </StackLayout>
+      <PullToRefresh @refresh="loadUnread" row="1" v-if="currentTab == 0">
+        <ScrollView @scroll="scrollUnread" id="scrollingView">
+          <StackLayout
+            class="no-messages"
+            v-if="unreadNotifs.length < 1 && !initialLoad.u"
+          >
+            <Label text="mark_email_read" class="mi big-icon" />
+            <Label>All done!</Label>
+          </StackLayout>
+          <StackLayout>
+            <Notification v-for="n in unreadNotifs" :notif="n" :key="n._id" />
+          </StackLayout>
+        </ScrollView>
       </PullToRefresh>
-      <RadListView
-        for="notif in unreadNotifs"
-        v-if="currentTab == 0"
-        class="notifs-list"
-        row="1"
-        pullToRefresh="true"
-        @pullToRefreshInitiated="loadUnread($event, 'rad')"
-        :pullToRefreshStyle="pullToRefreshStyle"
-        id="notifs"
-        ref="notifs"
-      >
-        <v-template>
-          <Notification :notif="notif" />
-        </v-template>
-      </RadListView>
-      <PullToRefresh
-        @refresh="loadRead($event, 'ptr')"
-        row="1"
-        v-if="currentTab == 1 && readNotifs.length < 1 && !initialLoad.r"
-      >
-        <StackLayout class="no-messages">
-          <Label text="quiz" class="mi big-icon" />
-          <Label>Can't find any messages</Label>
-        </StackLayout>
+      <PullToRefresh @refresh="loadRead" row="1" v-if="currentTab == 1">
+        <ScrollView @scroll="scrollRead">
+          <StackLayout
+            class="no-messages"
+            v-if="readNotifs.length < 1 && !initialLoad.r"
+          >
+            <Label text="quiz" class="mi big-icon" />
+            <Label>Can't find any messages</Label>
+          </StackLayout>
+          <StackLayout>
+            <Notification v-for="n in readNotifs" :notif="n" :key="n._id" />
+          </StackLayout>
+        </ScrollView>
       </PullToRefresh>
-      <RadListView
-        for="notif in readNotifs"
-        v-if="currentTab == 1"
-        class="notifs-list"
-        row="1"
-        pullToRefresh="true"
-        @pullToRefreshInitiated="loadRead($event, 'rad')"
-        :pullToRefreshStyle="pullToRefreshStyle"
-      >
-        <v-template>
-          <Notification :notif="notif" />
-        </v-template>
-      </RadListView>
       <ActivityIndicator
         busy="true"
         v-if="loading && (initialLoad.r || initialLoad.u)"
@@ -73,7 +53,7 @@
         androidScaleType="centerInside"
         class="fab-button mi"
         v-if="currentTab == 0"
-        hideOnSwipeOfView="notifs"
+        hideOnSwipeOfView="scrollingView"
         color="white"
         @tap="markRead"
       />
@@ -82,13 +62,11 @@
 </template>
 
 <script>
-import { Http } from "@nativescript/core";
-import { Application } from "@nativescript/core";
-import { ApplicationSettings } from "@nativescript/core";
+import { Application, ApplicationSettings, Http } from "@nativescript/core";
 import * as utils from "~/shared/utils";
-import Notification from "./Notification";
 import { SelectedPageService } from "../shared/selected-page-service";
 import * as colorModule from "tns-core-modules/color";
+import Notification from "./Notification.vue";
 export default {
   components: {
     Notification,
@@ -115,6 +93,11 @@ export default {
       },
       readPage: 1,
       unreadPage: 1,
+      isInfiniteLoading: false,
+      last: {
+        r: false,
+        u: false,
+      },
     };
   },
   methods: {
@@ -128,11 +111,11 @@ export default {
         this.loadRead();
       }
     },
-    loadUnread(e, source) {
-      this.loading = true;
-      if (source == "rad" || source == "ptr") {
+    loadUnread(e) {
+      if (!this.isInfiniteLoading) {
         this.unreadNotifs = [];
         this.unreadPage = 1;
+        this.initialLoad.u = true;
       }
       Http.request({
         url: `https://api.wasteof.money/messages/unread?page=${this.unreadPage}`,
@@ -152,28 +135,18 @@ export default {
         });
         this.loading = false;
         this.initialLoad.u = false;
-        this.unreadPage++;
-        if (source == "rad") {
-          e.object.notifyPullToRefreshFinished();
-        } else if (source == "ptr") {
+        this.isInfiniteLoading = false;
+        this.last.u = json.last;
+        if (e) {
           e.object.refreshing = false;
-        } else if (source == "inf") {
-          if (!json.last) {
-            e.object.notifyAppendItemsOnDemandFinished(json.unread.length);
-          } else {
-            e.object.notifyAppendItemsOnDemandFinished(
-              json.unread.length,
-              true
-            );
-          }
         }
       });
     },
-    loadRead(e, source) {
-      this.loading = true;
-      if (source == "rad" || source == "ptr") {
+    loadRead(e) {
+      if (!this.isInfiniteLoading) {
         this.readNotifs = [];
         this.readPage = 1;
+        this.initialLoad.r = true;
       }
       Http.request({
         url: `https://api.wasteof.money/messages/read?page=${this.readPage}`,
@@ -185,25 +158,26 @@ export default {
         const json = response.content.toJSON();
         json.read.forEach((notif) => {
           if (notif.type.includes("comment")) {
-            notif.data.comment = utils.fixComment(notif.data.comment);
+            if (notif.data.comment != null) {
+              notif.data.comment = utils.fixComment(notif.data.comment);
+            } else {
+              notif.data.comment = {
+                content: "[this comment was deleted]",
+                deleted: true,
+              };
+            }
           } else if (notif.type == "post_mention") {
             notif.data.post = utils.fixPost(notif.data.post);
           }
           this.readNotifs.push(notif);
         });
         this.loading = false;
+        this.isInfiniteLoading = false;
         this.initialLoad.r = false;
+        this.last.r = json.last;
         this.readPage++;
-        if (source == "rad") {
-          e.object.notifyPullToRefreshFinished();
-        } else if (source == "ptr") {
+        if (e) {
           e.object.refreshing = false;
-        } else if (source == "inf") {
-          if (!json.last) {
-            e.object.notifyAppendItemsOnDemandFinished(json.read.length);
-          } else {
-            e.object.notifyAppendItemsOnDemandFinished(json.read.length, true);
-          }
         }
       });
     },
@@ -229,11 +203,28 @@ export default {
         }
       });
     },
-    loadMore(e, t) {
-      if (t == "read") {
-        this.loadRead(e, "inf");
-      } else {
-        this.loadUnread(e, "inf");
+    scrollUnread(e) {
+      if (
+        e.scrollY > e.object.scrollableHeight - 200 &&
+        !this.isInfiniteLoading &&
+        !this.last.u &&
+        !this.initialLoad.u
+      ) {
+        this.isInfiniteLoading = true;
+        this.unreadPage++;
+        this.loadUnread();
+      }
+    },
+    scrollRead(e) {
+      if (
+        e.scrollY > e.object.scrollableHeight - 200 &&
+        !this.isInfiniteLoading &&
+        !this.last.r &&
+        !this.initialLoad.r
+      ) {
+        this.isInfiniteLoading = true;
+        this.readPage++;
+        this.loadRead();
       }
     },
   },
