@@ -6,7 +6,7 @@
       columns="auto, auto, *, auto"
     >
       <Image
-        :src="`https://api.wasteof.money/users/${actor}/picture`"
+        :src="`https://api.wasteof.money/users/${actor}/picture?optimized=true`"
         class="pfp"
         loadMode="async"
         col="0"

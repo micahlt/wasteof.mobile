@@ -12,7 +12,7 @@
         <GridLayout columns="90, *" class="header">
           <AbsoluteLayout col="0" class="pfp-wrapper">
             <Image
-              :src="`https://api.wasteof.money/users/${info.name}/picture`"
+              :src="`https://api.wasteof.money/users/${info.name}/picture?optimized=true`"
               v-if="info.name != 'loading...'"
               class="pfp"
               loadMode="async"
@@ -53,7 +53,7 @@
           </StackLayout>
         </GridLayout>
         <Image
-          :src="`https://api.wasteof.money/users/${info.name}/banner`"
+          :src="`https://api.wasteof.money/users/${info.name}/banner?optimized=true`"
           stretch="aspectFill"
           tintColor="#000000bb"
           height="100%"

@@ -109,12 +109,12 @@ export default {
   },
   computed: {
     pfp() {
-      return `https://api.wasteof.money/users/${this.username}/picture`;
+      return `https://api.wasteof.money/users/${this.username}/picture?optimized=true`;
     },
     banner() {
       return this.username != null
-        ? `https://api.wasteof.money/users/${this.username}/banner`
-        : "https://api.wasteof.money/users/jeffalo/banner";
+        ? `https://api.wasteof.money/users/${this.username}/banner?optimized=true`
+        : "https://api.wasteof.money/users/wasteof.money/banner?optimized=true";
     },
     formattedUsername() {
       if (this.username == "Signed Out") {
