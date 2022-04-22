@@ -217,7 +217,6 @@ export default {
         !this.initialLoad.u
       ) {
         this.isInfiniteLoading = true;
-        this.unreadPage++;
         this.loadUnread();
       }
     },
@@ -229,7 +228,6 @@ export default {
         !this.initialLoad.r
       ) {
         this.isInfiniteLoading = true;
-        this.readPage++;
         this.loadRead();
       }
     },

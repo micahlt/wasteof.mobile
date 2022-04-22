@@ -3,6 +3,10 @@
   "main": "app/app.js",
   "version": "0.4.5",
   "private": true,
+  "scripts": {
+    "dev": "ns run android",
+    "debug": "ns debug android"
+  },
   "dependencies": {
     "@akylas/nativescript-pulltorefresh": "^2.4.6",
     "@nativescript-community/ui-material-ripple": "^7.0.3",

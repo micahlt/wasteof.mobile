@@ -6,7 +6,7 @@
       columns="auto, auto, *, auto"
     >
       <Image
-        :src="`https://api.wasteof.money/users/${actor}/picture?optimized=true`"
+        :src="picture"
         class="pfp"
         loadMode="async"
         col="0"
@@ -14,7 +14,7 @@
       />
       <Label class="notif-username" col="1" @tap="openUser">
         <FormattedString>
-          <span fontWeight="bold">@{{ actor }} </span>
+          <span fontWeight="bold">{{ actor }} </span>
           <span>{{ notifLabel }}</span>
         </FormattedString>
       </Label>
@@ -24,7 +24,9 @@
       :html="
         notif.data.comment
           ? notif.data.comment.content
-          : notif.data.post.content
+          : notif.data.post
+          ? notif.data.post.content
+          : notif.data.content
       "
       class="notif-content"
       v-if="viewHtml"
@@ -62,11 +64,24 @@ export default {
     actor() {
       const n = this.notif;
       if (n.data) {
-        return n.data.actor.name;
+        if (n.data.actor) {
+          return "@" + n.data.actor.name;
+        } else if (n.type == "admin_notification") {
+          return "Admin notification";
+        }
       } else if (n.poster) {
-        return n.poster.name;
+        return "@" + n.poster.name;
       } else {
         return "unknown";
+      }
+    },
+    picture() {
+      if (this.actor != "Admin notification") {
+        return `https://api.wasteof.money/users/${this.actor.slice(
+          1
+        )}/picture?optimized=true`;
+      } else {
+        return "https://api.wasteof.money/users/wasteof.money/picture?optimized=true";
       }
     },
     notifLabel() {
