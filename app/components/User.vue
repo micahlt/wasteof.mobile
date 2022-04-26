@@ -2,9 +2,10 @@
   <Page>
     <ActionBar class="action-bar">
       <NavigationButton visibility="hidden" />
-      <GridLayout columns="50, *">
-        <Image src="~/shared/nav-logo.png" colSpan="2" class="nav-logo" />
-        <Label class="mi menu" text="menu" @tap="onDrawerButtonTap" />
+      <GridLayout columns="50, *, 50">
+        <Image src="~/shared/nav-logo.png" col="1" class="nav-logo" />
+        <Label class="mi menu" text="menu" @tap="onDrawerButtonTap" col="0" />
+        <Label class="mi menu" text="report" col="3" @tap="reportAndBlock" />
       </GridLayout>
     </ActionBar>
     <GridLayout rows="auto, *">
@@ -104,6 +105,7 @@ import * as utils from "~/shared/utils";
 import { SelectedPageService } from "../shared/selected-page-service";
 import Post from "./Post.vue";
 import Comment from "./Comment.vue";
+import Home from "./Home.vue";
 export default {
   props: {
     username: {
@@ -215,6 +217,27 @@ export default {
           this.following = !this.following;
         } else {
           alert(`Error code ${response.statusCode}, try again later.`);
+        }
+      });
+    },
+    reportAndBlock() {
+      Dialogs.confirm({
+        title: "Report & Block",
+        message:
+          "Doing this will prevent you from seeing other content from this user",
+        okButtonText: "Confirm",
+        cancelButtonText: "Cancel",
+      }).then((result) => {
+        if (result) {
+          let currentlyBlocked = ApplicationSettings.getString("blocked") || "";
+          currentlyBlocked = currentlyBlocked.split(",");
+          currentlyBlocked.push(this.info.name);
+          let newBlocklist = "";
+          currentlyBlocked.forEach((user) => {
+            newBlocklist += user + ",";
+          });
+          ApplicationSettings.setString("blocked", newBlocklist);
+          this.$navigateTo(Home);
         }
       });
     },

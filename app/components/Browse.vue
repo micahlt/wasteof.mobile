@@ -31,7 +31,7 @@
               col="1"
             />
           </GridLayout>
-          <Post v-for="post in posts" :key="post._id" :post="post" />
+          <Post v-for="post in computePosts" :key="post._id" :post="post" />
         </StackLayout>
       </ScrollView>
     </PullToRefresh>
@@ -40,7 +40,7 @@
 
 <script>
 import Post from "./Post";
-import { Application } from "@nativescript/core";
+import { Application, ApplicationSettings } from "@nativescript/core";
 import { Dialogs } from "@nativescript/core";
 import { Http } from "@nativescript/core";
 import * as utils from "~/shared/utils";
@@ -125,6 +125,13 @@ export default {
       } else {
         return "#6466e9";
       }
+    },
+    computePosts() {
+      let b = ApplicationSettings.getString("blocked") || "";
+      b = b.split(",");
+      return this.posts.filter((p) => {
+        return !b.includes(p.poster.name);
+      });
     },
   },
 };

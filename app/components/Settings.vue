@@ -25,6 +25,15 @@
           autocorrect="false"
         />
         <Button text="SIGN IN" @tap="signIn" class="auth-button" />
+        <Label horizontalAlignment="center" class="privacy">
+          <FormattedString>
+            <Span>By signing in, you agree to the </Span>
+            <Span class="privacy-link" @linkTap="openPrivacy"
+              >Privacy Policy</Span
+            >
+            <Span>.</Span>
+          </FormattedString>
+        </Label>
       </StackLayout>
       <StackLayout class="settings" v-else>
         <Label class="info-text"
@@ -40,6 +49,12 @@
           <Switch v-model="filterEnabled" />
           <Label class="setting-descriptor">Filter profanity</Label>
         </FlexboxLayout>
+        <Button
+          text="Unblock all users"
+          @tap="unblockAll"
+          class="setting-button"
+          horizontalAlignment="left"
+        />
         <Label class="version">Version {{ version }}</Label>
       </StackLayout>
     </StackLayout>
@@ -47,12 +62,13 @@
 </template>
 
 <script>
-import { ApplicationSettings } from "@nativescript/core";
+import { ApplicationSettings, Dialogs } from "@nativescript/core";
 import { android } from "@nativescript/core/application";
 import { Utils } from "@nativescript/core";
 import { Http } from "@nativescript/core";
 import * as utils from "~/shared/utils";
 import { SelectedPageService } from "../shared/selected-page-service";
+import { InAppBrowser } from "nativescript-inappbrowser";
 
 export default {
   mounted() {
@@ -69,6 +85,14 @@ export default {
   methods: {
     onDrawerButtonTap() {
       utils.showDrawer();
+    },
+    unblockAll() {
+      ApplicationSettings.setString("blocked", "");
+      Dialogs.alert({
+        title: "Success!",
+        message: "Successfully unblocked all users.",
+        okButtonText: "Okay",
+      });
     },
     signIn() {
       Http.request({
@@ -114,6 +138,15 @@ export default {
         Utils.android.getApplicationContext().startActivity(intent);
       });
     },
+    async openPrivacy() {
+      if (await InAppBrowser.isAvailable()) {
+        const b = InAppBrowser.open("https://wasteof.money/privacy", {
+          toolbarColor: "#6466e9",
+          enableDefaultShare: false,
+          showInRecents: false,
+        });
+      }
+    },
   },
   data() {
     return {
@@ -122,7 +155,7 @@ export default {
       username: "",
       password: "",
       filterEnabled: ApplicationSettings.getBoolean("filter") || null,
-      version: "0.4.5",
+      version: "0.5.5",
     };
   },
 };
@@ -174,6 +207,15 @@ Page {
   color: white;
 }
 
+.setting-button {
+  width: max-content;
+  background-color: var(--border-clr);
+  color: white;
+  width: 175;
+  margin-right: auto;
+  margin-top: -5;
+}
+
 .info-text {
   font-size: 17;
   text-align: center;
@@ -197,5 +239,13 @@ Page {
 .version {
   font-size: 15;
   margin-left: 5%;
+}
+
+.privacy {
+  margin-top: 5;
+}
+
+.privacy-link {
+  color: var(--accent);
 }
 </style>

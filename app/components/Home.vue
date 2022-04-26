@@ -34,7 +34,7 @@
                 <Label class="notifs-unread" col="0" text="•" />
               </GridLayout>
             </GridLayout>
-            <Post v-for="post in posts" :key="post._id" :post="post" />
+            <Post v-for="post in computePosts" :key="post._id" :post="post" />
             <ActivityIndicator
               busy="true"
               v-if="isInfiniteLoading"
@@ -190,6 +190,13 @@ export default {
       } else {
         return "#6466e9";
       }
+    },
+    computePosts() {
+      let b = ApplicationSettings.getString("blocked") || "";
+      b = b.split(",");
+      return this.posts.filter((p) => {
+        return !b.includes(p.poster.name);
+      });
     },
   },
 };
