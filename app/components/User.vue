@@ -66,20 +66,32 @@
           <SegmentedBarItem title="Wall" />
         </SegmentedBar>
         <PullToRefresh @refresh="loadPosts" row="1" v-if="currentTab == 0">
-          <ScrollView>
+          <ScrollView @scroll="scrollPosts">
             <StackLayout class="posts">
               <Post v-if="pinned" :post="pinned" :pinned="true" />
               <Post v-for="post in posts" :key="post._id" :post="post" />
+              <ActivityIndicator
+                busy="true"
+                v-if="isInfiniteLoading"
+                :color="indicatorColor"
+                class="infinite"
+              />
             </StackLayout>
           </ScrollView>
         </PullToRefresh>
         <PullToRefresh @refresh="loadWall" row="1" v-if="currentTab == 1">
-          <ScrollView>
+          <ScrollView @scroll="scrollWall">
             <StackLayout class="comments">
               <Comment
                 v-for="comment in wall"
                 :key="comment._id"
                 :comment="comment"
+              />
+              <ActivityIndicator
+                busy="true"
+                v-if="isInfiniteLoading"
+                :color="indicatorColor"
+                class="infinite"
               />
             </StackLayout>
           </ScrollView>
@@ -128,6 +140,15 @@ export default {
       loadingUser: true,
       loadingPosts: true,
       pinned: null,
+      isInfiniteLoading: false,
+      lastPost: false,
+      lastComment: false,
+      initialLoad: {
+        p: true,
+        w: false,
+      },
+      postsPage: 1,
+      wallPage: 1,
     };
   },
   methods: {
@@ -168,17 +189,26 @@ export default {
       );
     },
     loadPosts(e) {
+      if (!this.isInfiniteLoading) {
+        this.posts = [];
+        this.postsPage = 1;
+        this.initialLoad.r = true;
+      }
       Http.getJSON(
-        `https://api.wasteof.money/users/${this.username}/posts?page=1`
+        `https://api.wasteof.money/users/${this.username}/posts?page=${this.postsPage}`
       ).then((json) => {
         if (json.pinned.length > 0) {
           this.pinned = utils.fixPost(json.pinned[0]);
         }
         json.posts.forEach((post) => {
           post = utils.fixPost(post);
+          this.posts.push(post);
         });
         this.loadingPosts = false;
-        this.posts = json.posts;
+        this.initialLoad.p = false;
+        this.isInfiniteLoading = false;
+        this.lastPost = json.last;
+        this.postsPage++;
         if (e) {
           e.object.refreshing = false;
         }
@@ -192,13 +222,22 @@ export default {
       }
     },
     loadWall(e) {
+      if (!this.isInfiniteLoading) {
+        this.wall = [];
+        this.wallPage = 1;
+        this.initialLoad.w = true;
+      }
       Http.getJSON(
-        `https://api.wasteof.money/users/${this.username}/wall?page=1`
+        `https://api.wasteof.money/users/${this.username}/wall?page=${this.wallPage}`
       ).then((json) => {
         json.comments.forEach((comment) => {
           comment = utils.fixPost(comment);
+          this.wall.push(comment);
         });
-        this.wall = json.comments;
+        this.initialLoad.w = false;
+        this.isInfiniteLoading = false;
+        this.lastComment = json.last;
+        this.wallPage++;
         if (e) {
           e.object.refreshing = false;
         }
@@ -240,6 +279,28 @@ export default {
           this.$navigateTo(Home);
         }
       });
+    },
+    scrollPosts(e) {
+      if (
+        e.scrollY > e.object.scrollableHeight - 350 &&
+        !this.isInfiniteLoading &&
+        !this.lastPost &&
+        !this.initialLoad.p
+      ) {
+        this.isInfiniteLoading = true;
+        this.loadPosts();
+      }
+    },
+    scrollWall(e) {
+      if (
+        e.scrollY > e.object.scrollableHeight - 350 &&
+        !this.isInfiniteLoading &&
+        !this.lastComment &&
+        !this.initialLoad.w
+      ) {
+        this.isInfiniteLoading = true;
+        this.loadWall();
+      }
     },
   },
   mounted() {
