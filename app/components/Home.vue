@@ -1,5 +1,5 @@
 <template>
-  <Page @navigatedTo="checkNav">
+  <Page>
     <ActionBar class="action-bar">
       <NavigationButton visibility="hidden" />
       <GridLayout columns="50, *">
@@ -102,10 +102,6 @@ export default {
     };
   },
   methods: {
-    checkNav() {
-      alert("Navved");
-      this.$navigateTo(Home);
-    },
     onDrawerButtonTap() {
       utils.showDrawer();
     },
