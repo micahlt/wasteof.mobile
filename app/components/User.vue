@@ -118,6 +118,7 @@ import { SelectedPageService } from "../shared/selected-page-service";
 import Post from "./Post.vue";
 import Comment from "./Comment.vue";
 import Home from "./Home.vue";
+const fixWorker = new Worker("../workers/fixes.js");
 export default {
   props: {
     username: {
@@ -200,18 +201,18 @@ export default {
         if (json.pinned.length > 0) {
           this.pinned = utils.fixPost(json.pinned[0]);
         }
-        json.posts.forEach((post) => {
-          post = utils.fixPost(post);
-          this.posts.push(post);
-        });
-        this.loadingPosts = false;
-        this.initialLoad.p = false;
-        this.isInfiniteLoading = false;
-        this.lastPost = json.last;
-        this.postsPage++;
-        if (e) {
-          e.object.refreshing = false;
-        }
+        fixWorker.postMessage({ content: json.posts, type: "post" });
+        fixWorker.onmessage = (msg) => {
+          this.posts = [...this.posts, ...msg.data.content];
+          this.loadingPosts = false;
+          this.initialLoad.p = false;
+          this.isInfiniteLoading = false;
+          this.lastPost = json.last;
+          this.postsPage++;
+          if (e) {
+            e.object.refreshing = false;
+          }
+        };
       });
     },
     tab(n) {
@@ -230,17 +231,17 @@ export default {
       Http.getJSON(
         `https://api.wasteof.money/users/${this.username}/wall?page=${this.wallPage}`
       ).then((json) => {
-        json.comments.forEach((comment) => {
-          comment = utils.fixPost(comment);
-          this.wall.push(comment);
-        });
-        this.initialLoad.w = false;
-        this.isInfiniteLoading = false;
-        this.lastComment = json.last;
-        this.wallPage++;
-        if (e) {
-          e.object.refreshing = false;
-        }
+        fixWorker.postMessage({ content: json.comments, type: "comment" });
+        fixWorker.onmessage = (msg) => {
+          this.wall = [...this.wall, ...msg.data.content];
+          this.initialLoad.w = false;
+          this.isInfiniteLoading = false;
+          this.lastComment = json.last;
+          this.wallPage++;
+          if (e) {
+            e.object.refreshing = false;
+          }
+        };
       });
     },
     follow() {

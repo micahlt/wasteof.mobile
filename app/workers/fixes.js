@@ -1,31 +1,12 @@
-import { Application } from "@nativescript/core";
+require("@nativescript/core/globals");
+
 import { ApplicationSettings } from "@nativescript/core";
-const friendlyTime = require("friendly-time");
 const Filter = require("bad-words");
 const filter = new Filter({ placeHolder: "█" });
 filter.removeWords("god");
 
-export const showDrawer = () => {
-  let drawerNativeView = Application.getRootView();
-  if (drawerNativeView && drawerNativeView.showDrawer) {
-    drawerNativeView.showDrawer();
-  }
-};
-
-export const closeDrawer = () => {
-  let drawerNativeView = Application.getRootView();
-  if (drawerNativeView && drawerNativeView.showDrawer) {
-    drawerNativeView.closeDrawer();
-  }
-};
-
-export const formatTime = (time) => {
-  time = new Date(time);
-  return friendlyTime(time);
-};
-
-export const fixPost = (post) => {
-  let c = post.content.substring(0, 500);
+const fixPost = (post) => {
+  let c = post.content.substring(0, 1500);
   c = c.replace(/<\/p>/g, "<br/>");
   c = c.replace(/<p>/g, "");
   if (c.includes("<img src=")) {
@@ -41,8 +22,6 @@ export const fixPost = (post) => {
     post.image = src;
   }
   if (ApplicationSettings.getBoolean("filter")) {
-    //alert("FILTERING");
-    //alert(filter.clean(c));
     post.content = filter.clean(c);
     return post;
   } else {
@@ -51,7 +30,7 @@ export const fixPost = (post) => {
   }
 };
 
-export const fixComment = (comment) => {
+const fixComment = (comment) => {
   let c = comment.content;
   c = c.replace(/<\/p>/g, "<br/>");
   c = c.replace(/<p>/g, "");
@@ -60,4 +39,21 @@ export const fixComment = (comment) => {
   }
   comment.content = c;
   return comment;
+};
+
+global.onmessage = (msg) => {
+  let content = [];
+  if (msg.data.type == "post") {
+    msg.data.content.forEach((slice) => {
+      slice = fixPost(slice);
+      content.push(slice);
+    });
+    global.postMessage({ content, type: "post" });
+  } else if (msg.data.type == "comment") {
+    msg.data.content.forEach((slice) => {
+      slice = fixComment(slice);
+      content.push(slice);
+    });
+    global.postMessage({ content, type: "comment" });
+  }
 };

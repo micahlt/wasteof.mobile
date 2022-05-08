@@ -1,7 +1,7 @@
 {
   "name": "wasteof.mobile",
   "main": "app/app.js",
-  "version": "0.5.5",
+  "version": "0.6.0",
   "private": true,
   "scripts": {
     "dev": "ns run android",
@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@akylas/nativescript-pulltorefresh": "^2.4.6",
+    "@nativescript-community/https": "^4.0.5",
     "@nativescript-community/ui-material-ripple": "^7.0.4",
     "@nativescript/core": "~8.2.2",
     "@nativescript/theme": "~3.0.2",

@@ -18,7 +18,13 @@
           <span>{{ notifLabel }}</span>
         </FormattedString>
       </Label>
-      <Label text="launch" class="open-notif mi" col="3" @tap="openNotif" />
+      <Label
+        text="launch"
+        class="open-notif mi"
+        col="3"
+        @tap="openNotif"
+        v-if="!notif.deleted"
+      />
     </GridLayout>
     <HtmlView
       :html="
@@ -32,17 +38,12 @@
       v-if="viewHtml"
     />
     <Post
-      v-if="notif.type == 'post_mention'"
+      v-if="notif.type == 'post_mention' && !notif.deleted"
       :post="notif.data.post"
       :showUser="false"
       class="repost"
     />
-    <Label
-      :text="dateOf(notif.time)"
-      class="notif-time"
-      col="1"
-      v-if="notif.type != 'post_mention'"
-    />
+    <Label :text="dateOf(notif.time)" class="notif-time" col="1" />
   </StackLayout>
 </template>
 
@@ -96,6 +97,9 @@ export default {
         case "comment_reply": {
           return `replied to your comment`;
         }
+        case "comment_mention": {
+          return `mentioned you in a comment`;
+        }
         case "comment": {
           return `commented on your post`;
         }
@@ -103,12 +107,18 @@ export default {
           return `followed you`;
         }
         case "post_mention": {
-          return `mentioned you in a post`;
+          if (this.notif.deleted) {
+            return `mentioned you in a deleted post`;
+          } else {
+            return `mentioned you in a post`;
+          }
         }
       }
     },
     viewHtml() {
-      return !["follow", "post_mention"].includes(this.notif.type);
+      if (this.notif.type == "follow") return false;
+      else if (this.notif.type == "post_mention") return false;
+      else return true;
     },
   },
   methods: {
@@ -169,7 +179,11 @@ export default {
           break;
         }
         case "post_mention": {
-          open(`https://wasteof.money/posts/${this.notif.data.post._id}`);
+          if (this.notif.data.post) {
+            open(`https://wasteof.money/posts/${this.notif.data.post._id}`);
+          } else {
+            alert("NULL");
+          }
           break;
         }
       }

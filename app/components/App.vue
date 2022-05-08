@@ -13,7 +13,6 @@
 import DrawerContent from "./DrawerContent";
 import Home from "./Home";
 import { SlideInOnTopTransition } from "nativescript-ui-sidedrawer";
-
 export default {
   data() {
     return {

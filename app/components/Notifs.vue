@@ -169,11 +169,18 @@ export default {
             } else {
               notif.data.comment = {
                 content: "[this comment was deleted]",
-                deleted: true,
               };
+              notif.deleted = true;
             }
           } else if (notif.type == "post_mention") {
-            notif.data.post = utils.fixPost(notif.data.post);
+            if (notif.data.post != null) {
+              notif.data.post = utils.fixPost(notif.data.post);
+            } else {
+              notif.data.post = {
+                id: "deleted",
+              };
+              notif.deleted = true;
+            }
           }
           this.readNotifs.push(notif);
         });

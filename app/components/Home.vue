@@ -1,5 +1,5 @@
 <template>
-  <Page xmlns:mdr="@nativescript-community/ui-material-ripple">
+  <Page @navigatedTo="checkNav">
     <ActionBar class="action-bar">
       <NavigationButton visibility="hidden" />
       <GridLayout columns="50, *">
@@ -83,6 +83,7 @@ import {
 } from "@nativescript/core";
 import * as utils from "~/shared/utils";
 import { SelectedPageService } from "../shared/selected-page-service";
+const fixWorker = new Worker("../workers/fixes.js");
 export default {
   components: {
     Post,
@@ -101,6 +102,10 @@ export default {
     };
   },
   methods: {
+    checkNav() {
+      alert("Navved");
+      this.$navigateTo(Home);
+    },
     onDrawerButtonTap() {
       utils.showDrawer();
     },
@@ -135,18 +140,18 @@ export default {
       Http.getJSON(
         `https://api.wasteof.money/users/${this.username}/following/posts?page=${this.page}`
       ).then((json) => {
-        json.posts.forEach((post) => {
-          post = utils.fixPost(post);
-          this.posts.push(post);
-        });
-        this.loading++;
-        this.isInfiniteLoading = false;
-        this.last = json.last;
-        if (e) {
-          e.object.refreshing = false;
-        }
+        fixWorker.postMessage({ content: json.posts, type: "post" });
+        fixWorker.onmessage = (msg) => {
+          this.posts = [...this.posts, ...msg.data.content];
+          this.loading++;
+          this.isInfiniteLoading = false;
+          this.last = json.last;
+          if (e) {
+            e.object.refreshing = false;
+          }
+          this.initialLoad = false;
+        };
       });
-      this.initialLoad = false;
     },
     scroll(e) {
       if (

@@ -45,6 +45,7 @@ import { Dialogs } from "@nativescript/core";
 import { Http } from "@nativescript/core";
 import * as utils from "~/shared/utils";
 import { SelectedPageService } from "../shared/selected-page-service";
+const fixWorker = new Worker("../workers/fixes.js");
 export default {
   components: {
     Post,
@@ -67,14 +68,14 @@ export default {
       Http.getJSON(
         `https://api.wasteof.money/explore/posts/trending?timeframe=${this.timePeriod.slug}`
       ).then((json) => {
-        json.posts.forEach((post, i) => {
-          post = utils.fixPost(post);
-        });
-        this.posts = json.posts;
-        this.loading = 2;
-        if (e) {
-          e.object.refreshing = false;
-        }
+        fixWorker.postMessage({ content: json.posts, type: "post" });
+        fixWorker.onmessage = (msg) => {
+          this.posts = msg.data.content;
+          this.loading = 2;
+          if (e) {
+            e.object.refreshing = false;
+          }
+        };
       });
     },
     switchTime() {

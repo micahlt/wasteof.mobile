@@ -155,7 +155,7 @@ export default {
       username: "",
       password: "",
       filterEnabled: ApplicationSettings.getBoolean("filter") || null,
-      version: "0.5.5",
+      version: "0.6.0",
     };
   },
 };
