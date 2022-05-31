@@ -38,7 +38,7 @@
       v-if="viewHtml"
     />
     <Post
-      v-if="notif.type == 'post_mention' && !notif.deleted"
+      v-if="!notif.deleted && (notif.type == 'post_mention' || notif.type == 'repost')"
       :post="notif.data.post"
       :showUser="false"
       class="repost"
@@ -118,6 +118,7 @@ export default {
     viewHtml() {
       if (this.notif.type == "follow") return false;
       else if (this.notif.type == "post_mention") return false;
+      else if (this.notif.type == 'repost') return false;
       else return true;
     },
   },
