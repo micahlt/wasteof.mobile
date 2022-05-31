@@ -64,7 +64,7 @@
         class="fab-button mi"
         hideOnSwipeOfView="scrollingView"
         color="white"
-        @tap="newPost"
+        @tap="openModal"
       />
     </GridLayout>
   </Page>
@@ -74,10 +74,9 @@
 import Post from "./Post";
 import Browse from "./Browse";
 import Notifs from "./Notifs";
-import { InAppBrowser } from "nativescript-inappbrowser";
+import CreatePost from "./CreatePost";
 import {
   Application,
-  Utils,
   ApplicationSettings,
   Http,
   Dialogs
@@ -162,38 +161,14 @@ export default {
         this.fetchPosts();
       }
     },
-    async newPost() {
-      Dialogs.prompt({
-        title: "Create a post",
-        message: "What's on your mind?",
-        okButtonText: "Post",
-        cancelButtonText: "Cancel"
-      }).then((r) => {
-        if (r.result) {
-          Http.request({
-            url: "https://api.wasteof.money/posts",
-            method: "POST",
-            headers: {
-              "Authorization": this.token,
-              "Content-Type": "application/json"
-            },
-            content: JSON.stringify({
-              post: `<p>${r.text}</p>`,
-              repost: null
-            })
-          }).then((r) => {
-            if (r.statusCode == 200) {
-              this.$navigateTo("User", {
-                props: {
-                  username: this.username,
-                }
-              });
-            } else {
-              const json = r.content.toJSON();
-              Dialogs.alert(JSON.stringify(json));
-
-            }
-          })
+    openModal() {
+      this.$showModal(CreatePost, {
+        fullscreen: true,
+        animated: true
+      }).then((data) => {
+        if (data == "posted") {
+          this.loading = 0;
+          this.fetchPosts();
         }
       })
     },
