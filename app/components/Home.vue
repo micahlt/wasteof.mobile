@@ -80,6 +80,7 @@ import {
   Utils,
   ApplicationSettings,
   Http,
+  Dialogs
 } from "@nativescript/core";
 import * as utils from "~/shared/utils";
 import { SelectedPageService } from "../shared/selected-page-service";
@@ -162,15 +163,39 @@ export default {
       }
     },
     async newPost() {
-      if (await InAppBrowser.isAvailable()) {
-        const b = InAppBrowser.open("https://wasteof.money/posts/new", {
-          toolbarColor: "#6466e9",
-          enableDefaultShare: false,
-          showInRecents: false,
-        });
-      } else {
-        Utils.open("https://wasteof.money/posts/new");
-      }
+      Dialogs.prompt({
+        title: "Create a post",
+        message: "What's on your mind?",
+        okButtonText: "Post",
+        cancelButtonText: "Cancel"
+      }).then((r) => {
+        if (r.result) {
+          Http.request({
+            url: "https://api.wasteof.money/posts",
+            method: "POST",
+            headers: {
+              "Authorization": this.token,
+              "Content-Type": "application/json"
+            },
+            content: JSON.stringify({
+              post: `<p>${r.text}</p>`,
+              repost: null
+            })
+          }).then((r) => {
+            if (r.statusCode == 200) {
+              this.$navigateTo("User", {
+                props: {
+                  username: this.username,
+                }
+              });
+            } else {
+              const json = r.content.toJSON();
+              Dialogs.alert(JSON.stringify(json));
+
+            }
+          })
+        }
+      })
     },
   },
   mounted() {
