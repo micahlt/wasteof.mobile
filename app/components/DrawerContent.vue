@@ -12,42 +12,47 @@
         </GridLayout>
         <ScrollView row="1" class="nt-drawer__body">
             <StackLayout>
+              <Ripple rippleColor="#ffffff">
                 <GridLayout columns="auto, *"
                             :class="'nt-drawer__list-item' + (selectedPage === 'Home' ? ' -selected': '')"
                             @tap="onNavigationItemTap(Home)">
                     <Label col="0" text="home" class="page-icon mi"/>
                     <Label col="1" text="Home" class="p-r-10"/>
                 </GridLayout>
-
+              </Ripple>
+              <Ripple rippleColor="#ffffff">
                 <GridLayout columns="auto, *"
                             :class="'nt-drawer__list-item' + (selectedPage === 'Browse' ? ' -selected': '')"
                             @tap="onNavigationItemTap(Browse)">
                     <Label col="0" text="web" class="page-icon mi"/>
                     <Label col="1" text="Browse" class="p-r-10"/>
                 </GridLayout>
-
+              </Ripple>
+              <Ripple rippleColor="#ffffff">
                 <GridLayout columns="auto, *"
                             :class="'nt-drawer__list-item' + (selectedPage === 'Search' ? ' -selected': '')"
                             @tap="onNavigationItemTap(Search)">
                     <Label col="0" text="search" class="page-icon mi"/>
                     <Label col="1" text="Search" class="p-r-10"/>
                 </GridLayout>
-
+              </Ripple>
+              <Ripple rippleColor="#ffffff">
                 <GridLayout columns="auto, *"
                             :class="'nt-drawer__list-item' + (selectedPage === 'Notifications' ? ' -selected': '')"
                             @tap="onNavigationItemTap(Notifications)">
                     <Label col="0" text="notifications" class="page-icon mi"/>
                     <Label col="1" text="Notifications" class="p-r-10"/>
                 </GridLayout>
-
+              </Ripple>
                 <StackLayout class="hr"/>
-
+              <Ripple rippleColor="#ffffff">
                 <GridLayout columns="auto, *"
                             :class="'nt-drawer__list-item' + (selectedPage === 'Settings' ? ' -selected': '')"
                             @tap="onNavigationItemTap(Settings)">
                     <Label col="0" text="settings" class="page-icon mi"/>
                     <Label col="1" text="Settings" class="p-r-10"/>
                 </GridLayout>
+              </Ripple>
             </StackLayout>
         </ScrollView>
     </GridLayout>

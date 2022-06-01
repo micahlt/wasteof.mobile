@@ -13,16 +13,25 @@
 import DrawerContent from "./DrawerContent";
 import Home from "./Home";
 import { SlideInOnTopTransition } from "nativescript-ui-sidedrawer";
+import { firebase } from "@nativescript/firebase-core";
+import "@nativescript/firebase-messaging";
 export default {
   data() {
     return {
       transition: new SlideInOnTopTransition(),
     };
   },
-
   components: {
     DrawerContent,
     Home,
+  },
+  mounted() {
+    firebase()
+      .messaging()
+      .getToken()
+      .then((token) => {
+        alert(token);
+      });
   },
 };
 </script>

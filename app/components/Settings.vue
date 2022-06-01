@@ -24,7 +24,9 @@
           secure="true"
           autocorrect="false"
         />
-        <Button text="SIGN IN" @tap="signIn" class="auth-button" />
+        <Ripple rippleColor="#ffffff">
+          <Button text="SIGN IN" @tap="signIn" class="auth-button" />
+        </Ripple>
         <Label horizontalAlignment="center" class="privacy">
           <FormattedString>
             <Span>By signing in, you agree to the </Span>
@@ -42,7 +44,9 @@
             <span class="current-user">@{{ currentUsername }}</span>
           </FormattedString></Label
         >
-        <Button text="SIGN OUT" @tap="signOut" class="auth-button" />
+        <Ripple rippleColor="#ffffff">
+          <Button text="SIGN OUT" @tap="signOut" class="auth-button" />
+        </Ripple>
       </StackLayout>
       <StackLayout class="settings">
         <FlexboxLayout>

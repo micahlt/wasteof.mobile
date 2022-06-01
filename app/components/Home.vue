@@ -23,15 +23,27 @@
                 horizontalAlignment="left"
                 col="0"
               />
-              <GridLayout columns="*" alignSelf="flex-end" col="1">
-                <Button
-                  text.decode="&#xe7f4;"
-                  :class="['time-change', 'mi', { unread: messageCount > 0 }]"
-                  textWrap="false"
-                  @tap="openNotifs"
-                  col="0"
-                />
-                <Label class="notifs-unread" col="0" text="•" />
+              <GridLayout
+                columns="*"
+                alignSelf="flex-end"
+                col="1"
+                @tap="openNotifs"
+                class="notiflayout"
+              >
+                <Ripple rippleColor="#ffffff">
+                  <StackLayout col="0" @tap="openNotifs">
+                    <Button
+                      text.decode="&#xe7f4;"
+                      :class="[
+                        'time-change',
+                        'mi',
+                        { unread: messageCount > 0 },
+                      ]"
+                      textWrap="false"
+                      col="0"
+                    />
+                  </StackLayout>
+                </Ripple>
               </GridLayout>
             </GridLayout>
             <Post v-for="post in computePosts" :key="post._id" :post="post" />
@@ -205,6 +217,10 @@ export default {
 <style scoped lang="scss">
 @import "../variables.scss";
 
+.ripple {
+  z-index: 50;
+}
+
 Page {
   background-color: var(--bg);
 }
@@ -221,6 +237,7 @@ PullToRefresh {
 .switcher {
   width: 100%;
 }
+
 .time-change {
   text-transform: uppercase;
   font-size: 24;

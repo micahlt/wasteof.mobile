@@ -1,56 +1,62 @@
 <template>
-  <StackLayout class="post">
-    <GridLayout
-      flexDirection="row"
-      class="post-user"
-      v-if="showUser"
-      columns="auto, auto, *, auto, auto"
-    >
-      <Image
-        :src="`https://api.wasteof.money/users/${post.poster.name}/picture?optimized=true`"
-        class="pfp"
-        loadMode="async"
-        col="0"
-        @tap="openUser"
-      />
-      <Label
-        :text="post.poster.name"
-        class="post-username"
-        col="1"
-        @tap="openUser"
-      />
-      <Label
-        text="push_pin"
-        class="post-icon mi pinned"
-        col="3"
-        v-if="pinned"
-      />
-      <Label text="launch" class="open-post mi" col="4" @tap="openPost" />
-    </GridLayout>
-    <Image
-      :src="post.image"
-      v-if="post.image != undefined"
-      class="post-image"
-      loadMode="async"
-    />
-    <HtmlView :html="post.content" class="post-content" />
-    <Post :post="post.repost" v-if="post.repost" class="repost" />
-    <GridLayout columns="auto, *">
-      <FlexboxLayout flexDirection="row" col="0">
-        <Label
-          text="favorite"
-          :class="['post-icon', 'mi', { loved: loved }]"
-          @tap="lovePost"
+  <Ripple rippleColor="#ffffff" class="post-ripple" rippleBorderRadius="50">
+    <StackLayout class="post" @tap="openPost">
+      <GridLayout
+        flexDirection="row"
+        class="post-user"
+        v-if="showUser"
+        columns="auto, auto, *, auto, auto"
+      >
+        <Image
+          :src="`https://api.wasteof.money/users/${post.poster.name}/picture?optimized=true`"
+          class="pfp"
+          loadMode="async"
+          col="0"
+          @tap="openUser"
         />
-        <Label :text="post.loves" class="post-stat" @tap="lovePost" />
-        <Label text="repeat" class="post-icon mi" />
-        <Label :text="post.reposts" class="post-stat" />
-        <Label text="comment" class="post-icon mi" />
-        <Label :text="post.comments" class="post-stat" />
-      </FlexboxLayout>
-      <Label :text="dateOf(post.time)" class="post-time" col="1" />
-    </GridLayout>
-  </StackLayout>
+        <Label
+          :text="post.poster.name"
+          class="post-username"
+          col="1"
+          @tap="openUser"
+        />
+        <Label
+          text="push_pin"
+          class="post-icon mi pinned"
+          col="3"
+          v-if="pinned"
+        />
+      </GridLayout>
+      <Image
+        :src="post.image"
+        v-if="post.image != undefined"
+        class="post-image"
+        loadMode="async"
+      />
+      <HtmlView
+        :html="post.content"
+        class="post-content"
+        @tap="openPost"
+        isPassThroughParentEnabled="true"
+      />
+      <Post :post="post.repost" v-if="post.repost" class="repost" />
+      <GridLayout columns="auto, *">
+        <FlexboxLayout flexDirection="row" col="0">
+          <Label
+            text="favorite"
+            :class="['post-icon', 'mi', { loved: loved }]"
+            @tap="lovePost"
+          />
+          <Label :text="post.loves" class="post-stat" @tap="lovePost" />
+          <Label text="repeat" class="post-icon mi" />
+          <Label :text="post.reposts" class="post-stat" />
+          <Label text="comment" class="post-icon mi" />
+          <Label :text="post.comments" class="post-stat" />
+        </FlexboxLayout>
+        <Label :text="dateOf(post.time)" class="post-time" col="1" />
+      </GridLayout>
+    </StackLayout>
+  </Ripple>
 </template>
 
 <script>
@@ -74,6 +80,7 @@ export default {
     return {
       username: ApplicationSettings.getString("username") || null,
       loved: false,
+      isInteracting: false,
     };
   },
 
@@ -93,15 +100,19 @@ export default {
       return utils.formatTime(date);
     },
     openUser() {
+      this.isInteracting = true;
       const name = this.post.poster.name;
       this.$navigateTo("User", {
         props: {
           username: name,
         },
       });
+      setTimeout(() => {
+        this.isInteracting = false;
+      }, 300);
     },
     async openPost() {
-      if (await InAppBrowser.isAvailable()) {
+      if ((await InAppBrowser.isAvailable()) && !this.isInteracting) {
         const b = InAppBrowser.open(
           `https://wasteof.money/posts/${this.post._id}`,
           {
@@ -113,6 +124,7 @@ export default {
       }
     },
     lovePost() {
+      this.isInteracting = true;
       if (this.username) {
         const token = ApplicationSettings.getString("token");
         Http.request({
@@ -128,6 +140,7 @@ export default {
             this.loved = !this.loved;
             const loves = response.content.toJSON().new.loves;
             this.post.loves = loves;
+            this.isInteracting = false;
           }
         });
       } else {
@@ -158,6 +171,13 @@ export default {
   padding-bottom: 0;
   padding: 0;
   background-color: var(--card-bg);
+}
+
+.post-ripple {
+  margin-bottom: 10;
+  border-radius: 5;
+  padding-bottom: -10;
+  padding-right: -2;
 }
 
 .post-content p {
