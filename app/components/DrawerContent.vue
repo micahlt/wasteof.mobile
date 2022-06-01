@@ -34,8 +34,8 @@
                 </GridLayout>
 
                 <GridLayout columns="auto, *"
-                            :class="'nt-drawer__list-item' + (selectedPage === 'Notifs' ? ' -selected': '')"
-                            @tap="onNavigationItemTap(Notifs)">
+                            :class="'nt-drawer__list-item' + (selectedPage === 'Notifications' ? ' -selected': '')"
+                            @tap="onNavigationItemTap(Notifications)">
                     <Label col="0" text="notifications" class="page-icon mi"/>
                     <Label col="1" text="Notifications" class="p-r-10"/>
                 </GridLayout>
