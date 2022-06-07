@@ -96,6 +96,9 @@ export default {
         `https://wasteof.money/users/${this.comment.wall.name}#comments-${this.comment._id}`
       );
     },
+    reply() {
+      return;
+    }
   },
 };
 </script>

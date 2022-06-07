@@ -432,8 +432,8 @@ PullToRefresh {
 }
 
 .follow-button {
-  font-size: 10px;
-  height: 125px;
+  font-size: 12;
+  height: 40;
   margin: 0;
   margin-left: 10;
   background-color: var(--accent);
@@ -442,5 +442,9 @@ PullToRefresh {
 
 .tabview {
   height: 100;
+}
+
+.username-wrapper {
+  align-items: center;
 }
 </style>

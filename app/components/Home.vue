@@ -16,7 +16,7 @@
             :color="indicatorColor"
           />
           <StackLayout class="posts" v-if="loading > 1">
-            <GridLayout columns="*, 40" class="switcher">
+            <GridLayout columns="*, auto" class="switcher">
               <Label
                 text="Your feed"
                 class="time-current"
@@ -30,8 +30,8 @@
                 @tap="openNotifs"
                 class="notiflayout"
               >
-                <Ripple rippleColor="#ffffff">
-                  <StackLayout col="0" @tap="openNotifs">
+                <StackLayout col="0" @tap="openNotifs">
+                <Ripple rippleColor="#000000">
                     <Button
                       text.decode="&#xe7f4;"
                       :class="[
@@ -39,11 +39,11 @@
                         'mi',
                         { unread: messageCount > 0 },
                       ]"
-                      textWrap="false"
+                      textWrap="true"
                       col="0"
                     />
-                  </StackLayout>
                 </Ripple>
+                  </StackLayout>
               </GridLayout>
             </GridLayout>
             <Post v-for="post in computePosts" :key="post._id" :post="post" />
@@ -118,7 +118,9 @@ export default {
       utils.showDrawer();
     },
     openNotifs() {
-      this.$navigateTo(Notifs);
+      setTimeout(() => {
+        this.$navigateTo(Notifs);
+      }, 250);
     },
     fetchPosts(e) {
       if (!this.isInfiniteLoading) {

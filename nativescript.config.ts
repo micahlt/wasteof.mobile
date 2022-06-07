@@ -5,6 +5,8 @@ export default {
   appPath: 'app',
   appResourcesPath: 'App_Resources',
   android: {
+    discardUncaughtJsExceptions: true,
+    codeCache: true,
     v8Flags: '--expose_gc',
     markingMode: 'none'
   }

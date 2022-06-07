@@ -66,6 +66,7 @@
 </template>
 
 <script>
+const VERSION = "0.7.0";
 import { ApplicationSettings, Dialogs } from "@nativescript/core";
 import { android } from "@nativescript/core/application";
 import { Utils } from "@nativescript/core";
@@ -159,7 +160,7 @@ export default {
       username: "",
       password: "",
       filterEnabled: ApplicationSettings.getBoolean("filter") || null,
-      version: "0.6.0",
+      version: VERSION,
     };
   },
 };

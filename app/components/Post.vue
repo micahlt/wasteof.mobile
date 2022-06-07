@@ -41,11 +41,12 @@
       />
       <Post :post="post.repost" v-if="post.repost" class="repost" />
       <GridLayout columns="auto, *">
-        <FlexboxLayout flexDirection="row" col="0">
+        <FlexboxLayout flexDirection="row" col="0" class="post-actions">
           <Label
             text="favorite"
-            :class="['post-icon', 'mi', { loved: loved }]"
+            :class="['post-icon', 'mi', 'love-button', { loved: loved }, {loving: isLoving}]"
             @tap="lovePost"
+            ref="loveAction"
           />
           <Label :text="post.loves" class="post-stat" @tap="lovePost" />
           <Label text="repeat" class="post-icon mi" />
@@ -62,7 +63,7 @@
 <script>
 import * as utils from "~/shared/utils";
 import { InAppBrowser } from "nativescript-inappbrowser";
-import { Http } from "@nativescript/core";
+import { Http, Dialogs } from "@nativescript/core";
 import { ApplicationSettings } from "@nativescript/core";
 export default {
   props: {
@@ -81,6 +82,7 @@ export default {
       username: ApplicationSettings.getString("username") || null,
       loved: false,
       isInteracting: false,
+      isLoving: false
     };
   },
 
@@ -125,7 +127,13 @@ export default {
     },
     lovePost() {
       this.isInteracting = true;
+      // console.log(this.$refs.loveAction.nativeView.android.setClipChildren(false))
+      // console.log(this.$refs.loveAction.nativeView.android.getClipChildren())
       if (this.username) {
+        this.isLoving = true;
+        setTimeout(() => {
+          this.isLoving = false;
+        }, 450);
         const token = ApplicationSettings.getString("token");
         Http.request({
           url: `https://api.wasteof.money/posts/${this.post._id}/loves`,
@@ -163,6 +171,7 @@ export default {
   background: var(--card-bg);
   border-radius: var(--br);
   margin-bottom: 10;
+  overflow-x: visible;
 }
 
 .post-content {
@@ -171,6 +180,7 @@ export default {
   padding-bottom: 0;
   padding: 0;
   background-color: var(--card-bg);
+  overflow-x: visible;
 }
 
 .post-ripple {
@@ -190,10 +200,17 @@ export default {
   margin-right: 2;
 }
 
+.post-actions {
+  align-items: center;
+  overflow-x: visible;
+}
+
 .post-icon {
-  margin-right: 10;
-  font-size: 18;
+  padding: 3;
+  padding-right: 10;
+  font-size: 20;
   transform: translateY(1);
+  text-align: center;
 }
 
 .post-stat {
@@ -245,5 +262,26 @@ export default {
 
 .pinned {
   font-size: 20;
+}
+
+.loving {
+  animation-name: love;
+  animation-duration: 450ms;
+  animation-fill-mode: forwards;
+  transform-origin: center center;
+  animation-direction: normal;
+  animation-iteration-count: 1;
+}
+
+@keyframes love {
+  0% {
+    transform: translateY(1) scale(1);
+  }
+  50% {
+    transform: translateY(1) translateX(1) scale(1.3);
+  }
+  100% {
+    transform: translateY(1) scale(1);
+  }
 }
 </style>
