@@ -53,6 +53,15 @@
           <Switch v-model="filterEnabled" />
           <Label class="setting-descriptor">Filter profanity</Label>
         </FlexboxLayout>
+        <FlexboxLayout>
+          <Switch v-model="useBeta" />
+          <Label class="setting-descriptor" v-if="!useBeta"
+            >Opening site links normally
+          </Label>
+          <Label class="setting-descriptor" v-else
+            >Opening site links in beta
+          </Label>
+        </FlexboxLayout>
         <Button
           text="Unblock all users"
           @tap="unblockAll"
@@ -85,6 +94,9 @@ export default {
   watch: {
     filterEnabled(newSetting) {
       ApplicationSettings.setBoolean("filter", newSetting);
+    },
+    useBeta(newSetting) {
+      ApplicationSettings.setBoolean("useBeta", newSetting);
     },
   },
   methods: {
@@ -157,6 +169,7 @@ export default {
     return {
       currentUsername: ApplicationSettings.getString("username") || null,
       token: ApplicationSettings.getString("token") || null,
+      useBeta: ApplicationSettings.getBoolean("useBeta"),
       username: "",
       password: "",
       filterEnabled: ApplicationSettings.getBoolean("filter") || null,

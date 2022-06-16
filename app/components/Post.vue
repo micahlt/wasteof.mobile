@@ -44,7 +44,13 @@
         <FlexboxLayout flexDirection="row" col="0" class="post-actions">
           <Label
             text="favorite"
-            :class="['post-icon', 'mi', 'love-button', { loved: loved }, {loving: isLoving}]"
+            :class="[
+              'post-icon',
+              'mi',
+              'love-button',
+              { loved: loved },
+              { loving: isLoving },
+            ]"
             @tap="lovePost"
             ref="loveAction"
           />
@@ -80,9 +86,10 @@ export default {
   data() {
     return {
       username: ApplicationSettings.getString("username") || null,
+      beta: ApplicationSettings.getBoolean("useBeta") || false,
       loved: false,
       isInteracting: false,
-      isLoving: false
+      isLoving: false,
     };
   },
 
@@ -116,7 +123,9 @@ export default {
     async openPost() {
       if ((await InAppBrowser.isAvailable()) && !this.isInteracting) {
         const b = InAppBrowser.open(
-          `https://wasteof.money/posts/${this.post._id}`,
+          `https://${this.beta ? "beta." : ""}wasteof.money/posts/${
+            this.post._id
+          }`,
           {
             toolbarColor: "#6466e9",
             enableDefaultShare: false,

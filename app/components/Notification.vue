@@ -38,7 +38,10 @@
       v-if="viewHtml"
     />
     <Post
-      v-if="!notif.deleted && (notif.type == 'post_mention' || notif.type == 'repost')"
+      v-if="
+        !notif.deleted &&
+        (notif.type == 'post_mention' || notif.type == 'repost')
+      "
       :post="notif.data.post"
       :showUser="false"
       class="repost"
@@ -59,6 +62,7 @@ export default {
   data() {
     return {
       myUsername: ApplicationSettings.getString("username"),
+      beta: ApplicationSettings.getBoolean("useBeta") || false,
     };
   },
   computed: {
@@ -118,7 +122,7 @@ export default {
     viewHtml() {
       if (this.notif.type == "follow") return false;
       else if (this.notif.type == "post_mention") return false;
-      else if (this.notif.type == 'repost') return false;
+      else if (this.notif.type == "repost") return false;
       else return true;
     },
   },
@@ -153,35 +157,51 @@ export default {
       switch (t) {
         case "wall_comment_reply": {
           open(
-            `https://wasteof.money/users/${this.myUsername}/wall#comments-${this.notif.data.comment._id}`
+            `https://${this.beta ? "beta." : ""}wasteof.money/users/${
+              this.myUsername
+            }/wall#comments-${this.notif.data.comment._id}`
           );
           break;
         }
         case "wall_comment": {
           open(
-            `https://wasteof.money/users/${this.myUsername}/wall#comments-${this.notif.data.comment._id}`
+            `https://${this.beta ? "beta." : ""}wasteof.money/users/${
+              this.myUsername
+            }/wall#comments-${this.notif.data.comment._id}`
           );
           break;
         }
         case "comment_reply": {
           open(
-            `https://wasteof.money/posts/${this.notif.data.comment.post}#comments-${this.notif.data.comment._id}`
+            `https://${this.beta ? "beta." : ""}wasteof.money/posts/${
+              this.notif.data.comment.post
+            }#comments-${this.notif.data.comment._id}`
           );
           break;
         }
         case "comment": {
           open(
-            `https://wasteof.money/posts/${this.notif.data.comment.post}#comments-${this.notif.data.comment._id}`
+            `https://${this.beta ? "beta." : ""}wasteof.money/posts/${
+              this.notif.data.comment.post
+            }#comments-${this.notif.data.comment._id}`
           );
           break;
         }
         case "follow": {
-          open(`https://wasteof.money/users/${this.notif.data.actor.name}`);
+          open(
+            `https://${this.beta ? "beta." : ""}wasteof.money/users/${
+              this.notif.data.actor.name
+            }`
+          );
           break;
         }
         case "post_mention": {
           if (this.notif.data.post) {
-            open(`https://wasteof.money/posts/${this.notif.data.post._id}`);
+            open(
+              `https://${this.beta ? "beta." : ""}wasteof.money/posts/${
+                this.notif.data.post._id
+              }`
+            );
           } else {
             alert("NULL");
           }

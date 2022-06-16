@@ -55,6 +55,7 @@ export default {
   data() {
     return {
       replies: [],
+      beta: ApplicationSettings.getBoolean("useBeta") || false,
     };
   },
   mounted() {
@@ -93,12 +94,14 @@ export default {
     },
     openComment() {
       Utils.openUrl(
-        `https://wasteof.money/users/${this.comment.wall.name}#comments-${this.comment._id}`
+        `https://${this.beta ? "beta." : ""}wasteof.money/users/${
+          this.comment.wall.name
+        }#comments-${this.comment._id}`
       );
     },
     reply() {
       return;
-    }
+    },
   },
 };
 </script>
