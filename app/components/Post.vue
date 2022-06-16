@@ -36,7 +36,7 @@
       <HtmlView
         :html="post.content"
         class="post-content"
-        @tap="openPost"
+        @tap="htmlViewInteract"
         isPassThroughParentEnabled="true"
       />
       <Post :post="post.repost" v-if="post.repost" class="repost" />
@@ -116,6 +116,12 @@ export default {
           username: name,
         },
       });
+      setTimeout(() => {
+        this.isInteracting = false;
+      }, 300);
+    },
+    htmlViewInteract() {
+      this.isInteracting = true;
       setTimeout(() => {
         this.isInteracting = false;
       }, 300);
