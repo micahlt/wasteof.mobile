@@ -27,12 +27,15 @@
         <Ripple rippleColor="#ffffff">
           <Button text="SIGN IN" @tap="signIn" class="auth-button" />
         </Ripple>
-        <Label horizontalAlignment="center" class="privacy">
+        <Label horizontalAlignment="center" class="privacy" textWrap="true">
           <FormattedString>
-            <Span>By signing in, you agree to the </Span>
+            <Span>By signing in, you agree to the</Span>
+            <Span text.decode="&#x0a;" fontSize="20" />
             <Span class="privacy-link" @linkTap="openPrivacy"
               >Privacy Policy</Span
             >
+            <Span> and </Span>
+            <Span class="privacy-link" @linkTap="openRules">Rules</Span>
             <Span>.</Span>
           </FormattedString>
         </Label>
@@ -53,14 +56,9 @@
           <Switch v-model="filterEnabled" />
           <Label class="setting-descriptor">Filter profanity</Label>
         </FlexboxLayout>
-        <FlexboxLayout>
+        <FlexboxLayout class="collapse-switch">
           <Switch v-model="useBeta" />
-          <Label class="setting-descriptor" v-if="!useBeta"
-            >Opening site links normally
-          </Label>
-          <Label class="setting-descriptor" v-else
-            >Opening site links in beta
-          </Label>
+          <Label class="setting-descriptor">Use beta for links </Label>
         </FlexboxLayout>
         <Button
           text="Unblock all users"
@@ -68,14 +66,14 @@
           class="setting-button"
           horizontalAlignment="left"
         />
-        <Label class="version">Version {{ version }}</Label>
+        <Label class="version">app version {{ version }}</Label>
       </StackLayout>
     </StackLayout>
   </Page>
 </template>
 
 <script>
-const VERSION = "0.7.0";
+const VERSION = "0.7.2";
 import { ApplicationSettings, Dialogs } from "@nativescript/core";
 import { android } from "@nativescript/core/application";
 import { Utils } from "@nativescript/core";
@@ -164,6 +162,15 @@ export default {
         });
       }
     },
+    async openRules() {
+      if (await InAppBrowser.isAvailable()) {
+        const b = InAppBrowser.open("https://wasteof.money/rules", {
+          toolbarColor: "#6466e9",
+          enableDefaultShare: false,
+          showInRecents: false,
+        });
+      }
+    },
   },
   data() {
     return {
@@ -194,7 +201,8 @@ Page {
   margin: 15;
   background: var(--card-bg);
   border-radius: var(--br);
-  margin-bottom: 10;
+  margin-top: 20;
+  margin-bottom: 0;
   padding-bottom: 30;
 }
 
@@ -249,21 +257,27 @@ Page {
 }
 
 .setting-descriptor {
-  padding-top: 16;
+  padding-top: 17;
   font-size: 15;
-  margin-left: -9;
+  margin-left: -10;
 }
 
 .version {
   font-size: 15;
   margin-left: 5%;
+  opacity: 0.65;
 }
 
 .privacy {
   margin-top: 5;
+  text-align: center;
 }
 
 .privacy-link {
   color: var(--accent);
+}
+
+.collapse-switch {
+  margin-top: -15;
 }
 </style>

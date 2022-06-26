@@ -1,5 +1,5 @@
 <template lang="html">
-    <RadSideDrawer ref="drawer" drawerLocation="Left" gesturesEnabled="true" :drawerTransition="transition">
+    <RadSideDrawer ref="drawer" drawerLocation="Left" gesturesEnabled="false" :drawerTransition="transition">
         <StackLayout ~drawerContent backgroundColor="#ffffff">
             <DrawerContent/>
         </StackLayout>

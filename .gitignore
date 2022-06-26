@@ -26,3 +26,7 @@ typings/
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+# Local build scripts
+build.local.bat
+build.local.sh

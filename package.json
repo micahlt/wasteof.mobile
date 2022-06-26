@@ -1,17 +1,19 @@
 {
   "name": "wasteof.mobile",
   "main": "app/app.js",
-  "version": "0.7.0",
+  "version": "0.7.2",
   "private": true,
   "scripts": {
     "dev": "ns run android",
-    "debug": "ns debug android"
+    "debug": "ns debug android",
+    "build:windows": ".\\build.local.bat",
+    "build:linux": "./build.local.sh"
   },
   "dependencies": {
     "@akylas/nativescript-pulltorefresh": "^2.4.6",
     "@nativescript-community/https": "^4.0.6",
-    "@nativescript-community/ui-material-ripple": "^7.0.18",
-    "@nativescript/core": "~8.2.4",
+    "@nativescript-community/ui-material-ripple": "^7.0.24",
+    "@nativescript/core": "~8.2.5",
     "@nativescript/theme": "~3.0.2",
     "@nstudio/nativescript-floatingactionbutton": "^3.0.4",
     "bad-words": "^1.6.5",
