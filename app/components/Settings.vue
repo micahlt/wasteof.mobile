@@ -24,21 +24,34 @@
           secure="true"
           autocorrect="false"
         />
+        <FlexboxLayout horizontalAlignment="center" class="tos">
+          <CheckBox
+            :checked="hasAccepted"
+            @checkedChange="hasAccepted = $event.value"
+            fillColor="#6466e9"
+            class="checkbox"
+          />
+          <Label class="privacy" textWrap="true">
+            <FormattedString>
+              <Span>I agree to the</Span>
+              <Span
+                class="privacy-link"
+                @linkTap="openPrivacy"
+                text=" Privacy Policy"
+              />
+              <Span> and </Span>
+              <Span class="privacy-link" @linkTap="openRules">Rules</Span>
+              <Span>.</Span>
+            </FormattedString>
+          </Label>
+        </FlexboxLayout>
         <Ripple rippleColor="#ffffff">
-          <Button text="SIGN IN" @tap="signIn" class="auth-button" />
+          <Button
+            text="SIGN IN"
+            @tap="signIn"
+            :class="{ 'auth-button': true, disabled: !hasAccepted }"
+          />
         </Ripple>
-        <Label horizontalAlignment="center" class="privacy" textWrap="true">
-          <FormattedString>
-            <Span>By signing in, you agree to the</Span>
-            <Span text.decode="&#x0a;" fontSize="20" />
-            <Span class="privacy-link" @linkTap="openPrivacy"
-              >Privacy Policy</Span
-            >
-            <Span> and </Span>
-            <Span class="privacy-link" @linkTap="openRules">Rules</Span>
-            <Span>.</Span>
-          </FormattedString>
-        </Label>
       </StackLayout>
       <StackLayout class="settings" v-else>
         <Label class="info-text"
@@ -73,7 +86,7 @@
 </template>
 
 <script>
-const VERSION = "0.7.2";
+const VERSION = "0.7.5";
 import { ApplicationSettings, Dialogs } from "@nativescript/core";
 import { android } from "@nativescript/core/application";
 import { Utils } from "@nativescript/core";
@@ -110,33 +123,42 @@ export default {
       });
     },
     signIn() {
-      Http.request({
-        url: "https://api.wasteof.money/session",
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        content: JSON.stringify({
-          username: this.username,
-          password: this.password,
-        }),
-      }).then((response) => {
-        if (response.statusCode == 200) {
-          const json = response.content.toJSON();
-          if (json.error) {
-            alert(`Error: ${json.error}.  Please try again`);
+      if (this.hasAccepted) {
+        Http.request({
+          url: "https://api.wasteof.money/session",
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          content: JSON.stringify({
+            username: this.username,
+            password: this.password,
+          }),
+        }).then((response) => {
+          if (response.statusCode == 200) {
+            const json = response.content.toJSON();
+            if (json.error) {
+              alert(`Error: ${json.error}.  Please try again`);
+            }
+            ApplicationSettings.setString(
+              "username",
+              this.username.toLowerCase()
+            );
+            ApplicationSettings.setString("token", json.token);
+            const activity = android.foregroundActivity;
+            const intent = activity.getIntent();
+            activity.finish();
+            Utils.android.getApplicationContext().startActivity(intent);
+          } else {
+            alert(`Error ${response.statusCode}, please try again`);
           }
-          ApplicationSettings.setString(
-            "username",
-            this.username.toLowerCase()
-          );
-          ApplicationSettings.setString("token", json.token);
-          const activity = android.foregroundActivity;
-          const intent = activity.getIntent();
-          activity.finish();
-          Utils.android.getApplicationContext().startActivity(intent);
-        } else {
-          alert(`Error ${response.statusCode}, please try again`);
-        }
-      });
+        });
+      } else {
+        Dialogs.alert({
+          title: "Please agree",
+          message:
+            "To use wasteof.mobile, you must accept the Privacy Policy and Rules.",
+          okButtonText: "Okay",
+        });
+      }
     },
     signOut() {
       Http.request({
@@ -181,6 +203,7 @@ export default {
       password: "",
       filterEnabled: ApplicationSettings.getBoolean("filter") || null,
       version: VERSION,
+      hasAccepted: false,
     };
   },
 };
@@ -269,8 +292,8 @@ Page {
 }
 
 .privacy {
-  margin-top: 5;
-  text-align: center;
+  margin-top: 0;
+  text-align: left;
 }
 
 .privacy-link {
@@ -279,5 +302,15 @@ Page {
 
 .collapse-switch {
   margin-top: -15;
+}
+
+.tos {
+  align-items: center;
+  justify-content: center;
+  margin-top: 15;
+}
+
+.disabled {
+  background-color: gray;
 }
 </style>

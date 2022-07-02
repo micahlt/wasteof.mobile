@@ -56,7 +56,6 @@
         <Image
           :src="`https://api.wasteof.money/users/${info.name}/banner?optimized=true`"
           stretch="aspectFill"
-          tintColor="#000000bb"
           height="100%"
         />
       </GridLayout>
@@ -391,6 +390,7 @@ PullToRefresh {
   padding: 20;
   z-index: 3;
   color: white;
+  background-color: rgba(0, 0, 0, 0.7);
 }
 
 .header-bg {

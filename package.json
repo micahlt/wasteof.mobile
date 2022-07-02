@@ -15,6 +15,7 @@
     "@nativescript-community/ui-material-ripple": "^7.0.24",
     "@nativescript/core": "~8.2.5",
     "@nativescript/theme": "~3.0.2",
+    "@nstudio/nativescript-checkbox": "^2.0.5",
     "@nstudio/nativescript-floatingactionbutton": "^3.0.4",
     "bad-words": "^1.6.5",
     "friendly-time": "^1.1.1",

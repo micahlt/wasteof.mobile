@@ -70,7 +70,6 @@
 <script>
 import { Application, ApplicationSettings, Http } from "@nativescript/core";
 import * as utils from "~/shared/utils";
-import { SelectedPageService } from "../shared/selected-page-service";
 import * as colorModule from "tns-core-modules/color";
 import Notification from "./Notification.vue";
 export default {
@@ -78,7 +77,6 @@ export default {
     Notification,
   },
   mounted() {
-    SelectedPageService.getInstance().updateSelectedPage("Notifs");
     if (this.token) {
       this.loadUnread();
     }

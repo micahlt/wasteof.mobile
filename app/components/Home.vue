@@ -31,7 +31,7 @@
                 class="notiflayout"
               >
                 <StackLayout col="0" @tap="openNotifs">
-                <Ripple rippleColor="#000000">
+                  <Ripple rippleColor="#000000">
                     <Button
                       text.decode="&#xe7f4;"
                       :class="[
@@ -42,8 +42,8 @@
                       textWrap="true"
                       col="0"
                     />
-                </Ripple>
-                  </StackLayout>
+                  </Ripple>
+                </StackLayout>
               </GridLayout>
             </GridLayout>
             <Post v-for="post in computePosts" :key="post._id" :post="post" />
@@ -91,7 +91,7 @@ import {
   Application,
   ApplicationSettings,
   Http,
-  Dialogs
+  Dialogs,
 } from "@nativescript/core";
 import * as utils from "~/shared/utils";
 import { SelectedPageService } from "../shared/selected-page-service";
@@ -118,9 +118,13 @@ export default {
       utils.showDrawer();
     },
     openNotifs() {
-      setTimeout(() => {
-        this.$navigateTo(Notifs);
-      }, 250);
+      this.$navigateTo(Notifs, {
+        transition: {
+          name: "slideLeft",
+          duration: 200,
+          curve: "ease",
+        },
+      });
     },
     fetchPosts(e) {
       if (!this.isInfiniteLoading) {
@@ -178,13 +182,13 @@ export default {
     openModal() {
       this.$showModal(CreatePost, {
         fullscreen: true,
-        animated: true
+        animated: true,
       }).then((data) => {
         if (data == "posted") {
           this.loading = 0;
           this.fetchPosts();
         }
-      })
+      });
     },
   },
   mounted() {

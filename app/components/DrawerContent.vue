@@ -8,7 +8,7 @@
             <Label class="nt-drawer__header-footnote" text="sign in for more features" v-if="username == 'Signed Out'"/>
             <Label class="nt-drawer__header-footnote" text="online" v-else/>
           </StackLayout>
-          <Image :src="banner" class="banner" stretch="aspectFill" tintColor="#000000bb" />
+          <Image :src="banner" class="banner" stretch="aspectFill" :tintColor="tintColor" row="0" />
         </GridLayout>
         <ScrollView row="1" class="nt-drawer__body">
             <StackLayout>
@@ -67,6 +67,7 @@ import Notifs from "./Notifs";
 import * as utils from "~/shared/utils";
 import { SelectedPageService } from "~/shared/selected-page-service";
 import { ApplicationSettings } from "@nativescript/core";
+import { Color } from "@nativescript/core";
 
 export default {
   mounted() {
@@ -96,6 +97,11 @@ export default {
     onNavigationItemTap(component) {
       this.$navigateTo(component, {
         clearHistory: false,
+        transition: {
+          name: "slideLeft",
+          duration: 200,
+          curve: "ease",
+        },
       });
       utils.closeDrawer();
     },
@@ -105,9 +111,20 @@ export default {
           props: {
             username: this.username,
           },
+          transition: {
+            name: "slideLeft",
+            duration: 200,
+            curve: "ease",
+          },
         });
       } else {
-        this.$navigateTo(Settings);
+        this.$navigateTo(Settings, {
+          transition: {
+            name: "slideLeft",
+            duration: 200,
+            curve: "ease",
+          },
+        });
       }
       utils.closeDrawer();
     },
@@ -127,6 +144,9 @@ export default {
       } else {
         return "@" + this.username;
       }
+    },
+    tintColor() {
+      return new Color("#000000").android;
     },
   },
 };
@@ -161,9 +181,10 @@ export default {
 
 .banner {
   z-index: -1;
+  opacity: 1;
 }
 
 .nt-drawer__header {
-  background: transparent;
+  background: rgba(0, 0, 0, 0.5);
 }
 </style>
