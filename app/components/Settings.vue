@@ -204,6 +204,7 @@ export default {
       filterEnabled: ApplicationSettings.getBoolean("filter") || null,
       version: VERSION,
       hasAccepted: false,
+      listOfItems: ["apple", "orange", "grape"],
     };
   },
 };

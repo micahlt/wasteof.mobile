@@ -26,6 +26,12 @@
           col="3"
           v-if="pinned"
         />
+        <Label
+          text="more_vert"
+          class="post-icon mi options-btn"
+          col="4"
+          @tap="openOptions"
+        />
       </GridLayout>
       <Image
         :src="post.image"
@@ -71,6 +77,7 @@ import * as utils from "~/shared/utils";
 import { InAppBrowser } from "nativescript-inappbrowser";
 import { Http, Dialogs } from "@nativescript/core";
 import { ApplicationSettings } from "@nativescript/core";
+import { Toasty } from "@triniwiz/nativescript-toasty";
 export default {
   props: {
     post: Object,
@@ -90,6 +97,8 @@ export default {
       loved: false,
       isInteracting: false,
       isLoving: false,
+      optionsOpen: true,
+      options: ["hello", "there", "old", "friend"],
     };
   },
 
@@ -142,8 +151,6 @@ export default {
     },
     lovePost() {
       this.isInteracting = true;
-      // console.log(this.$refs.loveAction.nativeView.android.setClipChildren(false))
-      // console.log(this.$refs.loveAction.nativeView.android.getClipChildren())
       if (this.username) {
         this.isLoving = true;
         setTimeout(() => {
@@ -169,6 +176,31 @@ export default {
       } else {
         alert("Sign in to love posts!");
       }
+    },
+    openOptions() {
+      this.isInteracting = true;
+      Dialogs.action({
+        title: "Post Options",
+        cancelButtonText: "Cancel",
+        actions: ["Report"],
+        cancelable: true,
+      }).then((result) => {
+        if (result == "Report") {
+          Dialogs.prompt({
+            title: "Report",
+            message:
+              "Please include details about why you're reporting this post.",
+            okButtonText: "Submit",
+            cancelButtonText: "Cancel",
+          }).then((didSubmit) => {
+            if (didSubmit.result) {
+              new Toasty({ text: "Your report has been submitted." })
+                .setToastDuration(2000)
+                .show();
+            }
+          });
+        }
+      });
     },
   },
 };
@@ -259,12 +291,6 @@ export default {
   margin: 5 0;
 }
 
-.open-post {
-  font-size: 20;
-  text-align: right;
-  opacity: 0.5;
-}
-
 .repost {
   border-color: var(--border-clr);
   border-width: 2;
@@ -277,6 +303,14 @@ export default {
 
 .pinned {
   font-size: 20;
+}
+
+.options-btn {
+  margin: 0;
+  margin-right: -8;
+  padding: 5;
+  background-color: var(--card-bg);
+  opacity: 0.5;
 }
 
 .loving {
