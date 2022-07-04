@@ -1,0 +1,25 @@
+.infoBar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 10px 16px;
+  margin-right: 5px;
+}
+
+.iconButtonWrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.iconButtonBadge {
+  margin: auto;
+}
+
+.fab {
+  position: absolute;
+  margin: 16px;
+  right: 0;
+  bottom: 0;
+  z-index: 200;
+}

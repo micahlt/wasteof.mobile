@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="336 312 188.943 94.471">
+  <mask id="a">
+    <path fill="#ffffff" fill-rule="evenodd" d="M336 312h188.943v94.471H336Z"/>
+    <path fill-rule="evenodd" d="m347.808 335.618 12.907 47.271h13.897l8.152-29.737h.58l8.152 29.737h13.925l12.878-47.271h-13.274l-7.232 31.57h-.396l-7.784-31.57h-13.062l-7.656 31.754h-.425l-7.359-31.754Z"/>
+  </mask>
+  <path fill="#ffffff" fill-rule="evenodd" d="M336 312h188.943v94.471H336Z" mask="url(#a)"/>
+</svg>
