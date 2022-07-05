@@ -19,6 +19,7 @@ function Feed() {
   const [posts, setPosts] = React.useState([]);
   const [session, setSession] = React.useState(null);
   const [isLoading, setIsLoading] = React.useState(true);
+  const [messageCount, setMessageCount] = React.useState(0);
   const [page, setPage] = React.useState(1);
   React.useEffect(() => {
     Promise.all([
@@ -29,21 +30,47 @@ function Feed() {
         username: arr[0],
         token: arr[1],
       });
-      refresh(arr[0]);
+      refresh({
+        username: arr[0],
+        token: arr[1],
+      });
     });
   }, []);
-  const refresh = username => {
+  const refresh = s => {
+    fetchPosts(s || null, true);
+  };
+  const fetchPosts = (s, isInitial) => {
     setIsLoading(true);
+    if (isInitial) {
+      setPosts([]);
+      setPage(1);
+      fetch(`https://api.wasteof.money/messages/count`, {
+        headers: {
+          Authorization: session.token || s.token,
+        },
+      })
+        .then(res => {
+          if (res.status == 200) {
+            return res.json();
+          } else {
+            alert(`Error ${res.status} - try again later.`);
+          }
+        })
+        .then(json => {
+          setMessageCount(json.count);
+        });
+    }
     fetch(
       `https://api.wasteof.money/users/${
-        session?.username || username
+        session?.username || s.username
       }/following/posts?page=${page}`,
     )
       .then(response => {
         return response.json();
       })
       .then(json => {
-        setPosts(json.posts);
+        setPosts([...posts, ...json.posts]);
+        setPage(page + 1);
         setIsLoading(false);
       });
   };
@@ -54,9 +81,11 @@ function Feed() {
           Your feed
         </Text>
         <View style={g.iconButtonWrapper}>
-          <Badge style={g.iconButtonBadge} size={24}>
-            3
-          </Badge>
+          {messageCount > 0 && (
+            <Badge style={g.iconButtonBadge} size={24}>
+              {messageCount}
+            </Badge>
+          )}
           <IconButton
             icon="bell"
             size={24}
@@ -93,6 +122,7 @@ function Feed() {
           ListHeaderComponent={listHeader}
           onRefresh={refresh}
           refreshing={isLoading}
+          onEndReached={fetchPosts}
         />
       ) : (
         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
