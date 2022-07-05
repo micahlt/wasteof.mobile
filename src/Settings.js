@@ -57,9 +57,18 @@ function Settings() {
     }
   };
   const signOut = () => {
-    AsyncStorage.removeItem('username');
-    AsyncStorage.removeItem('token');
-    RNRestart.Restart();
+    AsyncStorage.getItem('token').then(token => {
+      fetch('https://api.wasteof.money/session', {
+        method: 'DELETE',
+        headers: {
+          Authorization: token,
+        },
+      }).then(() => {
+        AsyncStorage.removeItem('username');
+        AsyncStorage.removeItem('token');
+        RNRestart.Restart();
+      });
+    });
   };
   const signOutButton = () => {
     return (
