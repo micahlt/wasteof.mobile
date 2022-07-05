@@ -1,31 +1,53 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {ImageBackground} from 'react-native';
 import {DrawerContentScrollView} from '@react-navigation/drawer';
 import {Drawer, Avatar, Text, useTheme} from 'react-native-paper';
 import s from '../styles/DrawerContent.module.css';
 import {useNavigation} from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const DrawerContent = ({state}) => {
   const {colors} = useTheme();
   const navigation = useNavigation();
+  const [username, setUsername] = React.useState(null);
   const isOnPage = name => {
     if (state.routeNames[state.index] === name) return true;
     else return false;
   };
+  useEffect(() => {
+    AsyncStorage.getItem('username').then(val => {
+      setUsername(val);
+    });
+  }, []);
   return (
     <DrawerContentScrollView style={{flex: 1, backgroundColor: colors.surface}}>
       <ImageBackground
-        source={{uri: 'https://api.wasteof.money/users/micahlt/banner'}}
+        source={{
+          uri: `https://api.wasteof.money/users/${
+            username || 'micahlt'
+          }/banner`,
+        }}
         resizeMode="cover"
         style={s.imageBackground}
         imageStyle={{opacity: 0.5}}>
-        <Avatar.Icon
-          size={100}
-          icon="face-man-outline"
-          style={{alignSelf: 'center', margin: 20}}
-        />
+        {username ? (
+          <Avatar.Image
+            source={{
+              uri: `https://api.wasteof.money/users/${username}/picture`,
+            }}
+            size={100}
+            style={{alignSelf: 'center', marginTop: 30, marginBottom: 10}}
+          />
+        ) : (
+          <Avatar.Icon
+            icon="face-man-shimmer-outline"
+            size={100}
+            style={{alignSelf: 'center', marginTop: 30, marginBottom: 10}}
+            color={colors.background}
+          />
+        )}
         <Text style={s.username} variant="titleLarge">
-          Sign In
+          {username || 'Sign In'}
         </Text>
       </ImageBackground>
       <Drawer.Item
@@ -59,7 +81,9 @@ const DrawerContent = ({state}) => {
       <Drawer.Item
         label="Settings"
         icon="cog"
-        onPress={() => alert('Link to help')}
+        onPress={() => {
+          navigation.navigate('settings');
+        }}
         active={isOnPage('settings')}
       />
     </DrawerContentScrollView>

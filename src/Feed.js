@@ -1,11 +1,12 @@
 import * as React from 'react';
 import {View} from 'react-native';
-import {Text, IconButton, Badge, useTheme} from 'react-native-paper';
+import {Text, IconButton, Badge, Button, useTheme} from 'react-native-paper';
+import {useNavigation} from '@react-navigation/native';
 import g from '../styles/Global.module.css';
-import Logo from '../static/logo.svg';
 
 function Feed() {
   const {colors} = useTheme();
+  const navigation = useNavigation();
   return (
     <View
       style={{
@@ -31,7 +32,14 @@ function Feed() {
           />
         </View>
       </View>
-      <Logo width={331} height={165} style={{backgroundColor: 'black'}} />
+      <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+        <Button
+          mode="contained-tonal"
+          icon="account-lock-outline"
+          onPress={() => navigation.navigate('settings')}>
+          Sign In
+        </Button>
+      </View>
     </View>
   );
 }

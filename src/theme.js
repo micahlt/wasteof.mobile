@@ -26,9 +26,7 @@ export const lightTheme = {
     onError: '#ffffff',
     errorContainer: '#ffdad6',
     onErrorContainer: '#410002',
-    elevation: {
-      ...MD3LightTheme.elevation,
-    },
+    elevation: MD3LightTheme.elevation,
   },
 };
 
@@ -60,8 +58,6 @@ export const darkTheme = {
     onError: '#690005',
     errorContainer: '#93000a',
     onErrorContainer: '#ffdad6',
-    elevation: {
-      ...MD3DarkTheme.elevation,
-    },
+    elevation: MD3DarkTheme.elevation,
   },
 };

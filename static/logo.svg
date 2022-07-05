@@ -1,7 +1,3 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="336 312 188.943 94.471">
-  <mask id="a">
-    <path fill="#ffffff" fill-rule="evenodd" d="M336 312h188.943v94.471H336Z"/>
-    <path fill-rule="evenodd" d="m347.808 335.618 12.907 47.271h13.897l8.152-29.737h.58l8.152 29.737h13.925l12.878-47.271h-13.274l-7.232 31.57h-.396l-7.784-31.57h-13.062l-7.656 31.754h-.425l-7.359-31.754Z"/>
-  </mask>
-  <path fill="#ffffff" fill-rule="evenodd" d="M336 312h188.943v94.471H336Z" mask="url(#a)"/>
+<svg width="100%" height="100%" viewBox="0 0 189 95" version="1.1" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+    <path d="M188.943,0L0,0L0,94.471L188.943,94.471L188.943,0ZM11.875,23.881L25.11,23.881L32.527,55.733L32.943,55.733L40.62,23.881L53.629,23.881L61.455,55.465L61.823,55.465L69.088,23.874L82.351,23.87L69.469,71.14L55.541,71.14L47.363,41.406L46.803,41.406L38.623,71.145L24.795,71.145L11.875,23.881Z" fill="green" />
 </svg>

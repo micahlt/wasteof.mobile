@@ -1,0 +1,9 @@
+.stat {
+  margin-right: 0.75rem;
+  transform: translateY(-0.5px);
+}
+
+.statButton {
+  margin-left: -5;
+  margin-right: -2;
+}
