@@ -27,3 +27,8 @@
 .link {
   text-decoration: underline;
 }
+
+.header {
+  font-weight: bold;
+  flex: 1;
+}

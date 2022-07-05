@@ -1,8 +1,9 @@
 import * as React from 'react';
-import {View} from 'react-native';
+import {View, ScrollView} from 'react-native';
 import {Text, useTheme, AnimatedFAB} from 'react-native-paper';
 import {FlashList} from '@shopify/flash-list';
 import Post from './Post';
+import UserChip from './UserChip';
 import g from '../styles/Global.module.css';
 
 function Explore() {
@@ -10,6 +11,7 @@ function Explore() {
   const [posts, setPosts] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
   const [isExtended, setIsExtended] = React.useState(true);
+  const [topUsers, setTopUsers] = React.useState([]);
   const [timePeriod, setTimePeriod] = React.useState({
     slug: 'day',
     text: 'Trending today',
@@ -29,6 +31,17 @@ function Explore() {
         setPosts(json.posts);
         setIsLoading(false);
       });
+    fetch('https://api.wasteof.money/explore/users/top')
+      .then(response => {
+        return response.json();
+      })
+      .then(json => {
+        let usernames = [];
+        json.forEach(post => {
+          usernames.push(post.name);
+        });
+        setTopUsers([...new Set(usernames)]);
+      });
   };
   const onScroll = ({nativeEvent}) => {
     const currentScrollPosition =
@@ -38,8 +51,31 @@ function Explore() {
   };
   const listHeader = () => {
     return (
-      <View style={{margin: 20, marginBottom: 10}}>
-        <Text variant="titleLarge" style={{fontWeight: 'bold', flex: 1}}>
+      <View
+        style={{
+          marginTop: 20,
+          paddingLeft: 20,
+          marginBottom: 10,
+          marginRight: 0,
+        }}>
+        <Text variant="titleLarge" style={g.header}>
+          Top users
+        </Text>
+        <ScrollView
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          style={{
+            paddingTop: 10,
+            paddingBottom: 10,
+            paddingLeft: 20,
+            paddingRight: 40,
+            marginLeft: -20,
+          }}>
+          {topUsers.map(username => (
+            <UserChip username={username} inline={true} />
+          ))}
+        </ScrollView>
+        <Text variant="titleLarge" style={g.header}>
           {timePeriod.text}
         </Text>
       </View>

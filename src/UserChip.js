@@ -1,8 +1,8 @@
 import * as React from 'react';
 import {Chip, Avatar, Modal, Text, Portal} from 'react-native-paper';
-import UserModal from './UserModal';
+const UserModal = React.lazy(() => import('./UserModal'));
 
-const UserChip = ({username}) => {
+const UserChip = ({username, inline}) => {
   const [modalOpen, setModalOpen] = React.useState(false);
   const showModal = () => setModalOpen(true);
   const hideModal = () => setModalOpen(false);
@@ -19,7 +19,9 @@ const UserChip = ({username}) => {
             paddingVertical: 0,
           }}
           style={{marginTop: 0}}>
-          <UserModal username={username} closeModal={hideModal} />
+          <React.Suspense fallback={<Text>Loading</Text>}>
+            <UserModal username={username} closeModal={hideModal} />
+          </React.Suspense>
         </Modal>
       </Portal>
       <Chip
@@ -34,7 +36,7 @@ const UserChip = ({username}) => {
           />
         }
         onPress={showModal}
-        style={{marginRight: 'auto', marginBottom: 7}}>
+        style={{marginRight: inline ? 10 : 'auto', marginBottom: 7}}>
         {username}
       </Chip>
     </>
