@@ -1,13 +1,6 @@
 import * as React from 'react';
 import {View} from 'react-native';
-import {
-  Card,
-  IconButton,
-  Chip,
-  Avatar,
-  Text,
-  useTheme,
-} from 'react-native-paper';
+import {Card, IconButton, Text, useTheme} from 'react-native-paper';
 import {useWindowDimensions, Linking} from 'react-native';
 import RenderHtml from 'react-native-render-html';
 import linkifyHtml from 'linkify-html';

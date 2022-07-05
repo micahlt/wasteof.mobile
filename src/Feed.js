@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {View, FlatList, Linking} from 'react-native';
+import {View, Linking} from 'react-native';
 import {
   Text,
   IconButton,
@@ -11,6 +11,7 @@ import {
 } from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import {InAppBrowser} from 'react-native-inappbrowser-reborn';
+import {FlashList} from '@shopify/flash-list';
 import Post from './Post';
 import useSession from '../hooks/useSession';
 import g from '../styles/Global.module.css';
@@ -153,7 +154,7 @@ function Feed() {
         />
       )}
       {session ? (
-        <FlatList
+        <FlashList
           data={posts}
           keyExtractor={item => item._id}
           renderItem={renderItem}

@@ -1,6 +1,7 @@
 import * as React from 'react';
-import {View, FlatList} from 'react-native';
-import {Text, IconButton, useTheme, AnimatedFAB} from 'react-native-paper';
+import {View} from 'react-native';
+import {Text, useTheme, AnimatedFAB} from 'react-native-paper';
+import {FlashList} from '@shopify/flash-list';
 import Post from './Post';
 import g from '../styles/Global.module.css';
 
@@ -62,7 +63,7 @@ function Explore() {
         animateFrom="right"
         extended={isExtended}
       />
-      <FlatList
+      <FlashList
         data={posts}
         keyExtractor={item => item._id}
         renderItem={renderItem}
