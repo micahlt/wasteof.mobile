@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {View, FlatList} from 'react-native';
-import {Text, IconButton, FAB, useTheme} from 'react-native-paper';
+import {Text, IconButton, useTheme, AnimatedFAB} from 'react-native-paper';
 import Post from './Post';
 import g from '../styles/Global.module.css';
 
@@ -8,6 +8,7 @@ function Explore() {
   const {colors} = useTheme();
   const [posts, setPosts] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
+  const [isExtended, setIsExtended] = React.useState(true);
   const [timePeriod, setTimePeriod] = React.useState({
     slug: 'day',
     text: 'Trending today',
@@ -28,6 +29,12 @@ function Explore() {
         setIsLoading(false);
       });
   };
+  const onScroll = ({nativeEvent}) => {
+    const currentScrollPosition =
+      Math.floor(nativeEvent?.contentOffset?.y) ?? 0;
+
+    setIsExtended(currentScrollPosition <= 0);
+  };
   const listHeader = () => {
     return (
       <View style={{margin: 20, marginBottom: 10}}>
@@ -44,14 +51,16 @@ function Explore() {
         flex: 1,
         backgroundColor: colors.background,
       }}>
-      <FAB
-        icon="filter"
+      <AnimatedFAB
+        icon="clock-edit-outline"
         style={g.fab}
         onPress={() => console.log('Pressed')}
         size="medium"
         variant="secondary"
-        label="Filter"
+        label="Time Period"
         animated={true}
+        animateFrom="right"
+        extended={isExtended}
       />
       <FlatList
         data={posts}
@@ -60,6 +69,7 @@ function Explore() {
         ListHeaderComponent={listHeader}
         onRefresh={refresh}
         refreshing={isLoading}
+        onScroll={onScroll}
       />
     </View>
   );

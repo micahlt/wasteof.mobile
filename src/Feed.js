@@ -1,52 +1,47 @@
 import * as React from 'react';
-import {View, FlatList} from 'react-native';
+import {View, FlatList, Linking} from 'react-native';
 import {
   Text,
   IconButton,
   Badge,
   Button,
-  FAB,
+  AnimatedFAB,
+  ActivityIndicator,
   useTheme,
 } from 'react-native-paper';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNavigation} from '@react-navigation/native';
+import {InAppBrowser} from 'react-native-inappbrowser-reborn';
 import Post from './Post';
+import useSession from '../hooks/useSession';
 import g from '../styles/Global.module.css';
 
 function Feed() {
   const {colors} = useTheme();
   const navigation = useNavigation();
   const [posts, setPosts] = React.useState([]);
-  const [session, setSession] = React.useState(null);
+  const session = useSession();
   const [isLoading, setIsLoading] = React.useState(true);
+  const [isRefreshing, setIsRefreshing] = React.useState(true);
   const [messageCount, setMessageCount] = React.useState(0);
+  const [isExtended, setIsExtended] = React.useState(true);
   const [page, setPage] = React.useState(1);
   React.useEffect(() => {
-    Promise.all([
-      AsyncStorage.getItem('username'),
-      AsyncStorage.getItem('token'),
-    ]).then(arr => {
-      setSession({
-        username: arr[0],
-        token: arr[1],
-      });
-      refresh({
-        username: arr[0],
-        token: arr[1],
-      });
-    });
-  }, []);
+    if (session) {
+      refresh(session);
+    }
+  }, [session]);
   const refresh = s => {
     fetchPosts(s || null, true);
   };
   const fetchPosts = (s, isInitial) => {
     setIsLoading(true);
     if (isInitial) {
+      setIsRefreshing(true);
       setPosts([]);
       setPage(1);
       fetch(`https://api.wasteof.money/messages/count`, {
         headers: {
-          Authorization: session.token || s.token,
+          Authorization: session?.token || s.token,
         },
       })
         .then(res => {
@@ -58,6 +53,9 @@ function Feed() {
         })
         .then(json => {
           setMessageCount(json.count);
+        })
+        .catch(err => {
+          alert(err);
         });
     }
     fetch(
@@ -72,8 +70,37 @@ function Feed() {
         setPosts([...posts, ...json.posts]);
         setPage(page + 1);
         setIsLoading(false);
+        setIsRefreshing(false);
+      })
+      .catch(err => {
+        alert(err);
       });
   };
+  const handleFab = async () => {
+    if (await InAppBrowser.isAvailable()) {
+      await InAppBrowser.open('https://wasteof.money/posts/new', {
+        toolbarColor: colors.primary,
+      });
+    } else {
+      Linking.open('https://wasteof.money/posts/new');
+    }
+  };
+  const openNotifs = async () => {
+    if (await InAppBrowser.isAvailable()) {
+      await InAppBrowser.open('https://wasteof.money/messages', {
+        toolbarColor: colors.primary,
+      });
+    } else {
+      Linking.open('https://wasteof.money/messages');
+    }
+  };
+  const onScroll = ({nativeEvent}) => {
+    const currentScrollPosition =
+      Math.floor(nativeEvent?.contentOffset?.y) ?? 0;
+
+    setIsExtended(currentScrollPosition <= 0);
+  };
+
   const listHeader = () => {
     return (
       <View style={g.infoBar}>
@@ -90,9 +117,18 @@ function Feed() {
             icon="bell"
             size={24}
             iconColor={colors.primary}
-            onPress={() => {}}
+            onPress={openNotifs}
           />
         </View>
+      </View>
+    );
+  };
+  const listLoading = () => {
+    return (
+      <View style={{padding: 20}}>
+        {isLoading && !isRefreshing && (
+          <ActivityIndicator animating={true} color={colors.primary} />
+        )}
       </View>
     );
   };
@@ -104,14 +140,16 @@ function Feed() {
         backgroundColor: colors.background,
       }}>
       {session && (
-        <FAB
+        <AnimatedFAB
           icon="pencil-plus"
           style={g.fab}
-          onPress={() => console.log('Pressed')}
+          onPress={handleFab}
           size="medium"
           variant="secondary"
           label="Create"
           animated={true}
+          extended={isExtended}
+          animateFrom="right"
         />
       )}
       {session ? (
@@ -120,9 +158,11 @@ function Feed() {
           keyExtractor={item => item._id}
           renderItem={renderItem}
           ListHeaderComponent={listHeader}
+          ListFooterComponent={listLoading}
           onRefresh={refresh}
-          refreshing={isLoading}
+          refreshing={isRefreshing}
           onEndReached={fetchPosts}
+          onScroll={onScroll}
         />
       ) : (
         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>

@@ -2,6 +2,7 @@ import {MD3LightTheme, MD3DarkTheme} from 'react-native-paper';
 export const lightTheme = {
   ...MD3LightTheme,
   version: 3,
+  isDark: false,
   colors: {
     primary: '#494bd6',
     onPrimary: '#ffffff',
@@ -33,6 +34,7 @@ export const lightTheme = {
 export const darkTheme = {
   ...MD3DarkTheme,
   version: 3,
+  isDark: true,
   colors: {
     mode: 'adaptive',
     primary: '#c0c1ff',

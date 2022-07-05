@@ -1,7 +1,7 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
-import {useTheme} from 'react-native-paper';
+import {Portal, useTheme} from 'react-native-paper';
 import {StatusBar} from 'react-native';
 import Feed from './src/Feed';
 import DrawerContent from './src/DrawerContent';
@@ -15,15 +15,17 @@ const App = () => {
   return (
     <NavigationContainer>
       <StatusBar backgroundColor={colors.primary} />
-      <Drawer.Navigator
-        drawerContent={props => <DrawerContent {...props} />}
-        screenOptions={{
-          header: props => <AppBar />,
-        }}>
-        <Drawer.Screen name="home" component={Feed} />
-        <Drawer.Screen name="explore" component={Explore} />
-        <Drawer.Screen name="settings" component={Settings} />
-      </Drawer.Navigator>
+      <Portal.Host>
+        <Drawer.Navigator
+          drawerContent={props => <DrawerContent {...props} />}
+          screenOptions={{
+            header: props => <AppBar />,
+          }}>
+          <Drawer.Screen name="home" component={Feed} />
+          <Drawer.Screen name="explore" component={Explore} />
+          <Drawer.Screen name="settings" component={Settings} />
+        </Drawer.Navigator>
+      </Portal.Host>
     </NavigationContainer>
   );
 };

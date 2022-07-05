@@ -22,6 +22,8 @@
     "react": "18.0.0",
     "react-native": "0.69.1",
     "react-native-gesture-handler": "^2.5.0",
+    "react-native-image-colors": "^1.5.1",
+    "react-native-inappbrowser-reborn": "^3.6.3",
     "react-native-paper": "^5.0.0-rc.2",
     "react-native-reanimated": "^2.9.1",
     "react-native-render-html": "^6.3.4",
