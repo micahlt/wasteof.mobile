@@ -9,11 +9,14 @@ import useSession from '../hooks/useSession';
 import s from '../styles/Post.module.css';
 import UserChip from './UserChip';
 
-const Post = ({post}) => {
+const Post = ({post, isRepost, repostCount}) => {
   const {colors} = useTheme();
   const {width} = useWindowDimensions();
   const [loved, setLoved] = React.useState(false);
   const [loves, setLoves] = React.useState(post.loves);
+  const [localRepostCount, setLocalRepostCount] = React.useState(
+    repostCount || 1,
+  );
   const session = useSession();
   React.useEffect(() => {
     if (session) {
@@ -63,7 +66,7 @@ const Post = ({post}) => {
     return (
       <RenderHtml
         source={{html: linkifyHtml(html)}}
-        contentWidth={width - 65}
+        contentWidth={width - 65 * localRepostCount}
         tagsStyles={{
           img: {
             backgroundColor: 'white',
@@ -90,15 +93,18 @@ const Post = ({post}) => {
   });
   return (
     <Card
-      style={{
-        marginLeft: 16,
-        marginRight: 16,
-        marginBottom: 10,
-      }}
-      mode="elevated">
+      style={isRepost ? s.repostPost : s.regularPost}
+      mode={isRepost ? 'outlined' : 'elevated'}>
       <Card.Content style={{margin: 0, paddingTop: 15, paddingVertical: 0}}>
         <UserChip username={post.poster.name} />
         <WebDisplay html={post.content} />
+        {post.repost && (
+          <Post
+            post={post.repost}
+            isRepost={true}
+            repostCount={localRepostCount + 1}
+          />
+        )}
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <IconButton
             icon={loved ? 'heart' : 'heart-outline'}

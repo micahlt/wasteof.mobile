@@ -71,6 +71,7 @@ function Explore() {
         onRefresh={refresh}
         refreshing={isLoading}
         onScroll={onScroll}
+        estimatedItemSize={100}
       />
     </View>
   );

@@ -164,6 +164,7 @@ function Feed() {
           refreshing={isRefreshing}
           onEndReached={fetchPosts}
           onScroll={onScroll}
+          estimatedItemSize={100}
         />
       ) : (
         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>

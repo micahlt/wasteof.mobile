@@ -7,3 +7,13 @@
   margin-left: -5;
   margin-right: -2;
 }
+
+.regularPost {
+  margin-left: 16;
+  margin-right: 16;
+  margin-bottom: 10;
+}
+
+.repostPost {
+  margin-top: 10;
+}
