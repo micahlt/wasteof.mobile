@@ -16,12 +16,15 @@ import s from '../styles/UserModal.module.css';
 
 const UserModal = ({username, closeModal}) => {
   const {colors, isDark} = useTheme();
+  const session = useSession();
   const [headerColor, setHeaderColor] = React.useState(colors.surface);
   const [outlineColor, setOutlineColor] = React.useState(colors.outline);
   const [data, setData] = React.useState(null);
   const [posts, setPosts] = React.useState([]);
   const [following, setFollowing] = React.useState(false);
-  React.useEffect(() => {
+  const [followers, setFollowers] = React.useState(0);
+  const [isTogglingFollow, setIsTogglingFollow] = React.useState(false);
+  const refresh = () => {
     ImageColors.getColors(
       `https://api.wasteof.money/users/${username}/banner?optimized=true`,
       {
@@ -46,6 +49,7 @@ const UserModal = ({username, closeModal}) => {
       })
       .then(json => {
         setData(json);
+        setFollowers(json.stats.followers);
       });
     fetch(`https://api.wasteof.money/users/${username}/posts`)
       .then(res => {
@@ -54,7 +58,46 @@ const UserModal = ({username, closeModal}) => {
       .then(json => {
         setPosts(json.posts);
       });
-  }, []);
+  };
+  React.useEffect(() => {
+    if (session) {
+      refresh();
+      fetch(
+        `https://api.wasteof.money/users/${username}/followers/${session.username}`,
+      )
+        .then(res => {
+          return res.json();
+        })
+        .then(json => {
+          if (json) {
+            setFollowing(true);
+          } else {
+            setFollowing(false);
+          }
+        });
+    }
+  }, [session]);
+  const toggleFollow = () => {
+    setIsTogglingFollow(true);
+    fetch(`https://api.wasteof.money/users/${username}/followers`, {
+      method: 'POST',
+      headers: {
+        Authorization: session.token,
+      },
+    }).then(response => {
+      if (response.ok) {
+        if (following) {
+          setFollowers(followers - 1);
+        } else {
+          setFollowers(followers + 1);
+        }
+        setFollowing(!following);
+      } else {
+        alert(`Error code ${response.status}, try again later.`);
+      }
+      setIsTogglingFollow(false);
+    });
+  };
   const openUser = async () => {
     if (await InAppBrowser.isAvailable()) {
       await InAppBrowser.open(`https://wasteof.money/@${username}`, {
@@ -84,13 +127,14 @@ const UserModal = ({username, closeModal}) => {
         {data && (
           <View style={s.info}>
             <Button
-              icon="account-plus"
+              icon={following ? 'account-remove' : 'account-plus'}
               iconColor={colors.onSurface}
               size={20}
-              onPress={() => console.log('Pressed')}
+              onPress={toggleFollow}
               mode="contained-tonal"
+              loading={isTogglingFollow}
               style={{marginRight: 10}}>
-              Follow ({data.stats.followers})
+              {following ? 'Unfollow' : 'Follow'} ({followers})
             </Button>
             {data.verified && (
               <IconButton
