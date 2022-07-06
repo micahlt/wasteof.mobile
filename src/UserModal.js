@@ -7,7 +7,14 @@ import {
   Linking,
   FlatList,
 } from 'react-native';
-import {Appbar, Button, IconButton, Text, useTheme} from 'react-native-paper';
+import {
+  Appbar,
+  Button,
+  IconButton,
+  Text,
+  ActivityIndicator,
+  useTheme,
+} from 'react-native-paper';
 import ImageColors from 'react-native-image-colors';
 import {InAppBrowser} from 'react-native-inappbrowser-reborn';
 import Post from './Post';
@@ -21,10 +28,14 @@ const UserModal = ({username, closeModal}) => {
   const [outlineColor, setOutlineColor] = React.useState(colors.outline);
   const [data, setData] = React.useState(null);
   const [posts, setPosts] = React.useState([]);
+  const [isLoading, setIsLoading] = React.useState(true);
+  const [isRefreshing, setIsRefreshing] = React.useState(true);
+  const [page, setPage] = React.useState(1);
   const [following, setFollowing] = React.useState(false);
   const [followers, setFollowers] = React.useState(0);
   const [isTogglingFollow, setIsTogglingFollow] = React.useState(false);
   const refresh = () => {
+    setIsRefreshing(true);
     ImageColors.getColors(
       `https://api.wasteof.money/users/${username}/banner?optimized=true`,
       {
@@ -51,12 +62,20 @@ const UserModal = ({username, closeModal}) => {
         setData(json);
         setFollowers(json.stats.followers);
       });
-    fetch(`https://api.wasteof.money/users/${username}/posts`)
+    setPage(1);
+    setPosts([]);
+    fetchPosts();
+  };
+  const fetchPosts = () => {
+    fetch(`https://api.wasteof.money/users/${username}/posts?page=${page}`)
       .then(res => {
         return res.json();
       })
       .then(json => {
-        setPosts(json.posts);
+        setPosts([...posts, ...json.posts]);
+        setPage(page + 1);
+        setIsRefreshing(false);
+        setIsLoading(false);
       });
   };
   React.useEffect(() => {
@@ -106,6 +125,15 @@ const UserModal = ({username, closeModal}) => {
     } else {
       Linking.open(`https://wasteof.money/@${username}`);
     }
+  };
+  const listLoading = () => {
+    return (
+      <View style={{padding: 20}}>
+        {isLoading && !isRefreshing && (
+          <ActivityIndicator animating={true} color={colors.primary} />
+        )}
+      </View>
+    );
   };
   const listHeader = () => {
     return (
@@ -170,7 +198,7 @@ const UserModal = ({username, closeModal}) => {
       </>
     );
   };
-  const renderItem = ({item}) => <Post post={item} />;
+  const renderItem = React.useCallback(({item}) => <Post post={item} />, []);
   return (
     <>
       <Appbar style={{backgroundColor: headerColor}}>
@@ -196,6 +224,12 @@ const UserModal = ({username, closeModal}) => {
         keyExtractor={item => item._id}
         renderItem={renderItem}
         ListHeaderComponent={listHeader}
+        ListFooterComponent={listLoading}
+        onRefresh={refresh}
+        refreshing={isRefreshing}
+        onEndReached={fetchPosts}
+        estimatedItemSize={250}
+        windowSize={21}
       />
     </>
   );

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {View, Linking} from 'react-native';
+import {View, Linking, FlatList} from 'react-native';
 import {
   Text,
   IconButton,
@@ -11,7 +11,6 @@ import {
 } from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import {InAppBrowser} from 'react-native-inappbrowser-reborn';
-import {FlashList} from '@shopify/flash-list';
 import Post from './Post';
 import useSession from '../hooks/useSession';
 import g from '../styles/Global.module.css';
@@ -28,13 +27,13 @@ function Feed() {
   const [page, setPage] = React.useState(1);
   React.useEffect(() => {
     if (session) {
-      refresh(session);
+      refresh();
     }
   }, [session]);
-  const refresh = s => {
-    fetchPosts(s || null, true);
+  const refresh = () => {
+    fetchPosts(null, true);
   };
-  const fetchPosts = (s, isInitial) => {
+  const fetchPosts = (e, isInitial) => {
     setIsLoading(true);
     if (isInitial) {
       setIsRefreshing(true);
@@ -42,7 +41,7 @@ function Feed() {
       setPage(1);
       fetch(`https://api.wasteof.money/messages/count`, {
         headers: {
-          Authorization: session?.token || s.token,
+          Authorization: session.token,
         },
       })
         .then(res => {
@@ -60,9 +59,7 @@ function Feed() {
         });
     }
     fetch(
-      `https://api.wasteof.money/users/${
-        session?.username || s.username
-      }/following/posts?page=${page}`,
+      `https://api.wasteof.money/users/${session.username}/following/posts?page=${page}`,
     )
       .then(response => {
         return response.json();
@@ -133,7 +130,7 @@ function Feed() {
       </View>
     );
   };
-  const renderItem = ({item}) => <Post post={item} />;
+  const renderItem = React.useCallback(({item}) => <Post post={item} />, []);
   return (
     <View
       style={{
@@ -154,7 +151,7 @@ function Feed() {
         />
       )}
       {session ? (
-        <FlashList
+        <FlatList
           data={posts}
           keyExtractor={item => item._id}
           renderItem={renderItem}
@@ -164,10 +161,16 @@ function Feed() {
           refreshing={isRefreshing}
           onEndReached={fetchPosts}
           onScroll={onScroll}
-          estimatedItemSize={100}
+          estimatedItemSize={250}
+          windowSize={21}
         />
       ) : (
         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+          <Text
+            variant="titleLarge"
+            style={{width: '70%', textAlign: 'center', marginBottom: 10}}>
+            Get the most out of wasteof.mobile
+          </Text>
           <Button
             mode="contained-tonal"
             icon="account-lock-outline"

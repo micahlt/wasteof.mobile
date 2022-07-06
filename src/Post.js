@@ -3,15 +3,17 @@ import {View} from 'react-native';
 import {Card, IconButton, Text, useTheme} from 'react-native-paper';
 import {useWindowDimensions, Linking} from 'react-native';
 import RenderHtml from 'react-native-render-html';
-import linkifyHtml from 'linkify-html';
 import {InAppBrowser} from 'react-native-inappbrowser-reborn';
 import useSession from '../hooks/useSession';
 import s from '../styles/Post.module.css';
+import filter from '../utils/filter';
+import linkifyHtml from 'linkify-html';
 import UserChip from './UserChip';
 
 const Post = ({post, isRepost, repostCount}) => {
   const {colors} = useTheme();
   const {width} = useWindowDimensions();
+  const [filteredHTML, setFilteredHTML] = React.useState(null);
   const [loved, setLoved] = React.useState(false);
   const [loves, setLoves] = React.useState(post.loves);
   const [localRepostCount, setLocalRepostCount] = React.useState(
@@ -19,6 +21,13 @@ const Post = ({post, isRepost, repostCount}) => {
   );
   const session = useSession();
   React.useEffect(() => {
+    filter(post.content)
+      .then(c => {
+        setFilteredHTML(c);
+      })
+      .catch(err => {
+        setFilteredHTML(post.content);
+      });
     if (session) {
       fetch(
         `https://api.wasteof.money/posts/${post._id}/loves/${session.username}`,
@@ -65,7 +74,7 @@ const Post = ({post, isRepost, repostCount}) => {
   const WebDisplay = React.memo(function WebDisplay({html}) {
     return (
       <RenderHtml
-        source={{html: linkifyHtml(html)}}
+        source={{html: linkifyHtml(filteredHTML)}}
         contentWidth={width - 65 * localRepostCount}
         tagsStyles={{
           img: {
@@ -97,7 +106,7 @@ const Post = ({post, isRepost, repostCount}) => {
       mode={isRepost ? 'outlined' : 'elevated'}>
       <Card.Content style={{margin: 0, paddingTop: 15, paddingVertical: 0}}>
         <UserChip username={post.poster.name} />
-        <WebDisplay html={post.content} />
+        {filteredHTML && <WebDisplay html={post.content} />}
         {post.repost && (
           <Post
             post={post.repost}

@@ -6,6 +6,7 @@ import {
   TextInput,
   Checkbox,
   Button,
+  Switch,
   useTheme,
 } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -19,6 +20,7 @@ function Settings() {
   const [password, setPassword] = React.useState('');
   const [currentUsername, setCurrentUsername] = React.useState(null);
   const [hasAccepted, accept] = React.useState('unchecked');
+  const [enableFilter, setFilter] = React.useState(false);
   const handleCheckbox = () => {
     if (hasAccepted == 'unchecked') {
       accept('checked');
@@ -81,7 +83,13 @@ function Settings() {
     AsyncStorage.getItem('username').then(val => {
       setCurrentUsername(val);
     });
+    AsyncStorage.getItem('filter').then(val => {
+      setFilter(Boolean(val));
+    });
   }, []);
+  React.useEffect(() => {
+    AsyncStorage.setItem('filter', String(enableFilter));
+  }, [enableFilter]);
   return (
     <ScrollView
       style={{
@@ -155,6 +163,19 @@ function Settings() {
           />
         </Card>
       )}
+      <Card mode="outlined" style={{marginTop: 15}}>
+        <Card.Content>
+          <View style={g.inline}>
+            <Switch
+              value={enableFilter}
+              onValueChange={() => setFilter(!enableFilter)}
+            />
+            <Text style={{marginLeft: 10}} variant="labelLarge">
+              Profanity filter
+            </Text>
+          </View>
+        </Card.Content>
+      </Card>
     </ScrollView>
   );
 }

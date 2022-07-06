@@ -8,10 +8,14 @@ const useSession = () => {
       AsyncStorage.getItem('username'),
       AsyncStorage.getItem('token'),
     ]).then(arr => {
-      setSession({
-        username: arr[0],
-        token: arr[1],
-      });
+      if (arr[0] && arr[1]) {
+        setSession({
+          username: arr[0],
+          token: arr[1],
+        });
+      } else {
+        setSession(false);
+      }
     });
   }, []);
   return session;

@@ -32,3 +32,8 @@
   font-weight: bold;
   flex: 1;
 }
+
+.inline {
+  flex-direction: row;
+  align-items: center;
+}

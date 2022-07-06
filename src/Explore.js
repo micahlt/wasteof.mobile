@@ -1,7 +1,6 @@
 import * as React from 'react';
-import {View, ScrollView} from 'react-native';
+import {View, ScrollView, FlatList} from 'react-native';
 import {Text, useTheme, AnimatedFAB} from 'react-native-paper';
-import {FlashList} from '@shopify/flash-list';
 import Post from './Post';
 import UserChip from './UserChip';
 import g from '../styles/Global.module.css';
@@ -72,7 +71,7 @@ function Explore() {
             marginLeft: -20,
           }}>
           {topUsers.map(username => (
-            <UserChip username={username} inline={true} />
+            <UserChip username={username} inline={true} key={username} />
           ))}
         </ScrollView>
         <Text variant="titleLarge" style={g.header}>
@@ -81,7 +80,7 @@ function Explore() {
       </View>
     );
   };
-  const renderItem = ({item}) => <Post post={item} />;
+  const renderItem = React.useCallback(({item}) => <Post post={item} />, []);
   return (
     <View
       style={{
@@ -99,7 +98,7 @@ function Explore() {
         animateFrom="right"
         extended={isExtended}
       />
-      <FlashList
+      <FlatList
         data={posts}
         keyExtractor={item => item._id}
         renderItem={renderItem}
@@ -107,7 +106,7 @@ function Explore() {
         onRefresh={refresh}
         refreshing={isLoading}
         onScroll={onScroll}
-        estimatedItemSize={100}
+        estimatedItemSize={250}
       />
     </View>
   );
