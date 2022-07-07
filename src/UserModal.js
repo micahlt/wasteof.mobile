@@ -18,12 +18,12 @@ import {
 import ImageColors from 'react-native-image-colors';
 import {InAppBrowser} from 'react-native-inappbrowser-reborn';
 import Post from './Post';
-import useSession from '../hooks/useSession';
 import s from '../styles/UserModal.module.css';
+import {GlobalContext} from '../App';
 
 const UserModal = ({username, closeModal}) => {
+  const {username: myUsername, token} = React.useContext(GlobalContext);
   const {colors, isDark} = useTheme();
-  const session = useSession();
   const [headerColor, setHeaderColor] = React.useState(colors.surface);
   const [outlineColor, setOutlineColor] = React.useState(colors.outline);
   const [data, setData] = React.useState(null);
@@ -79,10 +79,10 @@ const UserModal = ({username, closeModal}) => {
       });
   };
   React.useEffect(() => {
-    if (session) {
+    if (token) {
       refresh();
       fetch(
-        `https://api.wasteof.money/users/${username}/followers/${session.username}`,
+        `https://api.wasteof.money/users/${username}/followers/${myUsername}`,
       )
         .then(res => {
           return res.json();
@@ -95,13 +95,13 @@ const UserModal = ({username, closeModal}) => {
           }
         });
     }
-  }, [session]);
+  }, [token]);
   const toggleFollow = () => {
     setIsTogglingFollow(true);
     fetch(`https://api.wasteof.money/users/${username}/followers`, {
       method: 'POST',
       headers: {
-        Authorization: session.token,
+        Authorization: token,
       },
     }).then(response => {
       if (response.ok) {

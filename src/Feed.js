@@ -6,42 +6,41 @@ import {
   Badge,
   Button,
   AnimatedFAB,
-  ActivityIndicator,
   useTheme,
 } from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import {InAppBrowser} from 'react-native-inappbrowser-reborn';
 import Post from './Post';
-import useSession from '../hooks/useSession';
 import g from '../styles/Global.module.css';
+import {GlobalContext} from '../App';
 
 function Feed() {
   const {colors} = useTheme();
   const navigation = useNavigation();
   const [posts, setPosts] = React.useState([]);
-  const session = useSession();
   const [isLoading, setIsLoading] = React.useState(true);
   const [isRefreshing, setIsRefreshing] = React.useState(true);
   const [messageCount, setMessageCount] = React.useState(0);
   const [isExtended, setIsExtended] = React.useState(true);
   const [page, setPage] = React.useState(1);
+  const {username, token} = React.useContext(GlobalContext);
   React.useEffect(() => {
-    if (session) {
+    if (token) {
       refresh();
     }
-  }, [session]);
+  }, [token]);
   const refresh = () => {
+    setIsRefreshing(true);
+    setPosts([]);
     fetchPosts(null, true);
   };
   const fetchPosts = (e, isInitial) => {
     setIsLoading(true);
     if (isInitial) {
-      setIsRefreshing(true);
-      setPosts([]);
       setPage(1);
       fetch(`https://api.wasteof.money/messages/count`, {
         headers: {
-          Authorization: session.token,
+          Authorization: token,
         },
       })
         .then(res => {
@@ -59,7 +58,7 @@ function Feed() {
         });
     }
     fetch(
-      `https://api.wasteof.money/users/${session.username}/following/posts?page=${page}`,
+      `https://api.wasteof.money/users/${username}/following/posts?page=${page}`,
     )
       .then(response => {
         return response.json();
@@ -98,7 +97,11 @@ function Feed() {
 
     setIsExtended(currentScrollPosition <= 0);
   };
-
+  const handleLoadMore = () => {
+    if (!isLoading) {
+      fetchPosts();
+    }
+  };
   const listHeader = () => {
     return (
       <View style={g.infoBar}>
@@ -123,9 +126,15 @@ function Feed() {
   };
   const listLoading = () => {
     return (
-      <View style={{padding: 20}}>
-        {isLoading && !isRefreshing && (
-          <ActivityIndicator animating={true} color={colors.primary} />
+      <View style={{paddingTop: 20, paddingBottom: 30}}>
+        {!isRefreshing && (
+          <Button
+            loading={isLoading}
+            mode="contained-tonal"
+            style={{marginLeft: 'auto', marginRight: 'auto'}}
+            onPress={handleLoadMore}>
+            Load more
+          </Button>
         )}
       </View>
     );
@@ -137,7 +146,7 @@ function Feed() {
         flex: 1,
         backgroundColor: colors.background,
       }}>
-      {session && (
+      {token && (
         <AnimatedFAB
           icon="pencil-plus"
           style={g.fab}
@@ -150,7 +159,7 @@ function Feed() {
           animateFrom="right"
         />
       )}
-      {session ? (
+      {token ? (
         <FlatList
           data={posts}
           keyExtractor={item => item._id}
@@ -159,7 +168,6 @@ function Feed() {
           ListFooterComponent={listLoading}
           onRefresh={refresh}
           refreshing={isRefreshing}
-          onEndReached={fetchPosts}
           onScroll={onScroll}
           estimatedItemSize={250}
           windowSize={21}

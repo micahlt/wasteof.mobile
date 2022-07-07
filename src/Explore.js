@@ -67,11 +67,16 @@ function Explore() {
             paddingTop: 10,
             paddingBottom: 10,
             paddingLeft: 20,
-            paddingRight: 40,
+            paddingRight: 0,
             marginLeft: -20,
           }}>
-          {topUsers.map(username => (
-            <UserChip username={username} inline={true} key={username} />
+          {topUsers.map((username, i) => (
+            <UserChip
+              username={username}
+              inline={true}
+              key={username}
+              lastInline={i == topUsers.length - 1}
+            />
           ))}
         </ScrollView>
         <Text variant="titleLarge" style={g.header}>

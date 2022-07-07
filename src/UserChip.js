@@ -2,7 +2,7 @@ import * as React from 'react';
 import {Chip, Avatar, Modal, Text, Portal} from 'react-native-paper';
 const UserModal = React.lazy(() => import('./UserModal'));
 
-const UserChip = ({username, inline}) => {
+const UserChip = ({username, inline, lastInline}) => {
   const [modalOpen, setModalOpen] = React.useState(false);
   const showModal = () => setModalOpen(true);
   const hideModal = () => setModalOpen(false);
@@ -36,7 +36,10 @@ const UserChip = ({username, inline}) => {
           />
         }
         onPress={showModal}
-        style={{marginRight: inline ? 10 : 'auto', marginBottom: 7}}>
+        style={{
+          marginRight: inline ? (lastInline ? 40 : 10) : 'auto',
+          marginBottom: 7,
+        }}>
         {username}
       </Chip>
     </>

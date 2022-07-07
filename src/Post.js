@@ -1,16 +1,18 @@
 import * as React from 'react';
 import {View} from 'react-native';
 import {Card, IconButton, Text, useTheme} from 'react-native-paper';
-import {useWindowDimensions, Linking} from 'react-native';
+import {useWindowDimensions, Linking, Image} from 'react-native';
 import RenderHtml from 'react-native-render-html';
 import {InAppBrowser} from 'react-native-inappbrowser-reborn';
-import useSession from '../hooks/useSession';
+import ago from 's-ago';
 import s from '../styles/Post.module.css';
 import filter from '../utils/filter';
 import linkifyHtml from 'linkify-html';
 import UserChip from './UserChip';
+import AutoImage from './AutoImage';
+import {GlobalContext} from '../App';
 
-const Post = ({post, isRepost, repostCount}) => {
+const Post = React.memo(({post, isRepost, repostCount}) => {
   const {colors} = useTheme();
   const {width} = useWindowDimensions();
   const [filteredHTML, setFilteredHTML] = React.useState(null);
@@ -19,19 +21,21 @@ const Post = ({post, isRepost, repostCount}) => {
   const [localRepostCount, setLocalRepostCount] = React.useState(
     repostCount || 1,
   );
-  const session = useSession();
+  const {shouldFilter, username, token} = React.useContext(GlobalContext);
   React.useEffect(() => {
-    filter(post.content)
-      .then(c => {
-        setFilteredHTML(c);
-      })
-      .catch(err => {
-        setFilteredHTML(post.content);
-      });
-    if (session) {
-      fetch(
-        `https://api.wasteof.money/posts/${post._id}/loves/${session.username}`,
-      )
+    if (shouldFilter && !filteredHTML) {
+      filter(post.content)
+        .then(c => {
+          setFilteredHTML(c);
+        })
+        .catch(err => {
+          setFilteredHTML(post.content);
+        });
+    } else if (!shouldFilter && !filteredHTML) {
+      setFilteredHTML(post.content);
+    }
+    if (token) {
+      fetch(`https://api.wasteof.money/posts/${post._id}/loves/${username}`)
         .then(res => {
           return res.json();
         })
@@ -42,12 +46,12 @@ const Post = ({post, isRepost, repostCount}) => {
           return;
         });
     }
-  }, [session]);
+  }, []);
   const handleLove = () => {
     fetch(`https://api.wasteof.money/posts/${post._id}/loves`, {
       method: 'POST',
       headers: {
-        Authorization: session.token,
+        Authorization: token,
       },
     })
       .then(res => {
@@ -71,15 +75,20 @@ const Post = ({post, isRepost, repostCount}) => {
       Linking.open(`https://wasteof.money/posts/${post._id}`);
     }
   };
+  const ImageRenderer = ({tnode}) => {
+    return (
+      <AutoImage
+        source={tnode.attributes.src}
+        fitWidth={width - 65 * localRepostCount}
+      />
+    );
+  };
   const WebDisplay = React.memo(function WebDisplay({html}) {
     return (
       <RenderHtml
         source={{html: linkifyHtml(filteredHTML)}}
         contentWidth={width - 65 * localRepostCount}
         tagsStyles={{
-          img: {
-            backgroundColor: 'white',
-          },
           a: {color: colors.primary},
           p: {
             color: colors.onSurface,
@@ -97,6 +106,7 @@ const Post = ({post, isRepost, repostCount}) => {
           },
         }}
         baseStyle={{color: colors.onSurface}}
+        renderers={{img: React.useCallback(ImageRenderer, [])}}
       />
     );
   });
@@ -105,7 +115,14 @@ const Post = ({post, isRepost, repostCount}) => {
       style={isRepost ? s.repostPost : s.regularPost}
       mode={isRepost ? 'outlined' : 'elevated'}>
       <Card.Content style={{margin: 0, paddingTop: 15, paddingVertical: 0}}>
-        <UserChip username={post.poster.name} />
+        <View style={{flexDirection: 'row', alignItems: 'flex-start'}}>
+          <UserChip username={post.poster.name} />
+          <Text
+            variant="labelLarge"
+            style={{opacity: 0.6, fontWeight: 'normal'}}>
+            {ago(new Date(post.time))}
+          </Text>
+        </View>
         {filteredHTML && <WebDisplay html={post.content} />}
         {post.repost && (
           <Post
@@ -115,17 +132,30 @@ const Post = ({post, isRepost, repostCount}) => {
           />
         )}
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <IconButton
-            icon={loved ? 'heart' : 'heart-outline'}
-            size={20}
-            style={s.statButton}
-            iconColor={loved ? colors.primary : colors.outline}
-            onPress={handleLove}
-          />
+          {loved ? (
+            <IconButton
+              icon="heart"
+              size={20}
+              animated={false}
+              style={s.statButton}
+              iconColor={loved ? colors.primary : colors.outline}
+              onPress={handleLove}
+            />
+          ) : (
+            <IconButton
+              icon="heart-outline"
+              animated={false}
+              size={20}
+              style={s.statButton}
+              iconColor={loved ? colors.primary : colors.outline}
+              onPress={handleLove}
+            />
+          )}
           <Text style={{...s.stat, color: colors.outline}}>{loves}</Text>
           <IconButton
             icon="recycle-variant"
             size={20}
+            animated={false}
             style={s.statButton}
             iconColor={colors.outline}
           />
@@ -134,6 +164,7 @@ const Post = ({post, isRepost, repostCount}) => {
             icon="comment-outline"
             size={20}
             style={s.statButton}
+            animated={false}
             iconColor={colors.outline}
             onPress={handleComment}
           />
@@ -144,6 +175,10 @@ const Post = ({post, isRepost, repostCount}) => {
       </Card.Content>
     </Card>
   );
+});
+
+Post.whyDidYouRender = {
+  logOnDifferentValues: true,
 };
 
 export default Post;

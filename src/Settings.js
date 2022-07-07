@@ -13,14 +13,22 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Logo from '../static/logo.svg';
 import g from '../styles/Global.module.css';
 import RNRestart from 'react-native-restart';
+import {GlobalContext} from '../App';
 
 function Settings() {
   const {colors} = useTheme();
-  const [username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');
-  const [currentUsername, setCurrentUsername] = React.useState(null);
   const [hasAccepted, accept] = React.useState('unchecked');
-  const [enableFilter, setFilter] = React.useState(false);
+  const [localUsername, setLocalUsername] = React.useState(null);
+  const [localFilter, setLocalFilter] = React.useState(false);
+  const {
+    shouldFilter,
+    setShouldFilter,
+    username,
+    setUsername,
+    token,
+    setToken,
+  } = React.useContext(GlobalContext);
   const handleCheckbox = () => {
     if (hasAccepted == 'unchecked') {
       accept('checked');
@@ -29,13 +37,12 @@ function Settings() {
     }
   };
   const signIn = () => {
-    console.log(username);
     if (hasAccepted == 'checked') {
       fetch('https://api.wasteof.money/session', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
-          username: username,
+          username: localUsername,
           password: password,
         }),
       })
@@ -50,9 +57,12 @@ function Settings() {
           if (json.error) {
             alert(`Error: ${json.error}.  Please try again`);
           }
-          AsyncStorage.setItem('username', username.toLowerCase());
-          AsyncStorage.setItem('token', json.token);
-          RNRestart.Restart();
+          Promise.all([
+            AsyncStorage.setItem('username', localUsername.toLowerCase()),
+            AsyncStorage.setItem('token', json.token),
+          ]).then(() => {
+            RNRestart.Restart();
+          });
         });
     } else {
       alert('Accept the terms to continue.');
@@ -66,9 +76,12 @@ function Settings() {
           Authorization: token,
         },
       }).then(() => {
-        AsyncStorage.removeItem('username');
-        AsyncStorage.removeItem('token');
-        RNRestart.Restart();
+        Promise.all([
+          AsyncStorage.removeItem('username'),
+          AsyncStorage.removeItem('token'),
+        ]).then(() => {
+          RNRestart.Restart();
+        });
       });
     });
   };
@@ -80,16 +93,12 @@ function Settings() {
     );
   };
   React.useEffect(() => {
-    AsyncStorage.getItem('username').then(val => {
-      setCurrentUsername(val);
-    });
-    AsyncStorage.getItem('filter').then(val => {
-      setFilter(Boolean(val));
-    });
+    setLocalFilter(shouldFilter);
   }, []);
   React.useEffect(() => {
-    AsyncStorage.setItem('filter', String(enableFilter));
-  }, [enableFilter]);
+    AsyncStorage.setItem('filter', String(localFilter));
+    setShouldFilter(localFilter);
+  }, [localFilter]);
   return (
     <ScrollView
       style={{
@@ -100,7 +109,7 @@ function Settings() {
       <Text variant="titleLarge" style={{fontWeight: 'bold', marginBottom: 10}}>
         Settings
       </Text>
-      {!currentUsername ? (
+      {!username ? (
         <Card mode="outlined" style={{backgroundColor: colors.background}}>
           <Card.Content>
             <Logo
@@ -111,7 +120,7 @@ function Settings() {
             <TextInput
               label="Username"
               value={username}
-              onChangeText={text => setUsername(text)}
+              onChangeText={text => setLocalUsername(text)}
               mode="outlined"
               style={{marginBottom: 5}}
               autoCapitalize="none"
@@ -153,10 +162,10 @@ function Settings() {
         <Card mode="outlined">
           <Card.Cover
             source={{
-              uri: `https://api.wasteof.money/users/${currentUsername}/banner`,
+              uri: `https://api.wasteof.money/users/${username}/banner`,
             }}></Card.Cover>
           <Card.Title
-            title={`Signed in as ${currentUsername}`}
+            title={`Signed in as ${username}`}
             titleVariant="titleLarge"
             titleStyle={{fontWeight: 'bold'}}
             right={signOutButton}
@@ -167,8 +176,8 @@ function Settings() {
         <Card.Content>
           <View style={g.inline}>
             <Switch
-              value={enableFilter}
-              onValueChange={() => setFilter(!enableFilter)}
+              value={localFilter}
+              onValueChange={() => setLocalFilter(!localFilter)}
             />
             <Text style={{marginLeft: 10}} variant="labelLarge">
               Profanity filter
