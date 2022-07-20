@@ -60,6 +60,8 @@ export const darkTheme = {
     onError: '#690005',
     errorContainer: '#93000a',
     onErrorContainer: '#ffdad6',
-    elevation: MD3DarkTheme.elevation,
+    elevation: {
+      level3: '#454559',
+    },
   },
 };

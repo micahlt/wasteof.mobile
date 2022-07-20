@@ -1,6 +1,13 @@
 import * as React from 'react';
 import {View, ScrollView, FlatList} from 'react-native';
-import {Text, useTheme, AnimatedFAB} from 'react-native-paper';
+import {
+  Text,
+  useTheme,
+  AnimatedFAB,
+  Portal,
+  Dialog,
+  RadioButton,
+} from 'react-native-paper';
 import Post from './Post';
 import UserChip from './UserChip';
 import g from '../styles/Global.module.css';
@@ -15,13 +22,16 @@ function Explore() {
     slug: 'day',
     text: 'Trending today',
   });
+  const [showTimePicker, setShowTimePicker] = React.useState(false);
   React.useEffect(() => {
     refresh();
   }, []);
-  const refresh = () => {
+  const refresh = slug => {
     setIsLoading(true);
     fetch(
-      `https://api.wasteof.money/explore/posts/trending?timeframe=${timePeriod.slug}`,
+      `https://api.wasteof.money/explore/posts/trending?timeframe=${
+        slug || timePeriod.slug
+      }`,
     )
       .then(response => {
         return response.json();
@@ -41,6 +51,40 @@ function Explore() {
         });
         setTopUsers([...new Set(usernames)]);
       });
+  };
+  const handleChangeTime = val => {
+    setShowTimePicker(false);
+    switch (val) {
+      case 'day': {
+        setTimePeriod({
+          slug: val,
+          text: 'Trending today',
+        });
+        break;
+      }
+      case 'week': {
+        setTimePeriod({
+          slug: val,
+          text: 'Trending this week',
+        });
+        break;
+      }
+      case 'month': {
+        setTimePeriod({
+          slug: val,
+          text: 'Trending this month',
+        });
+        break;
+      }
+      case 'all': {
+        setTimePeriod({
+          slug: val,
+          text: 'Trending all time',
+        });
+        break;
+      }
+    }
+    refresh(val);
   };
   const onScroll = ({nativeEvent}) => {
     const currentScrollPosition =
@@ -92,10 +136,58 @@ function Explore() {
         flex: 1,
         backgroundColor: colors.background,
       }}>
+      <Portal>
+        <Dialog
+          visible={showTimePicker}
+          onDismiss={() => setShowTimePicker(false)}
+          theme={{colors: {background: 'red', backdrop: 'red !important'}}}>
+          <Dialog.Title>Choose time period</Dialog.Title>
+          <Dialog.Content>
+            <RadioButton.Group onValueChange={handleChangeTime}>
+              <View style={{...g.inline, marginBottom: 10}}>
+                <RadioButton
+                  value="day"
+                  uncheckedColor={colors.onSecondaryContainer}
+                  color={colors.primary}
+                  status={timePeriod.slug == 'day' ? 'checked' : 'unchecked'}
+                />
+                <Text variant="bodyLarge">Today</Text>
+              </View>
+              <View style={{...g.inline, marginBottom: 10}}>
+                <RadioButton
+                  value="week"
+                  uncheckedColor={colors.onSecondaryContainer}
+                  color={colors.primary}
+                  status={timePeriod.slug == 'week' ? 'checked' : 'unchecked'}
+                />
+                <Text variant="bodyLarge">This week</Text>
+              </View>
+              <View style={{...g.inline, marginBottom: 10}}>
+                <RadioButton
+                  value="month"
+                  uncheckedColor={colors.onSecondaryContainer}
+                  color={colors.primary}
+                  status={timePeriod.slug == 'month' ? 'checked' : 'unchecked'}
+                />
+                <Text variant="bodyLarge">This month</Text>
+              </View>
+              <View style={{...g.inline, marginBottom: 10}}>
+                <RadioButton
+                  value="all"
+                  uncheckedColor={colors.onSecondaryContainer}
+                  color={colors.primary}
+                  status={timePeriod.slug == 'all' ? 'checked' : 'unchecked'}
+                />
+                <Text variant="bodyLarge">All time</Text>
+              </View>
+            </RadioButton.Group>
+          </Dialog.Content>
+        </Dialog>
+      </Portal>
       <AnimatedFAB
         icon="clock-edit-outline"
         style={g.fab}
-        onPress={() => console.log('Pressed')}
+        onPress={() => setShowTimePicker(true)}
         size="medium"
         variant="secondary"
         label="Time Period"
