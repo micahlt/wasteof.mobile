@@ -12,7 +12,7 @@ import UserChip from './UserChip';
 import AutoImage from './AutoImage';
 import {GlobalContext} from '../App';
 
-const Post = React.memo(({post, isRepost, repostCount}) => {
+const Post = React.memo(({post, isRepost, repostCount, hideUser}) => {
   const {colors} = useTheme();
   const {width} = useWindowDimensions();
   const [filteredHTML, setFilteredHTML] = React.useState(null);
@@ -115,14 +115,16 @@ const Post = React.memo(({post, isRepost, repostCount}) => {
       style={isRepost ? s.repostPost : s.regularPost}
       mode={isRepost ? 'outlined' : 'elevated'}>
       <Card.Content style={{margin: 0, paddingTop: 15, paddingVertical: 0}}>
-        <View style={{flexDirection: 'row', alignItems: 'flex-start'}}>
-          <UserChip username={post.poster.name} />
-          <Text
-            variant="labelLarge"
-            style={{opacity: 0.6, fontWeight: 'normal'}}>
-            {ago(new Date(post.time))}
-          </Text>
-        </View>
+        {!hideUser && (
+          <View style={{flexDirection: 'row', alignItems: 'flex-start'}}>
+            <UserChip username={post.poster.name} />
+            <Text
+              variant="labelLarge"
+              style={{opacity: 0.6, fontWeight: 'normal'}}>
+              {ago(new Date(post.time))}
+            </Text>
+          </View>
+        )}
         {filteredHTML && <WebDisplay html={post.content} />}
         {post.repost && (
           <Post

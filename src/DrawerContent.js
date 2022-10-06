@@ -69,13 +69,17 @@ const DrawerContent = ({state}) => {
       <Drawer.Item
         label="Search"
         icon="magnify"
-        onPress={() => alert('Link to help')}
+        onPress={() => {
+          navigation.navigate('search');
+        }}
         active={isOnPage('search')}
       />
       <Drawer.Item
         label="Notifications"
         icon="bell"
-        onPress={() => alert('Link to help')}
+        onPress={() => {
+          navigation.navigate('notifications');
+        }}
         active={isOnPage('notifs')}
       />
       <Drawer.Item

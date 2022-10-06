@@ -83,13 +83,7 @@ function Feed() {
     }
   };
   const openNotifs = async () => {
-    if (await InAppBrowser.isAvailable()) {
-      await InAppBrowser.open('https://wasteof.money/messages', {
-        toolbarColor: colors.primary,
-      });
-    } else {
-      Linking.open('https://wasteof.money/messages');
-    }
+    navigation.navigate('notifications');
   };
   const onScroll = ({nativeEvent}) => {
     const currentScrollPosition =
