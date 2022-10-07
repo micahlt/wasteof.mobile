@@ -8,7 +8,9 @@ import DrawerContent from './src/DrawerContent';
 import AppBar from './src/AppBar';
 import Explore from './src/Explore';
 import Settings from './src/Settings';
+import Search from './src/Search';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Notifications from './src/Notifications';
 const Drawer = createDrawerNavigator();
 
 export const GlobalContext = React.createContext();
@@ -51,6 +53,8 @@ const App = () => {
               }}>
               <Drawer.Screen name="home" component={Feed} />
               <Drawer.Screen name="explore" component={Explore} />
+              <Drawer.Screen name="search" component={Search} />
+              <Drawer.Screen name="notifications" component={Notifications} />
               <Drawer.Screen name="settings" component={Settings} />
             </Drawer.Navigator>
           </Portal.Host>

@@ -165,7 +165,7 @@ function Settings() {
               uri: `https://api.wasteof.money/users/${username}/banner`,
             }}></Card.Cover>
           <Card.Title
-            title={`Signed in as ${username}`}
+            title={String(username)}
             titleVariant="titleLarge"
             titleStyle={{fontWeight: 'bold'}}
             right={signOutButton}
