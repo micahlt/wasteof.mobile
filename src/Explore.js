@@ -27,6 +27,7 @@ function Explore() {
     refresh();
   }, []);
   const refresh = slug => {
+    console.log('refreshing');
     setIsLoading(true);
     fetch(
       `https://api.wasteof.money/explore/posts/trending?timeframe=${
@@ -34,17 +35,21 @@ function Explore() {
       }`,
     )
       .then(response => {
+        console.log('fetched');
         return response.json();
       })
       .then(json => {
+        console.log('set posts');
         setPosts(json.posts);
         setIsLoading(false);
       });
     fetch('https://api.wasteof.money/explore/users/top')
       .then(response => {
+        console.log('fetched');
         return response.json();
       })
       .then(json => {
+        console.log('set users');
         let usernames = [];
         json.forEach(post => {
           usernames.push(post.name);
@@ -140,7 +145,13 @@ function Explore() {
         <Dialog
           visible={showTimePicker}
           onDismiss={() => setShowTimePicker(false)}
-          theme={{colors: {background: 'red', backdrop: 'red !important'}}}>
+          theme={{
+            colors: {
+              elevation: {...colors.elevation},
+              background: 'red',
+              backdrop: 'red !important',
+            },
+          }}>
           <Dialog.Title>Choose time period</Dialog.Title>
           <Dialog.Content>
             <RadioButton.Group onValueChange={handleChangeTime}>

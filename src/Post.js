@@ -112,7 +112,10 @@ const Post = React.memo(({post, isRepost, repostCount, hideUser}) => {
   });
   return (
     <Card
-      style={isRepost ? s.repostPost : s.regularPost}
+      style={{
+        ...(isRepost ? s.repostPost : s.regularPost),
+        backgroundColor: colors.elevation.level1,
+      }}
       mode={isRepost ? 'outlined' : 'elevated'}>
       <Card.Content style={{margin: 0, paddingTop: 15, paddingVertical: 0}}>
         {!hideUser && (

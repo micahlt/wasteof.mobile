@@ -47,7 +47,7 @@ const DrawerContent = ({state}) => {
           />
         )}
         <Text style={s.username} variant="titleLarge">
-          {username || 'Sign In'}
+          {username || 'not signed in'}
         </Text>
       </ImageBackground>
       <Drawer.Item
