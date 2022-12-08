@@ -99,7 +99,11 @@ function Feed() {
   const listHeader = () => {
     return (
       <View style={g.infoBar}>
-        <Text variant="titleLarge" style={{fontWeight: 'bold', flex: 1}}>
+        <Text
+          variant="titleLarge"
+          style={{
+            flex: 1,
+          }}>
           Your feed
         </Text>
         <View style={g.iconButtonWrapper}>

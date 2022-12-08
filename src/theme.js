@@ -1,4 +1,58 @@
-import {MD3LightTheme, MD3DarkTheme} from 'react-native-paper';
+import {configureFonts, MD3LightTheme, MD3DarkTheme} from 'react-native-paper';
+const fontConfig = {
+  fontWeight: 'normal',
+  displaySmall: {
+    fontFamily: 'space_regular',
+  },
+  displayMedium: {
+    fontFamily: 'space_regular',
+  },
+  displayLarge: {
+    fontFamily: 'space_regular',
+  },
+  headlineSmall: {
+    fontFamily: 'space_regular',
+  },
+  headlineMedium: {
+    fontFamily: 'space_regular',
+  },
+  headlineLarge: {
+    fontFamily: 'space_regular',
+  },
+  titleSmall: {
+    fontFamily: 'space_bold',
+  },
+  titleMedium: {
+    fontFamily: 'space_bold',
+  },
+  titleLarge: {
+    fontFamily: 'space_bold',
+  },
+  labelSmall: {
+    fontFamily: 'space_bold',
+  },
+  labelMedium: {
+    fontFamily: 'space_bold',
+  },
+  labelLarge: {
+    fontFamily: 'space_bold',
+  },
+  labelLarge: {
+    fontFamily: 'space_bold',
+  },
+  bodySmall: {
+    fontFamily: 'space_regular',
+  },
+  bodyMedium: {
+    fontFamily: 'space_regular',
+  },
+  bodyLarge: {
+    fontFamily: 'space_regular',
+  },
+  default: {
+    fontFamily: 'space_regular',
+  },
+};
 export const lightTheme = {
   ...MD3LightTheme,
   version: 3,
@@ -45,6 +99,7 @@ export const lightTheme = {
     onSurfaceDisabled: 'rgba(28, 27, 31, 0.38)',
     backdrop: 'rgba(48, 48, 56, 0.4)',
   },
+  fonts: configureFonts({config: fontConfig}),
 };
 
 export const darkTheme = {
@@ -93,4 +148,5 @@ export const darkTheme = {
     onSurfaceDisabled: 'rgba(229, 225, 230, 0.38)',
     backdrop: 'rgba(48, 48, 56, 0.4)',
   },
+  fonts: configureFonts({config: fontConfig}),
 };
