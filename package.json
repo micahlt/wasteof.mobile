@@ -12,9 +12,9 @@
   "dependencies": {
     "@babel/plugin-proposal-export-namespace-from": "^7.18.9",
     "@react-native-async-storage/async-storage": "^1.17.11",
-    "@react-navigation/core": "^6.4.4",
-    "@react-navigation/drawer": "^6.5.4",
-    "@react-navigation/native": "^6.1.0",
+    "@react-navigation/core": "^6.4.5",
+    "@react-navigation/drawer": "^6.5.6",
+    "@react-navigation/native": "^6.1.1",
     "bad-words": "^3.0.4",
     "linkify-html": "^3.0.5",
     "linkifyjs": "^3.0.5",
@@ -23,7 +23,7 @@
     "react-native-gesture-handler": "^2.8.0",
     "react-native-image-colors": "^1.5.1",
     "react-native-inappbrowser-reborn": "^3.7.0",
-    "react-native-paper": "^5.0.1",
+    "react-native-paper": "^5.1.0",
     "react-native-reanimated": "^2.13.0",
     "react-native-render-html": "^6.3.4",
     "react-native-restart": "^0.0.24",
@@ -34,8 +34,8 @@
     "s-ago": "^2.2.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.5",
-    "@babel/runtime": "^7.20.6",
+    "@babel/core": "^7.20.7",
+    "@babel/runtime": "^7.20.7",
     "@react-native-community/eslint-config": "^2.0.0",
     "@welldone-software/why-did-you-render": "^7.0.1",
     "babel-plugin-react-native-classname-to-style": "^1.2.2",

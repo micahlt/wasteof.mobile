@@ -8,8 +8,8 @@ import {
   Dialog,
   RadioButton,
 } from 'react-native-paper';
-import Post from './Post';
-import UserChip from './UserChip';
+import Post from './components/Post';
+import UserChip from './components/UserChip';
 import g from '../styles/Global.module.css';
 
 function Explore() {

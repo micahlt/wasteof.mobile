@@ -2,7 +2,7 @@ import * as React from 'react';
 import {View} from 'react-native';
 import {Card, Text} from 'react-native-paper';
 import ago from 's-ago';
-import s from '../styles/Notif.module.css';
+import s from '../../styles/Notif.module.css';
 import UserChip from './UserChip';
 import Comment from './Comment';
 import Post from './Post';

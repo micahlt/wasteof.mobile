@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {Chip, Avatar, Modal, Text, Portal} from 'react-native-paper';
-const UserModal = React.lazy(() => import('./UserModal'));
+const UserModal = React.lazy(() => import('../UserModal'));
 
 const UserChip = ({username, inline, lastInline}) => {
   const [modalOpen, setModalOpen] = React.useState(false);

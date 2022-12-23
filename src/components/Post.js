@@ -1,16 +1,16 @@
 import * as React from 'react';
 import {View} from 'react-native';
 import {Card, IconButton, Text, useTheme} from 'react-native-paper';
-import {useWindowDimensions, Linking, Image} from 'react-native';
+import {useWindowDimensions, Linking} from 'react-native';
 import RenderHtml from 'react-native-render-html';
 import {InAppBrowser} from 'react-native-inappbrowser-reborn';
 import ago from 's-ago';
-import s from '../styles/Post.module.css';
-import filter from '../utils/filter';
+import s from '../../styles/Post.module.css';
+import filter from '../../utils/filter';
 import linkifyHtml from 'linkify-html';
 import UserChip from './UserChip';
 import AutoImage from './AutoImage';
-import {GlobalContext} from '../App';
+import {GlobalContext} from '../../App';
 
 const Post = React.memo(({post, isRepost, repostCount, hideUser}) => {
   const {colors} = useTheme();

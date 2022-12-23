@@ -1,12 +1,5 @@
 import * as React from 'react';
-import {
-  ScrollView,
-  ImageBackground,
-  View,
-  Image,
-  Linking,
-  FlatList,
-} from 'react-native';
+import {ImageBackground, View, Image, Linking, FlatList} from 'react-native';
 import {
   Appbar,
   Button,
@@ -17,7 +10,7 @@ import {
 } from 'react-native-paper';
 import ImageColors from 'react-native-image-colors';
 import {InAppBrowser} from 'react-native-inappbrowser-reborn';
-import Post from './Post';
+import Post from './components/Post';
 import s from '../styles/UserModal.module.css';
 import {GlobalContext} from '../App';
 

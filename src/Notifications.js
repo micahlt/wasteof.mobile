@@ -1,8 +1,8 @@
 import * as React from 'react';
-import {View, ScrollView, FlatList} from 'react-native';
+import {View, FlatList} from 'react-native';
 import {Text, useTheme} from 'react-native-paper';
 import {GlobalContext} from '../App';
-import Notif from './Notif';
+import Notif from './components/Notif';
 import g from '../styles/Global.module.css';
 
 function Notifications() {

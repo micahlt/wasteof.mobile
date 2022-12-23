@@ -10,7 +10,7 @@ import {
 } from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import {InAppBrowser} from 'react-native-inappbrowser-reborn';
-import Post from './Post';
+import Post from './components/Post';
 import g from '../styles/Global.module.css';
 import {GlobalContext} from '../App';
 

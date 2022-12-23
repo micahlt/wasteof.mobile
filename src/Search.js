@@ -2,7 +2,7 @@ import * as React from 'react';
 import {View, Linking, FlatList} from 'react-native';
 import {Button, Searchbar, useTheme} from 'react-native-paper';
 import {InAppBrowser} from 'react-native-inappbrowser-reborn';
-import Post from './Post';
+import Post from './components/Post';
 
 function Feed() {
   const {colors} = useTheme();

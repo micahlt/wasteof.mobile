@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import {ImageBackground} from 'react-native';
 import {DrawerContentScrollView} from '@react-navigation/drawer';
 import {Drawer, Avatar, Text, useTheme} from 'react-native-paper';
-import s from '../styles/DrawerContent.module.css';
+import s from '../../styles/DrawerContent.module.css';
 import {useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
