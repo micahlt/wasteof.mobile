@@ -92,43 +92,41 @@ function Explore() {
 
     setIsExtended(currentScrollPosition <= 0);
   };
-  const listHeader = () => {
-    return (
-      <View
+  const listHeader = (
+    <View
+      style={{
+        marginTop: 20,
+        paddingLeft: 20,
+        marginBottom: 10,
+        marginRight: 0,
+      }}>
+      <Text variant="titleLarge" style={g.header}>
+        Top users
+      </Text>
+      <ScrollView
+        horizontal={true}
+        showsHorizontalScrollIndicator={false}
         style={{
-          marginTop: 20,
+          paddingTop: 10,
+          paddingBottom: 10,
           paddingLeft: 20,
-          marginBottom: 10,
-          marginRight: 0,
+          paddingRight: 0,
+          marginLeft: -20,
         }}>
-        <Text variant="titleLarge" style={g.header}>
-          Top users
-        </Text>
-        <ScrollView
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-          style={{
-            paddingTop: 10,
-            paddingBottom: 10,
-            paddingLeft: 20,
-            paddingRight: 0,
-            marginLeft: -20,
-          }}>
-          {topUsers.map((username, i) => (
-            <UserChip
-              username={username}
-              inline={true}
-              key={username}
-              lastInline={i == topUsers.length - 1}
-            />
-          ))}
-        </ScrollView>
-        <Text variant="titleLarge" style={g.header}>
-          {timePeriod.text}
-        </Text>
-      </View>
-    );
-  };
+        {topUsers.map((username, i) => (
+          <UserChip
+            username={username}
+            inline={true}
+            key={username}
+            lastInline={i == topUsers.length - 1}
+          />
+        ))}
+      </ScrollView>
+      <Text variant="titleLarge" style={g.header}>
+        {timePeriod.text}
+      </Text>
+    </View>
+  );
   const renderItem = React.useCallback(({item}) => <Post post={item} />, []);
   return (
     <View

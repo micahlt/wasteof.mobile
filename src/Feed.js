@@ -96,47 +96,43 @@ function Feed() {
       fetchPosts();
     }
   };
-  const listHeader = () => {
-    return (
-      <View style={g.infoBar}>
-        <Text
-          variant="titleLarge"
-          style={{
-            flex: 1,
-          }}>
-          Your feed
-        </Text>
-        <View style={g.iconButtonWrapper}>
-          {messageCount > 0 && (
-            <Badge style={g.iconButtonBadge} size={24}>
-              {messageCount}
-            </Badge>
-          )}
-          <IconButton
-            icon="bell"
-            size={24}
-            iconColor={colors.primary}
-            onPress={openNotifs}
-          />
-        </View>
-      </View>
-    );
-  };
-  const listLoading = () => {
-    return (
-      <View style={{paddingTop: 20, paddingBottom: 30}}>
-        {!isRefreshing && (
-          <Button
-            loading={isLoading}
-            mode="contained-tonal"
-            style={{marginLeft: 'auto', marginRight: 'auto'}}
-            onPress={handleLoadMore}>
-            Load more
-          </Button>
+  const listHeader = (
+    <View style={g.infoBar}>
+      <Text
+        variant="titleLarge"
+        style={{
+          flex: 1,
+        }}>
+        Your feed
+      </Text>
+      <View style={g.iconButtonWrapper}>
+        {messageCount > 0 && (
+          <Badge style={g.iconButtonBadge} size={24}>
+            {messageCount}
+          </Badge>
         )}
+        <IconButton
+          icon="bell"
+          size={24}
+          iconColor={colors.primary}
+          onPress={openNotifs}
+        />
       </View>
-    );
-  };
+    </View>
+  );
+  const listLoading = (
+    <View style={{paddingTop: 20, paddingBottom: 30}}>
+      {!isRefreshing && (
+        <Button
+          loading={isLoading}
+          mode="contained-tonal"
+          style={{marginLeft: 'auto', marginRight: 'auto'}}
+          onPress={handleLoadMore}>
+          Load more
+        </Button>
+      )}
+    </View>
+  );
   const renderItem = React.useCallback(({item}) => <Post post={item} />, []);
   return (
     <View

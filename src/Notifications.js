@@ -32,21 +32,19 @@ function Notifications() {
     setPage(0);
     loadNotifications();
   };
-  const listHeader = () => {
-    return (
-      <View
-        style={{
-          marginTop: 20,
-          paddingLeft: 20,
-          marginBottom: 10,
-          marginRight: 0,
-        }}>
-        <Text variant="titleLarge" style={g.header}>
-          Notifications
-        </Text>
-      </View>
-    );
-  };
+  const listHeader = (
+    <View
+      style={{
+        marginTop: 20,
+        paddingLeft: 20,
+        marginBottom: 10,
+        marginRight: 0,
+      }}>
+      <Text variant="titleLarge" style={g.header}>
+        Notifications
+      </Text>
+    </View>
+  );
   const renderItem = React.useCallback(({item}) => <Notif notif={item} />, []);
   return (
     <View

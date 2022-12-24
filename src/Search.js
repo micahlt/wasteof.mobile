@@ -59,39 +59,37 @@ function Feed() {
       />
     </View>
   );
-  const listLoading = () => {
-    return (
-      <View style={{paddingTop: 20, paddingBottom: 30}}>
-        {!isRefreshing && posts[0] ? (
-          <Button
-            loading={isLoading}
-            mode="contained-tonal"
-            style={{marginLeft: 'auto', marginRight: 'auto'}}
-            onPress={handleLoadMore}>
-            Load more
-          </Button>
-        ) : (
-          <View
+  const listLoading = (
+    <View style={{paddingTop: 20, paddingBottom: 30}}>
+      {!isRefreshing && posts[0] ? (
+        <Button
+          loading={isLoading}
+          mode="contained-tonal"
+          style={{marginLeft: 'auto', marginRight: 'auto'}}
+          onPress={handleLoadMore}>
+          Load more
+        </Button>
+      ) : (
+        <View
+          style={{
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+          <Text
+            variant="titleLarge"
             style={{
-              flex: 1,
-              alignItems: 'center',
-              justifyContent: 'center',
+              width: '70%',
+              textAlign: 'center',
+              marginBottom: 0,
+              color: colors.outline,
             }}>
-            <Text
-              variant="titleLarge"
-              style={{
-                width: '70%',
-                textAlign: 'center',
-                marginBottom: 0,
-                color: colors.outline,
-              }}>
-              let's find something
-            </Text>
-          </View>
-        )}
-      </View>
-    );
-  };
+            let's find something
+          </Text>
+        </View>
+      )}
+    </View>
+  );
   const renderItem = React.useCallback(({item}) => <Post post={item} />, []);
   return (
     <View
