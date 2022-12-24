@@ -1,0 +1,10 @@
+.notif {
+  margin-left: 16;
+  margin-right: 16;
+  margin-bottom: 10;
+}
+
+.notifDescription {
+  opacity: 0.8;
+  margin-bottom: 5;
+}

@@ -1,0 +1,44 @@
+.avatar {
+  position: absolute;
+  top: 30px;
+  z-index: 200;
+  left: 20px;
+  border-width: 3px;
+  overflow: hidden;
+  height: 92px;
+  width: 92px;
+  border-radius: 92px;
+  background-color: white;
+}
+
+.imageBackground {
+  height: 75px;
+  width: 100%;
+  background-color: white;
+}
+
+.info {
+  width: 100%;
+  padding-left: 115px;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 6px;
+  margin-bottom: 6px;
+}
+
+.badge {
+  margin-right: 0;
+  padding-right: 0;
+  margin-left: -5px;
+}
+
+.bio {
+  margin-left: 25px;
+  margin-right: 25px;
+  margin-bottom: 10px;
+}
+
+.heading {
+  margin-left: 25px;
+  font-weight: bold;
+}
