@@ -42,10 +42,8 @@ const UserModal = ({username, closeModal}) => {
         else setHeaderColor(res.lightMuted);
         setOutlineColor(res.lightVibrant);
       })
-      .catch(err => {
-        alert(
-          'Failed to get the banner data - this means no dynamic theming for this profile.',
-        );
+      .catch(() => {
+        return;
       });
     fetch(`https://api.wasteof.money/users/${username}`)
       .then(res => {

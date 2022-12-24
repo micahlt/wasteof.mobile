@@ -1,7 +1,6 @@
 import * as React from 'react';
-import {View, Linking, FlatList} from 'react-native';
-import {Button, Searchbar, useTheme} from 'react-native-paper';
-import {InAppBrowser} from 'react-native-inappbrowser-reborn';
+import {View, FlatList} from 'react-native';
+import {Avatar, Button, Searchbar, Text, useTheme} from 'react-native-paper';
 import Post from './components/Post';
 
 function Feed() {
@@ -11,18 +10,24 @@ function Feed() {
   const [isRefreshing, setIsRefreshing] = React.useState(false);
   const [query, setQuery] = React.useState('');
   const [page, setPage] = React.useState(1);
-  const onChangeSearch = q => setQuery(q);
+  const onChangeSearch = q => {
+    setQuery(q);
+    if (q == '') {
+      setPage(1);
+      setPosts([]);
+    }
+  };
   const refresh = () => {
     setIsRefreshing(true);
     setPosts([]);
-    search(true);
   };
   const searchPosts = isInitial => {
     setIsLoading(true);
     if (isInitial) {
       setPage(1);
+      setIsRefreshing(true);
     }
-    fetch(`https://api.wasteof.money/search/posts?q=${query}`)
+    fetch(`https://api.wasteof.money/search/posts?q=${query}&page=${page}`)
       .then(response => {
         return response.json();
       })
@@ -36,31 +41,28 @@ function Feed() {
         alert(err);
       });
   };
-  const openNotifs = async () => {
-    if (await InAppBrowser.isAvailable()) {
-      await InAppBrowser.open('https://wasteof.money/messages', {
-        toolbarColor: colors.primary,
-      });
-    } else {
-      Linking.open('https://wasteof.money/messages');
-    }
-  };
   const handleLoadMore = () => {
     if (!isLoading) {
-      fetchPosts();
+      searchPosts(false);
     }
   };
-  const listHeader = () => {
-    return (
-      <View style={{padding: 10}}>
-        <Searchbar placeholder="Search" onChangeText={onChangeSearch} />
-      </View>
-    );
-  };
+  const listHeader = (
+    <View style={{padding: 10}}>
+      <Searchbar
+        placeholder="Search"
+        onChangeText={onChangeSearch}
+        value={query}
+        elevation={5}
+        autoFocus={true}
+        onSubmitEditing={searchPosts}
+        style={{borderRadius: 10}}
+      />
+    </View>
+  );
   const listLoading = () => {
     return (
       <View style={{paddingTop: 20, paddingBottom: 30}}>
-        {!isRefreshing && (
+        {!isRefreshing && posts[0] ? (
           <Button
             loading={isLoading}
             mode="contained-tonal"
@@ -68,6 +70,24 @@ function Feed() {
             onPress={handleLoadMore}>
             Load more
           </Button>
+        ) : (
+          <View
+            style={{
+              flex: 1,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            <Text
+              variant="titleLarge"
+              style={{
+                width: '70%',
+                textAlign: 'center',
+                marginBottom: 0,
+                color: colors.outline,
+              }}>
+              let's find something
+            </Text>
+          </View>
         )}
       </View>
     );
@@ -80,6 +100,7 @@ function Feed() {
         backgroundColor: colors.background,
       }}>
       <FlatList
+        stickyHeaderIndices={[0]}
         data={posts}
         keyExtractor={item => item._id}
         renderItem={renderItem}
