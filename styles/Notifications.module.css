@@ -1,0 +1,8 @@
+.listHeader {
+  margin-top: 20;
+  padding-left: 20;
+  padding-right: 20;
+  margin-bottom: 10;
+  margin-right: 0;
+  display: flex;
+}
