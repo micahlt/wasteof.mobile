@@ -147,12 +147,13 @@ function Notifications() {
           setToast({...toast, visible: false});
         }}
         duration={2000}
-        action={{
-          label: 'Undo',
-          onPress: () => {
-            return;
-          },
-        }}>
+        // action={{
+        //   label: 'Undo',
+        //   onPress: () => {
+        //     return;
+        //   },
+        // }}>
+      >
         {toast.text}
       </Snackbar>
     </View>

@@ -14,6 +14,7 @@ import Logo from '../static/logo.svg';
 import g from '../styles/Global.module.css';
 import RNRestart from 'react-native-restart';
 import {GlobalContext} from '../App';
+import Changelog from './components/Changelog';
 
 function Settings() {
   const {colors} = useTheme();
@@ -21,14 +22,9 @@ function Settings() {
   const [hasAccepted, accept] = React.useState('unchecked');
   const [localUsername, setLocalUsername] = React.useState(null);
   const [localFilter, setLocalFilter] = React.useState(false);
-  const {
-    shouldFilter,
-    setShouldFilter,
-    username,
-    setUsername,
-    token,
-    setToken,
-  } = React.useContext(GlobalContext);
+  const [showChangelog, setShowChangelog] = React.useState(false);
+  const {shouldFilter, setShouldFilter, username} =
+    React.useContext(GlobalContext);
   const handleCheckbox = () => {
     if (hasAccepted == 'unchecked') {
       accept('checked');
@@ -106,6 +102,12 @@ function Settings() {
         flex: 1,
         backgroundColor: colors.background,
       }}>
+      {showChangelog && (
+        <Changelog
+          dismissable={true}
+          closeExternal={() => setShowChangelog(false)}
+        />
+      )}
       <Text variant="titleLarge" style={{fontWeight: 'bold', marginBottom: 10}}>
         Settings
       </Text>
@@ -184,6 +186,13 @@ function Settings() {
             <Text style={{marginLeft: 10}} variant="labelLarge">
               Profanity filter
             </Text>
+          </View>
+          <View style={{...g.inline, marginTop: 5}}>
+            <Button
+              mode="contained-tonal"
+              onPress={() => setShowChangelog(true)}>
+              View changelog
+            </Button>
           </View>
         </Card.Content>
       </Card>

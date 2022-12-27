@@ -20,15 +20,18 @@ const App = () => {
   const [token, setToken] = React.useState(null);
   const [username, setUsername] = React.useState(null);
   const [didGet, setDidGet] = React.useState(false);
+  const [changelogViewed, setChangelogViewed] = React.useState(null);
   React.useEffect(() => {
     Promise.all([
       AsyncStorage.getItem('filter'),
       AsyncStorage.getItem('username'),
       AsyncStorage.getItem('token'),
+      AsyncStorage.getItem('changelogViewed'),
     ]).then(vals => {
       setShouldFilter(Boolean(vals[0]));
       setUsername(vals[1]);
       setToken(vals[2]);
+      setChangelogViewed(vals[3]);
       setDidGet(true);
     });
   }, []);
@@ -37,6 +40,7 @@ const App = () => {
       value={{
         shouldFilter,
         setShouldFilter,
+        changelogViewed,
         username,
         setUsername,
         token,

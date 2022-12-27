@@ -13,6 +13,8 @@ import {InAppBrowser} from 'react-native-inappbrowser-reborn';
 import Post from './components/Post';
 import g from '../styles/Global.module.css';
 import {GlobalContext} from '../App';
+import Changelog from './components/Changelog';
+import {version as appVersion} from '../package.json';
 
 function Feed() {
   const {colors} = useTheme();
@@ -23,9 +25,11 @@ function Feed() {
   const [messageCount, setMessageCount] = React.useState(0);
   const [isExtended, setIsExtended] = React.useState(true);
   const [page, setPage] = React.useState(1);
-  const {username, token} = React.useContext(GlobalContext);
+  const {username, token, changelogViewed} = React.useContext(GlobalContext);
   React.useEffect(() => {
-    navigation.addListener('focus', fetchMessages);
+    navigation.addListener('focus', () => {
+      if (token) fetchMessages();
+    });
     if (token) {
       refresh();
     }
@@ -144,6 +148,7 @@ function Feed() {
         flex: 1,
         backgroundColor: colors.background,
       }}>
+      {appVersion != changelogViewed && <Changelog />}
       {token && (
         <AnimatedFAB
           icon="pencil-plus"
