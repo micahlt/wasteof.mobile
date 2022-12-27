@@ -7,10 +7,15 @@ import UserChip from './UserChip';
 import Comment from './Comment';
 import Post from './Post';
 
-const Notif = React.memo(({notif}) => {
+const Notif = React.memo(({notif, changeReadStatus}) => {
   const t = notif.type;
   return (
-    <Card style={s.notif} mode="elevated">
+    <Card
+      style={s.notif}
+      mode="elevated"
+      onLongPress={() => {
+        changeReadStatus(notif._id);
+      }}>
       <Card.Content
         style={{
           margin: 0,
@@ -138,7 +143,12 @@ const Notif = React.memo(({notif}) => {
                 <Text style={s.notifDescription}>
                   mentioned you in their post
                 </Text>
-                <Post post={notif.data.post} isRepost={true} hideUser={true} />
+                <Post
+                  post={notif.data.post}
+                  isRepost={true}
+                  repostCount={1}
+                  hideUser={true}
+                />
               </>
             ) : (
               <Text style={s.notifDescription}>

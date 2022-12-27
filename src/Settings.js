@@ -124,6 +124,7 @@ function Settings() {
               mode="outlined"
               style={{marginBottom: 5}}
               autoCapitalize="none"
+              autoComplete="username"
             />
             <TextInput
               label="Password"
@@ -131,6 +132,7 @@ function Settings() {
               onChangeText={text => setPassword(text)}
               mode="outlined"
               secureTextEntry={true}
+              autoComplete="password"
             />
             <View
               style={{
