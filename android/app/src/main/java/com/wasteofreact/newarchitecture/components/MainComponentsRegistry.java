@@ -1,4 +1,4 @@
-package com.wasteofreact.newarchitecture.components;
+package com.micahlindley.wasteofmobile.newarchitecture.components;
 
 import com.facebook.jni.HybridData;
 import com.facebook.proguard.annotations.DoNotStrip;

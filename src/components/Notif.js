@@ -7,11 +7,22 @@ import UserChip from './UserChip';
 import Comment from './Comment';
 import Post from './Post';
 
-const Notif = React.memo(({notif}) => {
+const Notif = React.memo(({notif, changeReadStatus}) => {
   const t = notif.type;
   return (
-    <Card style={s.notif} mode="elevated">
-      <Card.Content style={{margin: 0, paddingTop: 15, paddingVertical: 0}}>
+    <Card
+      style={s.notif}
+      mode="elevated"
+      onLongPress={() => {
+        changeReadStatus(notif._id);
+      }}>
+      <Card.Content
+        style={{
+          margin: 0,
+          paddingTop: 15,
+          paddingVertical: 0,
+          paddingBottom: 15,
+        }}>
         <View style={{flexDirection: 'row', alignItems: 'flex-start'}}>
           <UserChip username={notif.data.actor.name} />
           <Text
@@ -30,75 +41,120 @@ const Notif = React.memo(({notif}) => {
         }
         {
           // Comments on your posts
-          t == 'comment' && (
-            <>
-              <Text style={s.notifDescription}>commented on your post</Text>
-              <Comment comment={notif.data.comment} />
-            </>
-          )
-        }
-        {
-          // Comments on your wall
-          t == 'wall_comment' && (
-            <>
-              <Text style={s.notifDescription}>commented on your wall</Text>
-              <Comment comment={notif.data.comment} />
-            </>
-          )
-        }
-        {
-          // Comments on your wall
-          t == 'wall_comment_reply' && (
-            <>
+          t == 'comment' &&
+            (notif.data.comment ? (
+              <>
+                <Text style={s.notifDescription}>commented on your post</Text>
+                <Comment comment={notif.data.comment} />
+              </>
+            ) : (
               <Text style={s.notifDescription}>
-                replied to your comment on your wall
+                commented on your post, but it's deleted
               </Text>
-              <Comment comment={notif.data.comment} />
-            </>
-          )
+            ))
+        }
+        {
+          // Comments on your wall
+          t == 'wall_comment' &&
+            (notif.data.comment ? (
+              <>
+                <Text style={s.notifDescription}>commented on your wall</Text>
+                <Comment comment={notif.data.comment} />
+              </>
+            ) : (
+              <Text style={s.notifDescription}>
+                commented on your wall, but it's deleted
+              </Text>
+            ))
+        }
+        {
+          // Comments on your wall
+          t == 'wall_comment_reply' &&
+            (notif.data.comment ? (
+              <>
+                <Text style={s.notifDescription}>
+                  replied to your comment on your wall
+                </Text>
+                <Comment comment={notif.data.comment} />
+              </>
+            ) : (
+              <Text style={s.notifDescription}>
+                replied to your comment on your wall, but it's deleted
+              </Text>
+            ))
         }
         {
           // Comment replies
-          t == 'comment_reply' && (
-            <>
+          t == 'comment_reply' &&
+            (notif.data.comment ? (
+              <>
+                <Text style={s.notifDescription}>
+                  replied to your comment on @{notif.data.post.poster.name}'s
+                  post
+                </Text>
+                <Comment comment={notif.data.comment} />
+              </>
+            ) : (
               <Text style={s.notifDescription}>
-                replied to your comment on @{notif.data.post.poster.name}'s post
+                replied to your comment on @{notif.data.post.poster.name}'s
+                post, but it was deleted
               </Text>
-              <Comment comment={notif.data.comment} />
-            </>
-          )
+            ))
         }
         {
           // Comment mentions
-          t == 'comment_mention' && (
-            <>
-              <Text style={s.notifDescription}>
-                mentioned you in a comment on @{notif.data.post.poster.name}'s
-                post
-              </Text>
-              <Comment comment={notif.data.comment} />
-            </>
-          )
+          t == 'comment_mention' &&
+            (notif.data.comment ? (
+              <>
+                <Text style={s.notifDescription}>
+                  mentioned you in a comment on @{notif.data.post.poster.name}'s
+                  post
+                </Text>
+                <Comment comment={notif.data.comment} />
+              </>
+            ) : (
+              <>
+                <Text style={s.notifDescription}>
+                  mentioned you in a deleted comment on @
+                  {notif.data.post.poster.name}'s post
+                </Text>
+              </>
+            ))
         }
         {
-          // Comment mentions
-          t == 'repost' && (
-            <>
-              <Text style={s.notifDescription}>reposted your post</Text>
-              <Post post={notif.data.post} isRepost={true} hideUser={true} />
-            </>
-          )
+          // Reposts
+          t == 'repost' &&
+            (notif.data.post ? (
+              <>
+                <Text style={s.notifDescription}>reposted your post</Text>
+                <Post post={notif.data.post} isRepost={true} hideUser={true} />
+              </>
+            ) : (
+              <Text style={s.notifDescription}>
+                reposted your post, but it's deleted
+              </Text>
+            ))
         }
         {
-          // Comment mentions
-          t == 'post_mention' && (
-            <>
+          // Post mentions
+          t == 'post_mention' &&
+            (notif.data.post ? (
+              <>
+                <Text style={s.notifDescription}>
+                  mentioned you in their post
+                </Text>
+                <Post
+                  post={notif.data.post}
+                  isRepost={true}
+                  repostCount={1}
+                  hideUser={true}
+                />
+              </>
+            ) : (
               <Text style={s.notifDescription}>
-                mentioned you in their post
+                mentioned you in their post, but it's deleted
               </Text>
-              <Post post={notif.data.post} isRepost={true} hideUser={true} />
-            </>
-          )
+            ))
         }
       </Card.Content>
     </Card>

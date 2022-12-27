@@ -1,4 +1,4 @@
-package com.wasteofreact.newarchitecture;
+package com.micahlindley.wasteofmobile.newarchitecture;
 
 import android.app.Application;
 import androidx.annotation.NonNull;
@@ -19,9 +19,9 @@ import com.facebook.react.fabric.CoreComponentsRegistry;
 import com.facebook.react.fabric.FabricJSIModuleProvider;
 import com.facebook.react.fabric.ReactNativeConfig;
 import com.facebook.react.uimanager.ViewManagerRegistry;
-import com.wasteofreact.BuildConfig;
-import com.wasteofreact.newarchitecture.components.MainComponentsRegistry;
-import com.wasteofreact.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
+import com.micahlindley.wasteofmobile.BuildConfig;
+import com.micahlindley.wasteofmobile.newarchitecture.components.MainComponentsRegistry;
+import com.micahlindley.wasteofmobile.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
 import java.util.ArrayList;
 import java.util.List;
 

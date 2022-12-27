@@ -13,6 +13,8 @@ import {InAppBrowser} from 'react-native-inappbrowser-reborn';
 import Post from './components/Post';
 import g from '../styles/Global.module.css';
 import {GlobalContext} from '../App';
+import Changelog from './components/Changelog';
+import {version as appVersion} from '../package.json';
 
 function Feed() {
   const {colors} = useTheme();
@@ -23,8 +25,11 @@ function Feed() {
   const [messageCount, setMessageCount] = React.useState(0);
   const [isExtended, setIsExtended] = React.useState(true);
   const [page, setPage] = React.useState(1);
-  const {username, token} = React.useContext(GlobalContext);
+  const {username, token, changelogViewed} = React.useContext(GlobalContext);
   React.useEffect(() => {
+    navigation.addListener('focus', () => {
+      if (token) fetchMessages();
+    });
     if (token) {
       refresh();
     }
@@ -34,28 +39,31 @@ function Feed() {
     setPosts([]);
     fetchPosts(null, true);
   };
+  const fetchMessages = () => {
+    fetch(`https://api.wasteof.money/messages/count`, {
+      headers: {
+        Authorization: token,
+      },
+    })
+      .then(res => {
+        if (res.status == 200) {
+          return res.json();
+        } else {
+          alert(`Error ${res.status} - try again later.`);
+        }
+      })
+      .then(json => {
+        setMessageCount(json.count);
+      })
+      .catch(err => {
+        alert(err);
+      });
+  };
   const fetchPosts = (e, isInitial) => {
     setIsLoading(true);
     if (isInitial) {
       setPage(1);
-      fetch(`https://api.wasteof.money/messages/count`, {
-        headers: {
-          Authorization: token,
-        },
-      })
-        .then(res => {
-          if (res.status == 200) {
-            return res.json();
-          } else {
-            alert(`Error ${res.status} - try again later.`);
-          }
-        })
-        .then(json => {
-          setMessageCount(json.count);
-        })
-        .catch(err => {
-          alert(err);
-        });
+      fetchMessages();
     }
     fetch(
       `https://api.wasteof.money/users/${username}/following/posts?page=${page}`,
@@ -140,6 +148,7 @@ function Feed() {
         flex: 1,
         backgroundColor: colors.background,
       }}>
+      {appVersion != changelogViewed && <Changelog />}
       {token && (
         <AnimatedFAB
           icon="pencil-plus"

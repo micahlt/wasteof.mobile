@@ -63,7 +63,7 @@ const Comment = React.memo(({comment}) => {
           margin: 0,
           paddingTop: 15,
           paddingVertical: 0,
-          paddingBottom: 16,
+          paddingBottom: 15,
         }}>
         {filteredHTML && <WebDisplay html={comment.content} />}
       </Card.Content>
