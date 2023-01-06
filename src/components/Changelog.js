@@ -22,28 +22,9 @@ const Changelog = ({closeExternal, dismissable}) => {
           Welcome to {version}
         </Dialog.Title>
         <Dialog.ScrollArea style={{padding: 10}}>
-          <Paragraph style={{marginBottom: 5}}>
-            This version of wasteof.mobile includes several bugfixes as well as
-            some major new features:
-          </Paragraph>
+          <Paragraph style={{marginBottom: 5}}>In this release:</Paragraph>
           <Paragraph style={{marginLeft: 10}}>
-            &bull; Improved scrolling performance
-          </Paragraph>
-          <Paragraph style={{marginLeft: 10}}>
-            &bull; Allow notifications with deleted content
-          </Paragraph>
-          <Paragraph style={{marginLeft: 10}}>
-            &bull; New changelog for each update
-          </Paragraph>
-          <Paragraph style={{marginLeft: 10}}>
-            &bull; Mark notifications as read and unread
-          </Paragraph>
-          <Paragraph style={{marginLeft: 10}}>
-            &bull; Load as many notifications as you want
-          </Paragraph>
-          <Paragraph
-            style={{marginTop: 10, fontSize: 10, color: colors.outline}}>
-            View this changelog again in settings at any time.
+            &bull; Allow viewing admin notifications
           </Paragraph>
         </Dialog.ScrollArea>
         <Dialog.Actions>

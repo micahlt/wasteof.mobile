@@ -1,6 +1,6 @@
 {
   "name": "wasteofmobile",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "private": true,
   "scripts": {
     "android": "react-native run-android",
@@ -23,7 +23,7 @@
     "react-native-gesture-handler": "^2.8.0",
     "react-native-image-colors": "^1.5.1",
     "react-native-inappbrowser-reborn": "^3.7.0",
-    "react-native-paper": "^5.1.0",
+    "react-native-paper": "^5.1.2",
     "react-native-reanimated": "^2.13.0",
     "react-native-render-html": "^6.3.4",
     "react-native-restart": "^0.0.24",
@@ -34,7 +34,7 @@
     "s-ago": "^2.2.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.7",
+    "@babel/core": "^7.20.12",
     "@babel/runtime": "^7.20.7",
     "@react-native-community/eslint-config": "^2.0.0",
     "@welldone-software/why-did-you-render": "^7.0.1",

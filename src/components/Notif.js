@@ -156,6 +156,14 @@ const Notif = React.memo(({notif, changeReadStatus}) => {
               </Text>
             ))
         }
+        {
+          // Comment mentions
+          t == 'admin_notification' && (
+            <>
+              <Text style={s.notifDescription}>{notif.data.content}</Text>
+            </>
+          )
+        }
       </Card.Content>
     </Card>
   );
