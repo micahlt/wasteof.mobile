@@ -5,7 +5,6 @@ import {version} from '../../package.json';
 
 const Changelog = ({closeExternal, dismissable}) => {
   const [visible, setVisible] = React.useState(true);
-  const {colors} = useTheme();
   const close = () => {
     AsyncStorage.setItem('changelogViewed', version).then(() => {
       setVisible(false);
