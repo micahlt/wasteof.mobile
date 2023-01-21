@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Chip, Avatar, Modal, Text, Portal} from 'react-native-paper';
 const UserModal = React.lazy(() => import('../UserModal'));
-
+import { apiURL } from '../apiURL';
 const UserChip = ({username, inline, lastInline}) => {
   const [modalOpen, setModalOpen] = React.useState(false);
   const showModal = () => setModalOpen(true);
@@ -29,7 +29,7 @@ const UserChip = ({username, inline, lastInline}) => {
           <Avatar.Image
             size={24}
             source={{
-              uri: `https://api.wasteof.money/users/${
+              uri: `${apiURL}/users/${
                 username || 'micahlt'
               }/picture`,
             }}

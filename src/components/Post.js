@@ -11,6 +11,7 @@ import linkifyHtml from 'linkify-html';
 import UserChip from './UserChip';
 import AutoImage from './AutoImage';
 import {GlobalContext} from '../../App';
+import { apiURL } from '../apiURL';
 
 const Post = React.memo(({post, isRepost, repostCount, hideUser}) => {
   const {colors} = useTheme();
@@ -35,7 +36,7 @@ const Post = React.memo(({post, isRepost, repostCount, hideUser}) => {
       setFilteredHTML(post.content);
     }
     if (token) {
-      fetch(`https://api.wasteof.money/posts/${post._id}/loves/${username}`)
+      fetch(`${apiURL}/posts/${post._id}/loves/${username}`)
         .then(res => {
           return res.json();
         })
@@ -48,7 +49,7 @@ const Post = React.memo(({post, isRepost, repostCount, hideUser}) => {
     }
   }, []);
   const handleLove = () => {
-    fetch(`https://api.wasteof.money/posts/${post._id}/loves`, {
+    fetch(`${apiURL}/posts/${post._id}/loves`, {
       method: 'POST',
       headers: {
         Authorization: token,
