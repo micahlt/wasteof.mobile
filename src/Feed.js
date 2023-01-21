@@ -22,10 +22,15 @@ function Feed() {
   const [posts, setPosts] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
   const [isRefreshing, setIsRefreshing] = React.useState(true);
-  const [messageCount, setMessageCount] = React.useState(0);
   const [isExtended, setIsExtended] = React.useState(true);
   const [page, setPage] = React.useState(1);
-  const {username, token, changelogViewed} = React.useContext(GlobalContext);
+  const {
+    username,
+    token,
+    changelogViewed,
+    setNotificationCount,
+    notificationCount,
+  } = React.useContext(GlobalContext);
   React.useEffect(() => {
     navigation.addListener('focus', () => {
       if (token) fetchMessages();
@@ -53,7 +58,7 @@ function Feed() {
         }
       })
       .then(json => {
-        setMessageCount(json.count);
+        setNotificationCount(json.count);
       })
       .catch(err => {
         alert(err);
@@ -114,9 +119,9 @@ function Feed() {
         Your feed
       </Text>
       <View style={g.iconButtonWrapper}>
-        {messageCount > 0 && (
+        {notificationCount > 0 && (
           <Badge style={g.iconButtonBadge} size={24}>
-            {messageCount}
+            {notificationCount}
           </Badge>
         )}
         <IconButton

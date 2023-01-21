@@ -104,12 +104,21 @@ function Settings() {
         Settings
       </Text>
       {!username ? (
-        <Card mode="outlined" style={{backgroundColor: colors.background}}>
+        <Card
+          mode="outlined"
+          style={{
+            backgroundColor: colors.background,
+            maxWidth: 500,
+          }}>
           <Card.Content>
             <Logo
               height={40}
               fill={colors.onBackground}
-              style={{marginLeft: 'auto', marginRight: 'auto', marginBottom: 8}}
+              style={{
+                marginLeft: 'auto',
+                marginRight: 'auto',
+                marginBottom: 8,
+              }}
             />
             <TextInput
               label="Username"
@@ -155,7 +164,7 @@ function Settings() {
           </Card.Content>
         </Card>
       ) : (
-        <Card mode="outlined">
+        <Card mode="outlined" style={{maxWidth: 500}}>
           <Card.Cover
             source={{
               uri: `https://api.wasteof.money/users/${username}/banner`,
@@ -168,7 +177,7 @@ function Settings() {
           />
         </Card>
       )}
-      <Card mode="outlined" style={{marginTop: 15}}>
+      <Card mode="outlined" style={{marginTop: 15, maxWidth: 500}}>
         <Card.Content>
           <View style={g.inline}>
             <Switch

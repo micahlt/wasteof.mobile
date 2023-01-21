@@ -1,4 +1,5 @@
 import React from 'react';
+import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import {NavigationContainer} from '@react-navigation/native';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 import {Portal, useTheme} from 'react-native-paper';
@@ -17,6 +18,7 @@ const App = () => {
   const [shouldFilter, setShouldFilter] = React.useState(null);
   const [token, setToken] = React.useState(null);
   const [username, setUsername] = React.useState(null);
+  const [notificationCount, setNotificationCount] = React.useState(0);
   const [didGet, setDidGet] = React.useState(false);
   const [changelogViewed, setChangelogViewed] = React.useState(null);
   React.useEffect(() => {
@@ -49,11 +51,18 @@ const App = () => {
         setUsername,
         token,
         setToken,
+        notificationCount,
+        setNotificationCount,
       }}>
       {didGet && (
         <NavigationContainer theme={theme}>
           <Portal.Host>
-            <Tab.Navigator shifting={true} initialRouteName="home">
+            <Tab.Navigator
+              shifting={true}
+              initialRouteName="home"
+              renderTouchable={props => (
+                <TouchableWithoutFeedback {...props} />
+              )}>
               <Tab.Screen
                 name="explore"
                 component={Explore}
@@ -82,6 +91,7 @@ const App = () => {
                 options={{
                   tabBarIcon: p => genTabIcon(p, 'bell', 'bell-outline'),
                   tabBarLabel: 'notifs',
+                  tabBarBadge: notificationCount > 0,
                 }}
               />
               <Tab.Screen

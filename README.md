@@ -3,7 +3,7 @@
 
 ## Tech Stack
 - [React 18.x](https://reactjs.org/)
-- [React Native 0.69.x](https://reactnative.dev/)
+- [React Native 0.70.x](https://reactnative.dev/)
 - [Metro](https://facebook.github.io/metro/)
 - [Paper 5.x](https://callstack.github.io/react-native-paper/)
 - [Node.js 16.x](https://nodejs.org/)

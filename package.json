@@ -1,6 +1,6 @@
 {
   "name": "wasteofmobile",
-  "version": "2.1.1",
+  "version": "2.1.4",
   "private": true,
   "scripts": {
     "android": "react-native run-android",

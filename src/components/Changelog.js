@@ -21,9 +21,18 @@ const Changelog = ({closeExternal, dismissable}) => {
           Welcome to {version}
         </Dialog.Title>
         <Dialog.ScrollArea style={{padding: 10}}>
-          <Paragraph style={{marginBottom: 5}}>In this release:</Paragraph>
+          <Paragraph style={{marginBottom: 5}}>
+            This release includes the 100th open-source commit! Here's what's
+            new:
+          </Paragraph>
           <Paragraph style={{marginLeft: 10}}>
-            &bull; Allow viewing admin notifications
+            &bull; Fixed login input labels overlapping
+          </Paragraph>
+          <Paragraph style={{marginLeft: 10}}>
+            &bull; Fixed profanity filter setting not saving
+          </Paragraph>
+          <Paragraph style={{marginLeft: 10}}>
+            &bull; Switched to new tab navigation system
           </Paragraph>
         </Dialog.ScrollArea>
         <Dialog.Actions>
