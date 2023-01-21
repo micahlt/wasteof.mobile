@@ -23,7 +23,6 @@ function Settings() {
   const [password, setPassword] = React.useState('');
   const [hasAccepted, accept] = React.useState('unchecked');
   const [localUsername, setLocalUsername] = React.useState('');
-  const [localFilter, setLocalFilter] = React.useState(false);
   const [showChangelog, setShowChangelog] = React.useState(false);
   const handleCheckbox = () => {
     if (hasAccepted == 'unchecked') {
@@ -88,13 +87,6 @@ function Settings() {
       </Button>
     );
   };
-  React.useEffect(() => {
-    setLocalFilter(shouldFilter);
-  }, []);
-  React.useEffect(() => {
-    AsyncStorage.setItem('filter', String(localFilter));
-    setShouldFilter(localFilter);
-  }, [localFilter]);
   return (
     <ScrollView
       style={{
@@ -180,8 +172,8 @@ function Settings() {
         <Card.Content>
           <View style={g.inline}>
             <Switch
-              value={localFilter}
-              onValueChange={() => setLocalFilter(!localFilter)}
+              value={shouldFilter}
+              onValueChange={val => setShouldFilter(val)}
             />
             <Text style={{marginLeft: 10}} variant="labelLarge">
               Profanity filter

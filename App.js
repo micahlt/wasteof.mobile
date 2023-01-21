@@ -14,7 +14,7 @@ const Tab = createMaterialBottomTabNavigator();
 export const GlobalContext = React.createContext();
 const App = () => {
   const theme = useTheme();
-  const [shouldFilter, setShouldFilter] = React.useState(false);
+  const [shouldFilter, setShouldFilter] = React.useState(null);
   const [token, setToken] = React.useState(null);
   const [username, setUsername] = React.useState(null);
   const [didGet, setDidGet] = React.useState(false);
@@ -26,13 +26,16 @@ const App = () => {
       AsyncStorage.getItem('token'),
       AsyncStorage.getItem('changelogViewed'),
     ]).then(vals => {
-      setShouldFilter(Boolean(vals[0]));
+      setShouldFilter(vals[0] == 'true' ? true : false);
       setUsername(vals[1]);
       setToken(vals[2]);
       setChangelogViewed(vals[3]);
       setDidGet(true);
     });
   }, []);
+  React.useEffect(() => {
+    AsyncStorage.setItem('filter', String(shouldFilter));
+  }, [shouldFilter]);
   const genTabIcon = (e, active, inactive) => {
     return <Icon name={e.focused ? active : inactive || active} size={24} />;
   };
