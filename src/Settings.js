@@ -18,13 +18,13 @@ import Changelog from './components/Changelog';
 
 function Settings() {
   const {colors} = useTheme();
-  const [password, setPassword] = React.useState('');
-  const [hasAccepted, accept] = React.useState('unchecked');
-  const [localUsername, setLocalUsername] = React.useState(null);
-  const [localFilter, setLocalFilter] = React.useState(false);
-  const [showChangelog, setShowChangelog] = React.useState(false);
   const {shouldFilter, setShouldFilter, username} =
     React.useContext(GlobalContext);
+  const [password, setPassword] = React.useState('');
+  const [hasAccepted, accept] = React.useState('unchecked');
+  const [localUsername, setLocalUsername] = React.useState('');
+  const [localFilter, setLocalFilter] = React.useState(false);
+  const [showChangelog, setShowChangelog] = React.useState(false);
   const handleCheckbox = () => {
     if (hasAccepted == 'unchecked') {
       accept('checked');
@@ -121,7 +121,7 @@ function Settings() {
             />
             <TextInput
               label="Username"
-              value={username}
+              value={localUsername}
               onChangeText={text => setLocalUsername(text)}
               mode="outlined"
               style={{marginBottom: 5}}
