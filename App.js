@@ -1,21 +1,19 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
-import {createDrawerNavigator} from '@react-navigation/drawer';
+import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 import {Portal, useTheme} from 'react-native-paper';
-import {StatusBar} from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Feed from './src/Feed';
-import DrawerContent from './src/components/DrawerContent';
-import AppBar from './src/components/AppBar';
 import Explore from './src/Explore';
 import Settings from './src/Settings';
 import Search from './src/Search';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Notifications from './src/Notifications';
-const Drawer = createDrawerNavigator();
+const Tab = createMaterialBottomTabNavigator();
 
 export const GlobalContext = React.createContext();
 const App = () => {
-  const {colors} = useTheme();
+  const theme = useTheme();
   const [shouldFilter, setShouldFilter] = React.useState(false);
   const [token, setToken] = React.useState(null);
   const [username, setUsername] = React.useState(null);
@@ -35,6 +33,9 @@ const App = () => {
       setDidGet(true);
     });
   }, []);
+  const genTabIcon = (e, active, inactive) => {
+    return <Icon name={e.focused ? active : inactive || active} size={24} />;
+  };
   return (
     <GlobalContext.Provider
       value={{
@@ -47,20 +48,47 @@ const App = () => {
         setToken,
       }}>
       {didGet && (
-        <NavigationContainer>
-          <StatusBar backgroundColor={colors.primary} />
+        <NavigationContainer theme={theme}>
           <Portal.Host>
-            <Drawer.Navigator
-              drawerContent={props => <DrawerContent {...props} />}
-              screenOptions={{
-                header: props => <AppBar />,
-              }}>
-              <Drawer.Screen name="home" component={Feed} />
-              <Drawer.Screen name="explore" component={Explore} />
-              <Drawer.Screen name="search" component={Search} />
-              <Drawer.Screen name="notifications" component={Notifications} />
-              <Drawer.Screen name="settings" component={Settings} />
-            </Drawer.Navigator>
+            <Tab.Navigator shifting={true} initialRouteName="home">
+              <Tab.Screen
+                name="explore"
+                component={Explore}
+                options={{
+                  tabBarIcon: p => genTabIcon(p, 'earth'),
+                }}
+              />
+              <Tab.Screen
+                name="search"
+                component={Search}
+                options={{
+                  tabBarIcon: p => genTabIcon(p, 'magnify'),
+                }}
+              />
+              <Tab.Screen
+                name="home"
+                component={Feed}
+                options={{
+                  tabBarIcon: p =>
+                    genTabIcon(p, 'home-variant', 'home-variant-outline'),
+                }}
+              />
+              <Tab.Screen
+                name="notifications"
+                component={Notifications}
+                options={{
+                  tabBarIcon: p => genTabIcon(p, 'bell', 'bell-outline'),
+                  tabBarLabel: 'notifs',
+                }}
+              />
+              <Tab.Screen
+                name="settings"
+                component={Settings}
+                options={{
+                  tabBarIcon: p => genTabIcon(p, 'cog', 'cog-outline'),
+                }}
+              />
+            </Tab.Navigator>
           </Portal.Host>
         </NavigationContainer>
       )}
