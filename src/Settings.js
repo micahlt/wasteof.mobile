@@ -34,7 +34,7 @@ function Settings() {
   };
   const signIn = () => {
     if (hasAccepted == 'checked') {
-      fetch('${apiURL}/session', {
+      fetch(`${apiURL}/session`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
@@ -66,7 +66,7 @@ function Settings() {
   };
   const signOut = () => {
     AsyncStorage.getItem('token').then(token => {
-      fetch('${apiURL}/session', {
+      fetch(`${apiURL}/session`, {
         method: 'DELETE',
         headers: {
           Authorization: token,

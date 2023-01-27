@@ -16,6 +16,7 @@ import {GlobalContext} from '../App';
 import Changelog from './components/Changelog';
 import {version as appVersion} from '../package.json';
 import { apiURL } from './apiURL';
+import { wasteofURL } from './apiURL';
 
 function Feed() {
   const {colors} = useTheme();
@@ -89,11 +90,11 @@ function Feed() {
   };
   const handleFab = async () => {
     if (await InAppBrowser.isAvailable()) {
-      await InAppBrowser.open('https://wasteof.money/posts/new', {
+      await InAppBrowser.open(`${wasteofURL}/posts/new`, {
         toolbarColor: colors.primary,
       });
     } else {
-      Linking.open('https://wasteof.money/posts/new');
+      Linking.open(`${wasteofURL}/posts/new`);
     }
   };
   const openNotifs = async () => {

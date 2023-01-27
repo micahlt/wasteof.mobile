@@ -41,7 +41,7 @@ function Explore() {
         setPosts(json.posts);
         setIsLoading(false);
       });
-    fetch('${apiURL}/explore/users/top')
+    fetch(`${apiURL}/explore/users/top`)
       .then(response => {
         return response.json();
       })

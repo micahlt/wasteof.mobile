@@ -13,7 +13,7 @@ import {InAppBrowser} from 'react-native-inappbrowser-reborn';
 import Post from './components/Post';
 import s from '../styles/UserModal.module.css';
 import {GlobalContext} from '../App';
-import { apiURL } from './apiURL';
+import { apiURL, wasteofURL } from './apiURL';
 
 const UserModal = ({username, closeModal}) => {
   const {username: myUsername, token} = React.useContext(GlobalContext);
@@ -111,11 +111,11 @@ const UserModal = ({username, closeModal}) => {
   };
   const openUser = async () => {
     if (await InAppBrowser.isAvailable()) {
-      await InAppBrowser.open(`https://wasteof.money/@${username}`, {
+      await InAppBrowser.open(`${wasteofURL}/@${username}`, {
         toolbarColor: headerColor,
       });
     } else {
-      Linking.open(`https://wasteof.money/@${username}`);
+      Linking.open(`${wasteofURL}/@${username}`);
     }
   };
   const listLoading = () => {
