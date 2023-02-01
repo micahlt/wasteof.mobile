@@ -13,6 +13,7 @@ import {InAppBrowser} from 'react-native-inappbrowser-reborn';
 import Post from './components/Post';
 import s from '../styles/UserModal.module.css';
 import {GlobalContext} from '../App';
+import { apiURL, wasteofURL } from './apiURL';
 
 const UserModal = ({username, closeModal}) => {
   const {username: myUsername, token} = React.useContext(GlobalContext);
@@ -30,7 +31,7 @@ const UserModal = ({username, closeModal}) => {
   const refresh = () => {
     setIsRefreshing(true);
     ImageColors.getColors(
-      `https://api.wasteof.money/users/${username}/banner?optimized=true`,
+      `${apiURL}/users/${username}/banner?optimized=true`,
       {
         fallback: colors.surface,
         cache: true,
@@ -45,7 +46,7 @@ const UserModal = ({username, closeModal}) => {
       .catch(() => {
         return;
       });
-    fetch(`https://api.wasteof.money/users/${username}`)
+    fetch(`${apiURL}/users/${username}`)
       .then(res => {
         return res.json();
       })
@@ -58,7 +59,7 @@ const UserModal = ({username, closeModal}) => {
     fetchPosts();
   };
   const fetchPosts = () => {
-    fetch(`https://api.wasteof.money/users/${username}/posts?page=${page}`)
+    fetch(`${apiURL}/users/${username}/posts?page=${page}`)
       .then(res => {
         return res.json();
       })
@@ -73,7 +74,7 @@ const UserModal = ({username, closeModal}) => {
     if (token) {
       refresh();
       fetch(
-        `https://api.wasteof.money/users/${username}/followers/${myUsername}`,
+        `${apiURL}/users/${username}/followers/${myUsername}`,
       )
         .then(res => {
           return res.json();
@@ -89,7 +90,7 @@ const UserModal = ({username, closeModal}) => {
   }, [token]);
   const toggleFollow = () => {
     setIsTogglingFollow(true);
-    fetch(`https://api.wasteof.money/users/${username}/followers`, {
+    fetch(`${apiURL}/users/${username}/followers`, {
       method: 'POST',
       headers: {
         Authorization: token,
@@ -110,11 +111,11 @@ const UserModal = ({username, closeModal}) => {
   };
   const openUser = async () => {
     if (await InAppBrowser.isAvailable()) {
-      await InAppBrowser.open(`https://wasteof.money/@${username}`, {
+      await InAppBrowser.open(`${wasteofURL}/@${username}`, {
         toolbarColor: headerColor,
       });
     } else {
-      Linking.open(`https://wasteof.money/@${username}`);
+      Linking.open(`${wasteofURL}/@${username}`);
     }
   };
   const listLoading = () => {
@@ -131,12 +132,12 @@ const UserModal = ({username, closeModal}) => {
       <>
         <ImageBackground
           source={{
-            uri: `https://api.wasteof.money/users/${username}/banner?optimized=true`,
+            uri: `${apiURL}/users/${username}/banner?optimized=true`,
           }}
           style={s.imageBackground}
           resizeMode="cover"></ImageBackground>
         <Image
-          source={{uri: `https://api.wasteof.money/users/${username}/picture`}}
+          source={{uri: `${apiURL}/users/${username}/picture`}}
           resizeMode="cover"
           style={{
             ...s.avatar,

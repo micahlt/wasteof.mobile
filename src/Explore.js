@@ -11,6 +11,7 @@ import {
 import Post from './components/Post';
 import UserChip from './components/UserChip';
 import g from '../styles/Global.module.css';
+import { apiURL } from './apiURL';
 
 function Explore() {
   const {colors} = useTheme();
@@ -29,7 +30,7 @@ function Explore() {
   const refresh = slug => {
     setIsLoading(true);
     fetch(
-      `https://api.wasteof.money/explore/posts/trending?timeframe=${
+      `${apiURL}/explore/posts/trending?timeframe=${
         slug || timePeriod.slug
       }`,
     )
@@ -40,7 +41,7 @@ function Explore() {
         setPosts(json.posts);
         setIsLoading(false);
       });
-    fetch('https://api.wasteof.money/explore/users/top')
+    fetch(`${apiURL}/explore/users/top`)
       .then(response => {
         return response.json();
       })

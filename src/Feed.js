@@ -15,6 +15,8 @@ import g from '../styles/Global.module.css';
 import {GlobalContext} from '../App';
 import Changelog from './components/Changelog';
 import {version as appVersion} from '../package.json';
+import { apiURL } from './apiURL';
+import { wasteofURL } from './apiURL';
 
 function Feed() {
   const {colors} = useTheme();
@@ -45,7 +47,7 @@ function Feed() {
     fetchPosts(null, true);
   };
   const fetchMessages = () => {
-    fetch(`https://api.wasteof.money/messages/count`, {
+    fetch(`${apiURL}/messages/count`, {
       headers: {
         Authorization: token,
       },
@@ -71,7 +73,7 @@ function Feed() {
       fetchMessages();
     }
     fetch(
-      `https://api.wasteof.money/users/${username}/following/posts?page=${page}`,
+      `${apiURL}/users/${username}/following/posts?page=${page}`,
     )
       .then(response => {
         return response.json();
@@ -88,11 +90,11 @@ function Feed() {
   };
   const handleFab = async () => {
     if (await InAppBrowser.isAvailable()) {
-      await InAppBrowser.open('https://wasteof.money/posts/new', {
+      await InAppBrowser.open(`${wasteofURL}/posts/new`, {
         toolbarColor: colors.primary,
       });
     } else {
-      Linking.open('https://wasteof.money/posts/new');
+      Linking.open(`${wasteofURL}/posts/new`);
     }
   };
   const openNotifs = async () => {

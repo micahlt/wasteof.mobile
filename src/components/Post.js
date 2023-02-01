@@ -11,6 +11,7 @@ import linkifyHtml from 'linkify-html';
 import UserChip from './UserChip';
 import AutoImage from './AutoImage';
 import {GlobalContext} from '../../App';
+import { apiURL, wasteofURL } from '../apiURL';
 
 const Post = React.memo(({post, isRepost, repostCount, hideUser}) => {
   const {colors} = useTheme();
@@ -35,7 +36,7 @@ const Post = React.memo(({post, isRepost, repostCount, hideUser}) => {
       setFilteredHTML(post.content);
     }
     if (token) {
-      fetch(`https://api.wasteof.money/posts/${post._id}/loves/${username}`)
+      fetch(`${apiURL}/posts/${post._id}/loves/${username}`)
         .then(res => {
           return res.json();
         })
@@ -48,7 +49,7 @@ const Post = React.memo(({post, isRepost, repostCount, hideUser}) => {
     }
   }, []);
   const handleLove = () => {
-    fetch(`https://api.wasteof.money/posts/${post._id}/loves`, {
+    fetch(`${apiURL}/posts/${post._id}/loves`, {
       method: 'POST',
       headers: {
         Authorization: token,
@@ -68,11 +69,11 @@ const Post = React.memo(({post, isRepost, repostCount, hideUser}) => {
   };
   const handleComment = async () => {
     if (await InAppBrowser.isAvailable()) {
-      await InAppBrowser.open(`https://wasteof.money/posts/${post._id}`, {
+      await InAppBrowser.open(`${wasteofURL}/posts/${post._id}`, {
         toolbarColor: colors.primary,
       });
     } else {
-      Linking.open(`https://wasteof.money/posts/${post._id}`);
+      Linking.open(`${wasteofURL}/posts/${post._id}`);
     }
   };
   const ImageRenderer = ({tnode}) => {

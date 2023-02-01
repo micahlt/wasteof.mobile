@@ -10,6 +10,7 @@ import {
 import {GlobalContext} from '../App';
 import Notif from './components/Notif';
 import s from '../styles/Notifications.module.css';
+import { apiURL } from './apiURL';
 
 function Notifications() {
   const {colors} = useTheme();
@@ -37,7 +38,7 @@ function Notifications() {
       setPage(0);
     }
     setIsLoading(true);
-    fetch(`https://api.wasteof.money/messages/${mode}?page=${n ? page : 0}`, {
+    fetch(`${apiURL}/messages/${mode}?page=${n ? page : 0}`, {
       headers: {
         Authorization: token,
       },
@@ -58,7 +59,7 @@ function Notifications() {
       setNotifs(newArr);
       if (mode == 'read') {
         setToast({text: 'Marked message as unread', visible: true});
-        fetch(`https://api.wasteof.money/messages/mark/unread`, {
+        fetch(`${apiURL}/messages/mark/unread`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -68,7 +69,7 @@ function Notifications() {
         }).then(res => res.json());
       } else if (mode == 'unread') {
         setToast({text: 'Marked message as read', visible: true});
-        fetch(`https://api.wasteof.money/messages/mark/read`, {
+        fetch(`${apiURL}/messages/mark/read`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

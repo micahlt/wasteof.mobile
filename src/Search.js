@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {View, FlatList} from 'react-native';
 import {Avatar, Button, Searchbar, Text, useTheme} from 'react-native-paper';
+import { apiURL } from './apiURL';
 import Post from './components/Post';
 
 function Feed() {
@@ -27,7 +28,7 @@ function Feed() {
       setPage(1);
       setIsRefreshing(true);
     }
-    fetch(`https://api.wasteof.money/search/posts?q=${query}&page=${page}`)
+    fetch(`${apiURL}/search/posts?q=${query}&page=${page}`)
       .then(response => {
         return response.json();
       })

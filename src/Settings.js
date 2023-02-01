@@ -15,6 +15,7 @@ import g from '../styles/Global.module.css';
 import RNRestart from 'react-native-restart';
 import {GlobalContext} from '../App';
 import Changelog from './components/Changelog';
+import { apiURL } from './apiURL';
 
 function Settings() {
   const {colors} = useTheme();
@@ -33,7 +34,7 @@ function Settings() {
   };
   const signIn = () => {
     if (hasAccepted == 'checked') {
-      fetch('https://api.wasteof.money/session', {
+      fetch(`${apiURL}/session`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
@@ -65,7 +66,7 @@ function Settings() {
   };
   const signOut = () => {
     AsyncStorage.getItem('token').then(token => {
-      fetch('https://api.wasteof.money/session', {
+      fetch(`${apiURL}/session`, {
         method: 'DELETE',
         headers: {
           Authorization: token,
@@ -167,7 +168,7 @@ function Settings() {
         <Card mode="outlined" style={{maxWidth: 500}}>
           <Card.Cover
             source={{
-              uri: `https://api.wasteof.money/users/${username}/banner`,
+              uri: `${apiURL}/users/${username}/banner`,
             }}></Card.Cover>
           <Card.Title
             title={String(username)}
