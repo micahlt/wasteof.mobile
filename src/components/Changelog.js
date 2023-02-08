@@ -22,17 +22,15 @@ const Changelog = ({closeExternal, dismissable}) => {
         </Dialog.Title>
         <Dialog.ScrollArea style={{padding: 10}}>
           <Paragraph style={{marginBottom: 5}}>
-            This release includes the 100th open-source commit! Here's what's
-            new:
+            This release includes some quality-of-life fixes and improvements!
+            Here's what's new:
           </Paragraph>
           <Paragraph style={{marginLeft: 10}}>
-            &bull; Fixed login input labels overlapping
+            &bull; Easing between tabs
           </Paragraph>
+          <Paragraph style={{marginLeft: 10}}>&bull; Spacing fixes</Paragraph>
           <Paragraph style={{marginLeft: 10}}>
-            &bull; Fixed profanity filter setting not saving
-          </Paragraph>
-          <Paragraph style={{marginLeft: 10}}>
-            &bull; Switched to new tab navigation system
+            &bull; All messages read icon
           </Paragraph>
         </Dialog.ScrollArea>
         <Dialog.Actions>

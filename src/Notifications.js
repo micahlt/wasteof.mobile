@@ -6,11 +6,12 @@ import {
   Button,
   Snackbar,
   useTheme,
+  Avatar,
 } from 'react-native-paper';
 import {GlobalContext} from '../App';
 import Notif from './components/Notif';
 import s from '../styles/Notifications.module.css';
-import { apiURL } from './apiURL';
+import {apiURL} from './apiURL';
 
 function Notifications() {
   const {colors} = useTheme();
@@ -24,10 +25,10 @@ function Notifications() {
     visible: false,
     text: '',
   });
-  const [lastAction, setLastAction] = React.useState({
-    action: 'markUnread',
-    id: '39jsjsi19j201-l',
-  });
+  // const [undoAction, setUndoAction] = React.useState({
+  //   action: '',
+  //   id: '',
+  // });
   React.useEffect(() => {
     loadNotifications();
   }, [mode]);
@@ -51,14 +52,16 @@ function Notifications() {
         setIsEnd(data.last);
       });
   };
-  const changeReadStatus = id => {
+  const changeReadStatus = (id, modeOverride) => {
     const i = notifs.findIndex(n => n._id == id);
     if (i != -1) {
       let newArr = notifs;
       newArr.splice(i, 1);
       setNotifs(newArr);
-      if (mode == 'read') {
-        setToast({text: 'Marked message as unread', visible: true});
+      if ((modeOverride || mode) == 'read') {
+        if (!modeOverride)
+          setToast({text: 'Marked message as unread', visible: true});
+        // setUndoAction({action: 'read', id: id});
         fetch(`${apiURL}/messages/mark/unread`, {
           method: 'POST',
           headers: {
@@ -66,9 +69,11 @@ function Notifications() {
             Authorization: token,
           },
           body: JSON.stringify({messages: [id]}),
-        }).then(res => res.json());
-      } else if (mode == 'unread') {
-        setToast({text: 'Marked message as read', visible: true});
+        });
+      } else if ((modeOverride || mode) == 'unread') {
+        if (!modeOverride)
+          setToast({text: 'Marked message as read', visible: true});
+        // setUndoAction({action: 'unread', id: id});
         fetch(`${apiURL}/messages/mark/read`, {
           method: 'POST',
           headers: {
@@ -76,8 +81,6 @@ function Notifications() {
             Authorization: token,
           },
           body: JSON.stringify({messages: [id]}),
-        }).then(res => {
-          console.log(JSON.stringify(res));
         });
       }
     } else {
@@ -109,19 +112,33 @@ function Notifications() {
     </View>
   );
   const listLoading = (
-    <View style={{paddingTop: 20, paddingBottom: 30}}>
-      {!(isLoading && page == 0) && !isEnd && (
-        <Button
-          loading={isLoading}
-          mode="contained-tonal"
-          style={{marginLeft: 'auto', marginRight: 'auto'}}
-          onPress={() => {
-            loadNotifications(notifs);
-          }}>
-          Load more
-        </Button>
+    <>
+      {!(isLoading && page == 0) && !isEnd ? (
+        <View style={{paddingTop: 20, paddingBottom: 30}}>
+          <Button
+            loading={isLoading}
+            mode="contained-tonal"
+            style={{marginLeft: 'auto', marginRight: 'auto'}}
+            onPress={() => {
+              loadNotifications(notifs);
+            }}>
+            Load more
+          </Button>
+        </View>
+      ) : (
+        notifs.length == 0 &&
+        !isLoading && (
+          <View style={{alignItems: 'center', flexGrow: 1}}>
+            <Avatar.Icon
+              size={128}
+              icon="email-check-outline"
+              style={{backgroundColor: 'transparent'}}
+            />
+            <Text variant="labelLarge">No unread messages</Text>
+          </View>
+        )
       )}
-    </View>
+    </>
   );
   const renderItem = ({item}) => (
     <Notif notif={item} changeReadStatus={changeReadStatus} />
@@ -151,7 +168,7 @@ function Notifications() {
         // action={{
         //   label: 'Undo',
         //   onPress: () => {
-        //     return;
+        //     changeReadStatus(undoAction.id, undoAction.action);
         //   },
         // }}>
       >

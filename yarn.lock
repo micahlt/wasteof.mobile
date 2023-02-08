@@ -5477,7 +5477,7 @@ pascalcase@^0.1.1:
   resolved "https://registry.npmjs.org/pascalcase/-/pascalcase-0.1.1.tgz"
   integrity sha512-XHXfu/yOQRy9vYOtUDVMN60OEJjW013GoObG1o+xwQTpB9eYJX/BjXMsdW13ZDPruFhYYn0AG22w0xgQMwl3Nw==
 
-patch-package@*:
+patch-package@^6.5.1:
   version "6.5.1"
   resolved "https://registry.npmjs.org/patch-package/-/patch-package-6.5.1.tgz"
   integrity sha512-I/4Zsalfhc6bphmJTlrLoOcAF87jcxko4q0qsv4bGcurbr8IskEOtdnt9iCmsQVGL1B+iUhSQqweyTLJfCF9rA==
@@ -5791,10 +5791,10 @@ react-native-gradle-plugin@^0.71.14:
   resolved "https://registry.npmjs.org/react-native-gradle-plugin/-/react-native-gradle-plugin-0.71.14.tgz"
   integrity sha512-nnLawTZEPPRAKq92UqDkzoGgCBl9aa9zAihFHMwmwzn4WRVdK4O6Cd4XYiyoNOiQzx3Hh9k5WOckHE80C92ivQ==
 
-react-native-image-colors@^1.5.1:
-  version "1.5.1"
-  resolved "https://registry.npmjs.org/react-native-image-colors/-/react-native-image-colors-1.5.1.tgz"
-  integrity sha512-1vMl6BIWssKGEPNgLIujzBxStdgNXIGAz3EDxuFk/bmnnB4x4YQjVzxOtJp+eoKMBl9DNkcul+72IUAw1IFJQw==
+react-native-image-colors@^1.5.2:
+  version "1.5.2"
+  resolved "https://registry.npmjs.org/react-native-image-colors/-/react-native-image-colors-1.5.2.tgz"
+  integrity sha512-yGsxwjQZFL5fthNc/F8//sSH1WZtC0OmxN7HQhXE1gSH0ApldOMkl5njTTMnWSUT/t1iCCBZrANSj3gnw1UaOg==
   dependencies:
     node-vibrant "3.1.6"
 
@@ -5806,10 +5806,10 @@ react-native-inappbrowser-reborn@^3.7.0:
     invariant "^2.2.4"
     opencollective-postinstall "^2.0.3"
 
-react-native-paper@^5.1.4, "react-native-paper@>= 3.0.0":
-  version "5.1.4"
-  resolved "https://registry.npmjs.org/react-native-paper/-/react-native-paper-5.1.4.tgz"
-  integrity sha512-MpT7zmq/+bSXrKtjUHDKYadTSZvhE2d15oH+Sz77F+xq0/Xqwtg9aX3iHU4x0P92PRubRAbKiLkV0Qi9+beN7g==
+react-native-paper@^5.2.0, "react-native-paper@>= 3.0.0":
+  version "5.2.0"
+  resolved "https://registry.npmjs.org/react-native-paper/-/react-native-paper-5.2.0.tgz"
+  integrity sha512-FfKvfh4nBvetTusiuc1QMuNxXdNai4lthoyD+dNPM03RnIapcjoKHrhCD1EvVi5c1kBSKHrlXQ3OAW/8QCQXNw==
   dependencies:
     "@callstack/react-theme-provider" "^3.0.8"
     color "^3.1.2"
