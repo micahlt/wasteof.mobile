@@ -15,7 +15,7 @@ import g from '../styles/Global.module.css';
 import RNRestart from 'react-native-restart';
 import {GlobalContext} from '../App';
 import Changelog from './components/Changelog';
-import { apiURL } from './apiURL';
+import {apiURL} from './apiURL';
 
 function Settings() {
   const {colors} = useTheme();
@@ -189,7 +189,7 @@ function Settings() {
               Profanity filter
             </Text>
           </View>
-          <View style={{...g.inline, marginTop: 5}}>
+          <View style={{...g.inline, marginTop: 10}}>
             <Button
               mode="contained-tonal"
               onPress={() => setShowChangelog(true)}>

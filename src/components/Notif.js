@@ -14,7 +14,7 @@ const Notif = React.memo(({notif, changeReadStatus}) => {
       style={s.notif}
       mode="elevated"
       onLongPress={() => {
-        changeReadStatus(notif._id);
+        changeReadStatus(notif._id, null);
       }}>
       <Card.Content
         style={{
