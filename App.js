@@ -1,6 +1,7 @@
 import React from 'react';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import {NavigationContainer} from '@react-navigation/native';
+import {Easing} from 'react-native';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 import {Portal, useTheme} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -10,6 +11,7 @@ import Settings from './src/Settings';
 import Search from './src/Search';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Notifications from './src/Notifications';
+import UserModal from './src/UserModal';
 const Tab = createMaterialBottomTabNavigator();
 
 export const GlobalContext = React.createContext();
@@ -58,6 +60,9 @@ const App = () => {
         <NavigationContainer theme={theme}>
           <Portal.Host>
             <Tab.Navigator
+              sceneAnimationType="shifting"
+              sceneAnimationEnabled={true}
+              sceneAnimationEasing={Easing.ease}
               shifting={true}
               initialRouteName="home"
               renderTouchable={props => (
