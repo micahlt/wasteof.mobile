@@ -8,6 +8,7 @@ import {
   useTheme,
   Avatar,
 } from 'react-native-paper';
+import {useNavigation} from '@react-navigation/native';
 import {GlobalContext} from '../App';
 import Notif from './components/Notif';
 import s from '../styles/Notifications.module.css';
@@ -15,6 +16,7 @@ import {apiURL} from './apiURL';
 
 function Notifications() {
   const {colors} = useTheme();
+  const navigation = useNavigation();
   const {token} = React.useContext(GlobalContext);
   const [isLoading, setIsLoading] = React.useState(true);
   const [page, setPage] = React.useState(0);
@@ -30,7 +32,7 @@ function Notifications() {
   //   id: '',
   // });
   React.useEffect(() => {
-    loadNotifications();
+    if (token) loadNotifications();
   }, [mode]);
   const loadNotifications = n => {
     if (!n) {
@@ -149,31 +151,49 @@ function Notifications() {
         flex: 1,
         backgroundColor: colors.background,
       }}>
-      <FlatList
-        data={notifs}
-        keyExtractor={item => item._id}
-        renderItem={renderItem}
-        onRefresh={() => loadNotifications(null)}
-        ListHeaderComponent={() => listHeader}
-        ListFooterComponent={listLoading}
-        refreshing={isLoading && page == 0}
-        estimatedItemSize={150}
-      />
-      <Snackbar
-        visible={toast.visible}
-        onDismiss={() => {
-          setToast({...toast, visible: false});
-        }}
-        duration={2000}
-        // action={{
-        //   label: 'Undo',
-        //   onPress: () => {
-        //     changeReadStatus(undoAction.id, undoAction.action);
-        //   },
-        // }}>
-      >
-        {toast.text}
-      </Snackbar>
+      {token ? (
+        <>
+          <FlatList
+            data={notifs}
+            keyExtractor={item => item._id}
+            renderItem={renderItem}
+            onRefresh={() => loadNotifications(null)}
+            ListHeaderComponent={() => listHeader}
+            ListFooterComponent={listLoading}
+            refreshing={isLoading && page == 0}
+            estimatedItemSize={150}
+          />
+          <Snackbar
+            visible={toast.visible}
+            onDismiss={() => {
+              setToast({...toast, visible: false});
+            }}
+            duration={2000}
+            // action={{
+            //   label: 'Undo',
+            //   onPress: () => {
+            //     changeReadStatus(undoAction.id, undoAction.action);
+            //   },
+            // }}>
+          >
+            {toast.text}
+          </Snackbar>
+        </>
+      ) : (
+        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+          <Text
+            variant="titleLarge"
+            style={{width: '70%', textAlign: 'center', marginBottom: 10}}>
+            Sign in to view notifications
+          </Text>
+          <Button
+            mode="contained-tonal"
+            icon="account-lock-outline"
+            onPress={() => navigation.navigate('settings')}>
+            Sign In
+          </Button>
+        </View>
+      )}
     </View>
   );
 }
