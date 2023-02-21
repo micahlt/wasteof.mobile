@@ -1,9 +1,10 @@
 import * as React from 'react';
 import {View} from 'react-native';
 import {Card, IconButton, Text, useTheme} from 'react-native-paper';
-import {useWindowDimensions, Linking} from 'react-native';
+import {useWindowDimensions} from 'react-native';
+import links from '../../utils/links';
+import InAppBrowser from 'react-native-inappbrowser-reborn';
 import RenderHtml from 'react-native-render-html';
-import {InAppBrowser} from 'react-native-inappbrowser-reborn';
 import ago from 's-ago';
 import s from '../../styles/Post.module.css';
 import filter from '../../utils/filter';
@@ -68,13 +69,7 @@ const Post = React.memo(({post, isRepost, repostCount, hideUser}) => {
       });
   };
   const handleComment = async () => {
-    if (await InAppBrowser.isAvailable()) {
-      await InAppBrowser.open(`${wasteofURL}/posts/${post._id}`, {
-        toolbarColor: colors.primary,
-      });
-    } else {
-      Linking.open(`${wasteofURL}/posts/${post._id}`);
-    }
+    links.open(`${wasteofURL}/posts/${post._id}`, colors.primary);
   };
   const ImageRenderer = ({tnode}) => {
     return (

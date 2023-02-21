@@ -16,6 +16,7 @@ import RNRestart from 'react-native-restart';
 import {GlobalContext} from '../App';
 import Changelog from './components/Changelog';
 import {apiURL} from './apiURL';
+import links from '../utils/links';
 
 function Settings() {
   const {colors} = useTheme();
@@ -151,9 +152,14 @@ function Settings() {
               />
               <Text>
                 I agree to the{' '}
-                <Text style={{...g.link, color: colors.primary}}>Terms</Text>{' '}
-                and{' '}
-                <Text style={{...g.link, color: colors.primary}}>Rules</Text>.
+                <Text
+                  style={{...g.link, color: colors.primary}}
+                  onPress={() =>
+                    links.open('https://wasteof.money/rules', colors.primary)
+                  }>
+                  Rules
+                </Text>
+                .
               </Text>
             </View>
             <Button
@@ -162,6 +168,21 @@ function Settings() {
               onPress={signIn}>
               Log In
             </Button>
+            <Text
+              style={{
+                marginLeft: 'auto',
+                marginRight: 'auto',
+                marginTop: 10,
+                ...g.link,
+                color: colors.primary,
+                opacity: 0.5,
+              }}
+              variant="bodySmall"
+              onPress={() =>
+                links.open('https://wasteof.money/join', colors.primary)
+              }>
+              Don't have an account?
+            </Text>
           </Card.Content>
         </Card>
       ) : (

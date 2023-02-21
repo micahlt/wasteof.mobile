@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {View, Linking, FlatList} from 'react-native';
+import {View, FlatList} from 'react-native';
 import {
   Text,
   IconButton,
@@ -9,14 +9,14 @@ import {
   useTheme,
 } from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
-import {InAppBrowser} from 'react-native-inappbrowser-reborn';
 import Post from './components/Post';
 import g from '../styles/Global.module.css';
 import {GlobalContext} from '../App';
 import Changelog from './components/Changelog';
 import {version as appVersion} from '../package.json';
-import { apiURL } from './apiURL';
-import { wasteofURL } from './apiURL';
+import {apiURL} from './apiURL';
+import {wasteofURL} from './apiURL';
+import links from '../utils/links';
 
 function Feed() {
   const {colors} = useTheme();
@@ -72,9 +72,7 @@ function Feed() {
       setPage(1);
       fetchMessages();
     }
-    fetch(
-      `${apiURL}/users/${username}/following/posts?page=${page}`,
-    )
+    fetch(`${apiURL}/users/${username}/following/posts?page=${page}`)
       .then(response => {
         return response.json();
       })
@@ -89,13 +87,7 @@ function Feed() {
       });
   };
   const handleFab = async () => {
-    if (await InAppBrowser.isAvailable()) {
-      await InAppBrowser.open(`${wasteofURL}/posts/new`, {
-        toolbarColor: colors.primary,
-      });
-    } else {
-      Linking.open(`${wasteofURL}/posts/new`);
-    }
+    links.open(`${wasteofURL}/posts/new`, colors.primary);
   };
   const openNotifs = async () => {
     navigation.navigate('notifications');
