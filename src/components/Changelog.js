@@ -28,15 +28,17 @@ const Changelog = ({ closeExternal, dismissable }) => {
         </Dialog.Title>
         <Dialog.ScrollArea style={{ padding: 10 }}>
           <Paragraph style={{ marginBottom: 5 }}>
-            This release includes some quality-of-life fixes and improvements!
-            Here's what's new:
+            This release includes a few new features! Here's what's new:
           </Paragraph>
           <Paragraph style={{ marginLeft: 10 }}>
-            &bull; Fix notification screen crash
+            &bull; Viewing comments
           </Paragraph>
-          <Paragraph style={{ marginLeft: 10 }}>&bull; Spacing fixes</Paragraph>
           <Paragraph style={{ marginLeft: 10 }}>
-            &bull; Minor performance improvements
+            &bull; Viewing replies
+          </Paragraph>
+          <Paragraph style={{ marginTop: 5 }}>
+            Creating comments is coming very soon, so keep an eye out for
+            updates!
           </Paragraph>
         </Dialog.ScrollArea>
         <Dialog.Actions>
