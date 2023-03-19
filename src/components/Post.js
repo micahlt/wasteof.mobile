@@ -1,6 +1,13 @@
 import * as React from 'react';
 import { View } from 'react-native';
-import { Card, IconButton, Text, useTheme } from 'react-native-paper';
+import {
+  Card,
+  IconButton,
+  Text,
+  Portal,
+  Modal,
+  useTheme,
+} from 'react-native-paper';
 import { useWindowDimensions } from 'react-native';
 import links from '../../utils/links';
 import RenderHtml from 'react-native-render-html';
@@ -12,6 +19,7 @@ import UserChip from './UserChip';
 import AutoImage from './AutoImage';
 import { GlobalContext } from '../../App';
 import { apiURL, wasteofURL } from '../apiURL';
+import CommentModal from '../CommentModal';
 
 const Post = React.memo(({ post, isRepost, repostCount, hideUser }) => {
   const { colors } = useTheme();
@@ -19,6 +27,9 @@ const Post = React.memo(({ post, isRepost, repostCount, hideUser }) => {
   const [filteredHTML, setFilteredHTML] = React.useState(null);
   const [loved, setLoved] = React.useState(false);
   const [loves, setLoves] = React.useState(post.loves);
+  const [modalOpen, setModalOpen] = React.useState(false);
+  const showModal = () => setModalOpen(true);
+  const hideModal = () => setModalOpen(false);
   const [localRepostCount, setLocalRepostCount] = React.useState(
     repostCount || 1,
   );
@@ -68,7 +79,10 @@ const Post = React.memo(({ post, isRepost, repostCount, hideUser }) => {
       });
   };
   const handleComment = async () => {
-    links.open(`${wasteofURL}/posts/${post._id}`, colors.primary);
+    // FALLBACK LINK OPENER
+    //  links.open(`${wasteofURL}/posts/${post._id}`, colors.primary);
+    // NEW COMMENT MODAL HANDLER
+    showModal(true);
   };
   const ImageRenderer = ({ tnode }) => {
     return (
@@ -113,6 +127,20 @@ const Post = React.memo(({ post, isRepost, repostCount, hideUser }) => {
       }}
       mode={isRepost ? 'outlined' : 'elevated'}>
       <Card.Content style={{ margin: 0, paddingTop: 15, paddingVertical: 0 }}>
+        <Portal>
+          <Modal
+            visible={modalOpen}
+            onDismiss={hideModal}
+            contentContainerStyle={{
+              flex: 1,
+              justifyContent: 'flex-start',
+              padding: 0,
+              paddingVertical: 0,
+            }}
+            style={{ marginTop: 0 }}>
+            <CommentModal postId={post._id} closeModal={hideModal} />
+          </Modal>
+        </Portal>
         {!hideUser && (
           <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
             <UserChip username={post.poster.name} />

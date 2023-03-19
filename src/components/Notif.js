@@ -45,7 +45,7 @@ const Notif = React.memo(({ notif, changeReadStatus }) => {
             (notif.data.comment ? (
               <>
                 <Text style={s.notifDescription}>commented on your post</Text>
-                <Comment comment={notif.data.comment} />
+                <Comment comment={notif.data.comment} inNotif={true} />
               </>
             ) : (
               <Text style={s.notifDescription}>
@@ -59,7 +59,7 @@ const Notif = React.memo(({ notif, changeReadStatus }) => {
             (notif.data.comment ? (
               <>
                 <Text style={s.notifDescription}>commented on your wall</Text>
-                <Comment comment={notif.data.comment} />
+                <Comment comment={notif.data.comment} inNotif={true} />
               </>
             ) : (
               <Text style={s.notifDescription}>
@@ -75,7 +75,7 @@ const Notif = React.memo(({ notif, changeReadStatus }) => {
                 <Text style={s.notifDescription}>
                   replied to your comment on your wall
                 </Text>
-                <Comment comment={notif.data.comment} />
+                <Comment comment={notif.data.comment} inNotif={true} />
               </>
             ) : (
               <Text style={s.notifDescription}>
@@ -92,7 +92,7 @@ const Notif = React.memo(({ notif, changeReadStatus }) => {
                   replied to your comment on @{notif.data.post.poster.name}'s
                   post
                 </Text>
-                <Comment comment={notif.data.comment} />
+                <Comment comment={notif.data.comment} inNotif={true} />
               </>
             ) : (
               <Text style={s.notifDescription}>
@@ -110,7 +110,7 @@ const Notif = React.memo(({ notif, changeReadStatus }) => {
                   mentioned you in a comment on @{notif.data.post.poster.name}'s
                   post
                 </Text>
-                <Comment comment={notif.data.comment} />
+                <Comment comment={notif.data.comment} inNotif={true} />
               </>
             ) : (
               <>
