@@ -1,9 +1,9 @@
 import React from 'react';
-import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
-import {NavigationContainer} from '@react-navigation/native';
-import {Easing} from 'react-native';
-import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
-import {Portal, useTheme} from 'react-native-paper';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { NavigationContainer } from '@react-navigation/native';
+import { Easing } from 'react-native';
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+import { Portal, useTheme } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Feed from './src/Feed';
 import Explore from './src/Explore';

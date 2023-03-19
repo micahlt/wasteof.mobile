@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {View, ScrollView, FlatList} from 'react-native';
+import { View, ScrollView, FlatList } from 'react-native';
 import {
   Text,
   useTheme,
@@ -14,7 +14,7 @@ import g from '../styles/Global.module.css';
 import { apiURL } from './apiURL';
 
 function Explore() {
-  const {colors} = useTheme();
+  const { colors } = useTheme();
   const [posts, setPosts] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
   const [isExtended, setIsExtended] = React.useState(true);
@@ -30,9 +30,7 @@ function Explore() {
   const refresh = slug => {
     setIsLoading(true);
     fetch(
-      `${apiURL}/explore/posts/trending?timeframe=${
-        slug || timePeriod.slug
-      }`,
+      `${apiURL}/explore/posts/trending?timeframe=${slug || timePeriod.slug}`,
     )
       .then(response => {
         return response.json();
@@ -87,7 +85,7 @@ function Explore() {
     }
     refresh(val);
   };
-  const onScroll = ({nativeEvent}) => {
+  const onScroll = ({ nativeEvent }) => {
     const currentScrollPosition =
       Math.floor(nativeEvent?.contentOffset?.y) ?? 0;
 
@@ -128,7 +126,7 @@ function Explore() {
       </Text>
     </View>
   );
-  const renderItem = React.useCallback(({item}) => <Post post={item} />, []);
+  const renderItem = React.useCallback(({ item }) => <Post post={item} />, []);
   return (
     <View
       style={{
@@ -141,7 +139,7 @@ function Explore() {
           onDismiss={() => setShowTimePicker(false)}
           theme={{
             colors: {
-              elevation: {...colors.elevation},
+              elevation: { ...colors.elevation },
               background: 'red',
               backdrop: 'red !important',
             },
@@ -149,7 +147,7 @@ function Explore() {
           <Dialog.Title>Choose time period</Dialog.Title>
           <Dialog.Content>
             <RadioButton.Group onValueChange={handleChangeTime}>
-              <View style={{...g.inline, marginBottom: 10}}>
+              <View style={{ ...g.inline, marginBottom: 10 }}>
                 <RadioButton
                   value="day"
                   uncheckedColor={colors.onSecondaryContainer}
@@ -158,7 +156,7 @@ function Explore() {
                 />
                 <Text variant="bodyLarge">Today</Text>
               </View>
-              <View style={{...g.inline, marginBottom: 10}}>
+              <View style={{ ...g.inline, marginBottom: 10 }}>
                 <RadioButton
                   value="week"
                   uncheckedColor={colors.onSecondaryContainer}
@@ -167,7 +165,7 @@ function Explore() {
                 />
                 <Text variant="bodyLarge">This week</Text>
               </View>
-              <View style={{...g.inline, marginBottom: 10}}>
+              <View style={{ ...g.inline, marginBottom: 10 }}>
                 <RadioButton
                   value="month"
                   uncheckedColor={colors.onSecondaryContainer}
@@ -176,7 +174,7 @@ function Explore() {
                 />
                 <Text variant="bodyLarge">This month</Text>
               </View>
-              <View style={{...g.inline, marginBottom: 10}}>
+              <View style={{ ...g.inline, marginBottom: 10 }}>
                 <RadioButton
                   value="all"
                   uncheckedColor={colors.onSecondaryContainer}

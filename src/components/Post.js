@@ -1,9 +1,8 @@
 import * as React from 'react';
-import {View} from 'react-native';
-import {Card, IconButton, Text, useTheme} from 'react-native-paper';
-import {useWindowDimensions} from 'react-native';
+import { View } from 'react-native';
+import { Card, IconButton, Text, useTheme } from 'react-native-paper';
+import { useWindowDimensions } from 'react-native';
 import links from '../../utils/links';
-import InAppBrowser from 'react-native-inappbrowser-reborn';
 import RenderHtml from 'react-native-render-html';
 import ago from 's-ago';
 import s from '../../styles/Post.module.css';
@@ -11,19 +10,19 @@ import filter from '../../utils/filter';
 import linkifyHtml from 'linkify-html';
 import UserChip from './UserChip';
 import AutoImage from './AutoImage';
-import {GlobalContext} from '../../App';
-import {apiURL, wasteofURL} from '../apiURL';
+import { GlobalContext } from '../../App';
+import { apiURL, wasteofURL } from '../apiURL';
 
-const Post = React.memo(({post, isRepost, repostCount, hideUser}) => {
-  const {colors} = useTheme();
-  const {width} = useWindowDimensions();
+const Post = React.memo(({ post, isRepost, repostCount, hideUser }) => {
+  const { colors } = useTheme();
+  const { width } = useWindowDimensions();
   const [filteredHTML, setFilteredHTML] = React.useState(null);
   const [loved, setLoved] = React.useState(false);
   const [loves, setLoves] = React.useState(post.loves);
   const [localRepostCount, setLocalRepostCount] = React.useState(
     repostCount || 1,
   );
-  const {shouldFilter, username, token} = React.useContext(GlobalContext);
+  const { shouldFilter, username, token } = React.useContext(GlobalContext);
   React.useEffect(() => {
     if (shouldFilter && !filteredHTML) {
       filter(post.content)
@@ -71,7 +70,7 @@ const Post = React.memo(({post, isRepost, repostCount, hideUser}) => {
   const handleComment = async () => {
     links.open(`${wasteofURL}/posts/${post._id}`, colors.primary);
   };
-  const ImageRenderer = ({tnode}) => {
+  const ImageRenderer = ({ tnode }) => {
     return (
       <AutoImage
         source={tnode.attributes.src}
@@ -79,13 +78,13 @@ const Post = React.memo(({post, isRepost, repostCount, hideUser}) => {
       />
     );
   };
-  const WebDisplay = React.memo(function WebDisplay({html}) {
+  const WebDisplay = React.memo(function WebDisplay({ html }) {
     return (
       <RenderHtml
-        source={{html: linkifyHtml(filteredHTML)}}
+        source={{ html: linkifyHtml(filteredHTML) }}
         contentWidth={width - 65 * localRepostCount}
         tagsStyles={{
-          a: {color: colors.primary},
+          a: { color: colors.primary },
           p: {
             color: colors.onSurface,
             fontSize: '1.035rem',
@@ -101,8 +100,8 @@ const Post = React.memo(({post, isRepost, repostCount, hideUser}) => {
             marginBottom: 0,
           },
         }}
-        baseStyle={{color: colors.onSurface}}
-        renderers={{img: React.useCallback(ImageRenderer, [])}}
+        baseStyle={{ color: colors.onSurface }}
+        renderers={{ img: React.useCallback(ImageRenderer, []) }}
       />
     );
   });
@@ -113,13 +112,13 @@ const Post = React.memo(({post, isRepost, repostCount, hideUser}) => {
         backgroundColor: colors.elevation.level1,
       }}
       mode={isRepost ? 'outlined' : 'elevated'}>
-      <Card.Content style={{margin: 0, paddingTop: 15, paddingVertical: 0}}>
+      <Card.Content style={{ margin: 0, paddingTop: 15, paddingVertical: 0 }}>
         {!hideUser && (
-          <View style={{flexDirection: 'row', alignItems: 'flex-start'}}>
+          <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
             <UserChip username={post.poster.name} />
             <Text
               variant="labelLarge"
-              style={{opacity: 0.6, fontWeight: 'normal'}}>
+              style={{ opacity: 0.6, fontWeight: 'normal' }}>
               {ago(new Date(post.time))}
             </Text>
           </View>
@@ -132,7 +131,7 @@ const Post = React.memo(({post, isRepost, repostCount, hideUser}) => {
             repostCount={localRepostCount + 1}
           />
         )}
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           {loved ? (
             <IconButton
               icon="heart"
@@ -152,7 +151,7 @@ const Post = React.memo(({post, isRepost, repostCount, hideUser}) => {
               onPress={handleLove}
             />
           )}
-          <Text style={{...s.stat, color: colors.outline}}>{loves}</Text>
+          <Text style={{ ...s.stat, color: colors.outline }}>{loves}</Text>
           <IconButton
             icon="recycle-variant"
             size={20}
@@ -160,7 +159,9 @@ const Post = React.memo(({post, isRepost, repostCount, hideUser}) => {
             style={s.statButton}
             iconColor={colors.outline}
           />
-          <Text style={{...s.stat, color: colors.outline}}>{post.reposts}</Text>
+          <Text style={{ ...s.stat, color: colors.outline }}>
+            {post.reposts}
+          </Text>
           <IconButton
             icon="comment-outline"
             size={20}
@@ -169,7 +170,7 @@ const Post = React.memo(({post, isRepost, repostCount, hideUser}) => {
             iconColor={colors.outline}
             onPress={handleComment}
           />
-          <Text style={{...s.stat, color: colors.outline}}>
+          <Text style={{ ...s.stat, color: colors.outline }}>
             {post.comments}
           </Text>
         </View>

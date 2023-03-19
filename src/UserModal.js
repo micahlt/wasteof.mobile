@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {ImageBackground, View, Image, Linking, FlatList} from 'react-native';
+import { ImageBackground, View, Image, Linking, FlatList } from 'react-native';
 import {
   Appbar,
   Button,
@@ -9,15 +9,15 @@ import {
   useTheme,
 } from 'react-native-paper';
 import ImageColors from 'react-native-image-colors';
-import {InAppBrowser} from 'react-native-inappbrowser-reborn';
+import { InAppBrowser } from 'react-native-inappbrowser-reborn';
 import Post from './components/Post';
 import s from '../styles/UserModal.module.css';
-import {GlobalContext} from '../App';
+import { GlobalContext } from '../App';
 import { apiURL, wasteofURL } from './apiURL';
 
-const UserModal = ({username, closeModal}) => {
-  const {username: myUsername, token} = React.useContext(GlobalContext);
-  const {colors, isDark} = useTheme();
+const UserModal = ({ username, closeModal }) => {
+  const { username: myUsername, token } = React.useContext(GlobalContext);
+  const { colors, isDark } = useTheme();
   const [headerColor, setHeaderColor] = React.useState(colors.surface);
   const [outlineColor, setOutlineColor] = React.useState(colors.outline);
   const [data, setData] = React.useState(null);
@@ -30,14 +30,11 @@ const UserModal = ({username, closeModal}) => {
   const [isTogglingFollow, setIsTogglingFollow] = React.useState(false);
   const refresh = () => {
     setIsRefreshing(true);
-    ImageColors.getColors(
-      `${apiURL}/users/${username}/banner?optimized=true`,
-      {
-        fallback: colors.surface,
-        cache: true,
-        key: String(Math.random()),
-      },
-    )
+    ImageColors.getColors(`${apiURL}/users/${username}/banner?optimized=true`, {
+      fallback: colors.surface,
+      cache: true,
+      key: String(Math.random()),
+    })
       .then(res => {
         if (isDark) setHeaderColor(res.darkMuted);
         else setHeaderColor(res.lightMuted);
@@ -73,9 +70,7 @@ const UserModal = ({username, closeModal}) => {
   React.useEffect(() => {
     if (token) {
       refresh();
-      fetch(
-        `${apiURL}/users/${username}/followers/${myUsername}`,
-      )
+      fetch(`${apiURL}/users/${username}/followers/${myUsername}`)
         .then(res => {
           return res.json();
         })
@@ -120,7 +115,7 @@ const UserModal = ({username, closeModal}) => {
   };
   const listLoading = () => {
     return (
-      <View style={{padding: 20}}>
+      <View style={{ padding: 20 }}>
         {isLoading && !isRefreshing && (
           <ActivityIndicator animating={true} color={colors.primary} />
         )}
@@ -137,7 +132,7 @@ const UserModal = ({username, closeModal}) => {
           style={s.imageBackground}
           resizeMode="cover"></ImageBackground>
         <Image
-          source={{uri: `${apiURL}/users/${username}/picture`}}
+          source={{ uri: `${apiURL}/users/${username}/picture` }}
           resizeMode="cover"
           style={{
             ...s.avatar,
@@ -153,7 +148,7 @@ const UserModal = ({username, closeModal}) => {
               onPress={toggleFollow}
               mode="contained-tonal"
               loading={isTogglingFollow}
-              style={{marginRight: 10}}>
+              style={{ marginRight: 10 }}>
               {following ? 'Unfollow' : 'Follow'} ({followers})
             </Button>
             {data.verified && (
@@ -190,10 +185,10 @@ const UserModal = ({username, closeModal}) => {
       </>
     );
   };
-  const renderItem = React.useCallback(({item}) => <Post post={item} />, []);
+  const renderItem = React.useCallback(({ item }) => <Post post={item} />, []);
   return (
     <>
-      <Appbar style={{backgroundColor: headerColor}}>
+      <Appbar style={{ backgroundColor: headerColor }}>
         <Appbar.BackAction onPress={closeModal} />
         <Appbar.Content title={username} />
         <Appbar.Action

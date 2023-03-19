@@ -1,5 +1,5 @@
-import {InAppBrowser} from 'react-native-inappbrowser-reborn';
-import {Linking} from 'react-native';
+import { InAppBrowser } from 'react-native-inappbrowser-reborn';
+import { Linking } from 'react-native';
 import rgbHex from 'rgb-hex';
 /**
  * Opens a URL with InAppBrowser, or if not available, React Native Linking
@@ -22,4 +22,4 @@ const open = async (url, color) => {
   }
 };
 
-export default {open: open};
+export default { open: open };

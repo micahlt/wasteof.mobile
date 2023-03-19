@@ -1,13 +1,13 @@
 import * as React from 'react';
-import {View} from 'react-native';
-import {Card, Text} from 'react-native-paper';
+import { View } from 'react-native';
+import { Card, Text } from 'react-native-paper';
 import ago from 's-ago';
 import s from '../../styles/Notif.module.css';
 import UserChip from './UserChip';
 import Comment from './Comment';
 import Post from './Post';
 
-const Notif = React.memo(({notif, changeReadStatus}) => {
+const Notif = React.memo(({ notif, changeReadStatus }) => {
   const t = notif.type;
   return (
     <Card
@@ -23,11 +23,11 @@ const Notif = React.memo(({notif, changeReadStatus}) => {
           paddingVertical: 0,
           paddingBottom: 15,
         }}>
-        <View style={{flexDirection: 'row', alignItems: 'flex-start'}}>
+        <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
           <UserChip username={notif.data.actor.name} />
           <Text
             variant="labelLarge"
-            style={{opacity: 0.6, fontWeight: 'normal'}}>
+            style={{ opacity: 0.6, fontWeight: 'normal' }}>
             {ago(new Date(notif.time))}
           </Text>
         </View>

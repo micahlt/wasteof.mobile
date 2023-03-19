@@ -1,18 +1,18 @@
 import * as React from 'react';
-import {Card, useTheme} from 'react-native-paper';
-import {useWindowDimensions} from 'react-native';
+import { Card, useTheme } from 'react-native-paper';
+import { useWindowDimensions } from 'react-native';
 import RenderHtml from 'react-native-render-html';
 import s from '../../styles/Comment.module.css';
 import filter from '../../utils/filter';
 import linkifyHtml from 'linkify-html';
 import AutoImage from './AutoImage';
-import {GlobalContext} from '../../App';
+import { GlobalContext } from '../../App';
 
-const Comment = React.memo(({comment}) => {
-  const {colors} = useTheme();
-  const {width} = useWindowDimensions();
+const Comment = React.memo(({ comment }) => {
+  const { colors } = useTheme();
+  const { width } = useWindowDimensions();
   const [filteredHTML, setFilteredHTML] = React.useState(null);
-  const {shouldFilter} = React.useContext(GlobalContext);
+  const { shouldFilter } = React.useContext(GlobalContext);
   React.useEffect(() => {
     if (shouldFilter && !filteredHTML) {
       filter(comment.content)
@@ -26,16 +26,16 @@ const Comment = React.memo(({comment}) => {
       setFilteredHTML(comment.content);
     }
   }, []);
-  const ImageRenderer = ({tnode}) => {
+  const ImageRenderer = ({ tnode }) => {
     return <AutoImage source={tnode.attributes.src} />;
   };
-  const WebDisplay = React.memo(function WebDisplay({html}) {
+  const WebDisplay = React.memo(function WebDisplay({ html }) {
     return (
       <RenderHtml
-        source={{html: linkifyHtml(filteredHTML)}}
+        source={{ html: linkifyHtml(filteredHTML) }}
         contentWidth={width - 65}
         tagsStyles={{
-          a: {color: colors.primary},
+          a: { color: colors.primary },
           p: {
             color: colors.onSurface,
             fontSize: '1.035rem',
@@ -51,8 +51,8 @@ const Comment = React.memo(({comment}) => {
             marginBottom: 0,
           },
         }}
-        baseStyle={{color: colors.onSurface}}
-        renderers={{img: React.useCallback(ImageRenderer, [])}}
+        baseStyle={{ color: colors.onSurface }}
+        renderers={{ img: React.useCallback(ImageRenderer, []) }}
       />
     );
   });

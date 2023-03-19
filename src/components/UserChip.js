@@ -1,8 +1,8 @@
 import * as React from 'react';
-import {Chip, Avatar, Modal, Text, Portal} from 'react-native-paper';
+import { Chip, Avatar, Modal, Text, Portal } from 'react-native-paper';
 const UserModal = React.lazy(() => import('../UserModal'));
 import { apiURL } from '../apiURL';
-const UserChip = ({username, inline, lastInline}) => {
+const UserChip = ({ username, inline, lastInline }) => {
   const [modalOpen, setModalOpen] = React.useState(false);
   const showModal = () => setModalOpen(true);
   const hideModal = () => setModalOpen(false);
@@ -18,7 +18,7 @@ const UserChip = ({username, inline, lastInline}) => {
             padding: 0,
             paddingVertical: 0,
           }}
-          style={{marginTop: 0}}>
+          style={{ marginTop: 0 }}>
           <React.Suspense fallback={<Text>Loading</Text>}>
             <UserModal username={username} closeModal={hideModal} />
           </React.Suspense>
@@ -29,9 +29,7 @@ const UserChip = ({username, inline, lastInline}) => {
           <Avatar.Image
             size={24}
             source={{
-              uri: `${apiURL}/users/${
-                username || 'micahlt'
-              }/picture`,
+              uri: `${apiURL}/users/${username || 'micahlt'}/picture`,
             }}
           />
         }

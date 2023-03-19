@@ -1,5 +1,5 @@
 import Filter from 'bad-words';
-const f = new Filter({placeHolder: '█'});
+const f = new Filter({ placeHolder: '█' });
 ['god', 'willy', 'omg'].forEach(w => f.removeWords(w));
 
 /**

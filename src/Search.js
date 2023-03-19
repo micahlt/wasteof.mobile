@@ -1,11 +1,11 @@
 import * as React from 'react';
-import {View, FlatList} from 'react-native';
-import {Avatar, Button, Searchbar, Text, useTheme} from 'react-native-paper';
+import { View, FlatList } from 'react-native';
+import { Avatar, Button, Searchbar, Text, useTheme } from 'react-native-paper';
 import { apiURL } from './apiURL';
 import Post from './components/Post';
 
 function Feed() {
-  const {colors} = useTheme();
+  const { colors } = useTheme();
   const [posts, setPosts] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
   const [isRefreshing, setIsRefreshing] = React.useState(false);
@@ -48,7 +48,7 @@ function Feed() {
     }
   };
   const listHeader = (
-    <View style={{padding: 10}}>
+    <View style={{ padding: 10 }}>
       <Searchbar
         placeholder="Search"
         onChangeText={onChangeSearch}
@@ -56,17 +56,17 @@ function Feed() {
         elevation={5}
         autoFocus={true}
         onSubmitEditing={searchPosts}
-        style={{borderRadius: 10}}
+        style={{ borderRadius: 10 }}
       />
     </View>
   );
   const listLoading = (
-    <View style={{paddingTop: 20, paddingBottom: 30}}>
+    <View style={{ paddingTop: 20, paddingBottom: 30 }}>
       {!isRefreshing && posts[0] ? (
         <Button
           loading={isLoading}
           mode="contained-tonal"
-          style={{marginLeft: 'auto', marginRight: 'auto'}}
+          style={{ marginLeft: 'auto', marginRight: 'auto' }}
           onPress={handleLoadMore}>
           Load more
         </Button>
@@ -91,7 +91,7 @@ function Feed() {
       )}
     </View>
   );
-  const renderItem = React.useCallback(({item}) => <Post post={item} />, []);
+  const renderItem = React.useCallback(({ item }) => <Post post={item} />, []);
   return (
     <View
       style={{

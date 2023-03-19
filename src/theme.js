@@ -1,4 +1,8 @@
-import {configureFonts, MD3LightTheme, MD3DarkTheme} from 'react-native-paper';
+import {
+  configureFonts,
+  MD3LightTheme,
+  MD3DarkTheme,
+} from 'react-native-paper';
 const fontConfig = {
   fontWeight: 'normal',
   displaySmall: {
@@ -99,7 +103,7 @@ export const lightTheme = {
     onSurfaceDisabled: 'rgba(28, 27, 31, 0.38)',
     backdrop: 'rgba(48, 48, 56, 0.4)',
   },
-  fonts: configureFonts({config: fontConfig}),
+  fonts: configureFonts({ config: fontConfig }),
 };
 
 export const darkTheme = {
@@ -148,5 +152,5 @@ export const darkTheme = {
     onSurfaceDisabled: 'rgba(229, 225, 230, 0.38)',
     backdrop: 'rgba(48, 48, 56, 0.4)',
   },
-  fonts: configureFonts({config: fontConfig}),
+  fonts: configureFonts({ config: fontConfig }),
 };

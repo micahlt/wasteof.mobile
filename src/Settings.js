@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {ScrollView, View} from 'react-native';
+import { ScrollView, View } from 'react-native';
 import {
   Text,
   Card,
@@ -13,14 +13,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Logo from '../static/logo.svg';
 import g from '../styles/Global.module.css';
 import RNRestart from 'react-native-restart';
-import {GlobalContext} from '../App';
+import { GlobalContext } from '../App';
 import Changelog from './components/Changelog';
-import {apiURL} from './apiURL';
+import { apiURL } from './apiURL';
 import links from '../utils/links';
 
 function Settings() {
-  const {colors} = useTheme();
-  const {shouldFilter, setShouldFilter, username} =
+  const { colors } = useTheme();
+  const { shouldFilter, setShouldFilter, username } =
     React.useContext(GlobalContext);
   const [password, setPassword] = React.useState('');
   const [hasAccepted, accept] = React.useState('unchecked');
@@ -37,7 +37,7 @@ function Settings() {
     if (hasAccepted == 'checked') {
       fetch(`${apiURL}/session`, {
         method: 'POST',
-        headers: {'Content-Type': 'application/json'},
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           username: localUsername,
           password: password,
@@ -84,7 +84,7 @@ function Settings() {
   };
   const signOutButton = () => {
     return (
-      <Button mode="outlined" style={{marginRight: 16}} onPress={signOut}>
+      <Button mode="outlined" style={{ marginRight: 16 }} onPress={signOut}>
         Sign Out
       </Button>
     );
@@ -102,7 +102,9 @@ function Settings() {
           closeExternal={() => setShowChangelog(false)}
         />
       )}
-      <Text variant="titleLarge" style={{fontWeight: 'bold', marginBottom: 10}}>
+      <Text
+        variant="titleLarge"
+        style={{ fontWeight: 'bold', marginBottom: 10 }}>
         Settings
       </Text>
       {!username ? (
@@ -127,7 +129,7 @@ function Settings() {
               value={localUsername}
               onChangeText={text => setLocalUsername(text)}
               mode="outlined"
-              style={{marginBottom: 5}}
+              style={{ marginBottom: 5 }}
               autoCapitalize="none"
               autoComplete="username"
             />
@@ -148,12 +150,12 @@ function Settings() {
               <Checkbox.Item
                 status={hasAccepted}
                 onPress={handleCheckbox}
-                style={{paddingHorizontal: 0}}
+                style={{ paddingHorizontal: 0 }}
               />
               <Text>
                 I agree to the{' '}
                 <Text
-                  style={{...g.link, color: colors.primary}}
+                  style={{ ...g.link, color: colors.primary }}
                   onPress={() =>
                     links.open('https://wasteof.money/rules', colors.primary)
                   }>
@@ -164,7 +166,7 @@ function Settings() {
             </View>
             <Button
               mode="contained-tonal"
-              style={{marginLeft: 'auto', marginRight: 'auto'}}
+              style={{ marginLeft: 'auto', marginRight: 'auto' }}
               onPress={signIn}>
               Log In
             </Button>
@@ -186,7 +188,7 @@ function Settings() {
           </Card.Content>
         </Card>
       ) : (
-        <Card mode="outlined" style={{maxWidth: 500}}>
+        <Card mode="outlined" style={{ maxWidth: 500 }}>
           <Card.Cover
             source={{
               uri: `${apiURL}/users/${username}/banner`,
@@ -194,23 +196,23 @@ function Settings() {
           <Card.Title
             title={String(username)}
             titleVariant="titleLarge"
-            titleStyle={{fontWeight: 'bold'}}
+            titleStyle={{ fontWeight: 'bold' }}
             right={signOutButton}
           />
         </Card>
       )}
-      <Card mode="outlined" style={{marginTop: 15, maxWidth: 500}}>
+      <Card mode="outlined" style={{ marginTop: 15, maxWidth: 500 }}>
         <Card.Content>
           <View style={g.inline}>
             <Switch
               value={shouldFilter}
               onValueChange={val => setShouldFilter(val)}
             />
-            <Text style={{marginLeft: 10}} variant="labelLarge">
+            <Text style={{ marginLeft: 10 }} variant="labelLarge">
               Profanity filter
             </Text>
           </View>
-          <View style={{...g.inline, marginTop: 10}}>
+          <View style={{ ...g.inline, marginTop: 10 }}>
             <Button
               mode="contained-tonal"
               onPress={() => setShowChangelog(true)}>

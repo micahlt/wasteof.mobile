@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {View, FlatList} from 'react-native';
+import { View, FlatList } from 'react-native';
 import {
   Text,
   IconButton,
@@ -8,18 +8,18 @@ import {
   AnimatedFAB,
   useTheme,
 } from 'react-native-paper';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import Post from './components/Post';
 import g from '../styles/Global.module.css';
-import {GlobalContext} from '../App';
+import { GlobalContext } from '../App';
 import Changelog from './components/Changelog';
-import {version as appVersion} from '../package.json';
-import {apiURL} from './apiURL';
-import {wasteofURL} from './apiURL';
+import { version as appVersion } from '../package.json';
+import { apiURL } from './apiURL';
+import { wasteofURL } from './apiURL';
 import links from '../utils/links';
 
 function Feed() {
-  const {colors} = useTheme();
+  const { colors } = useTheme();
   const navigation = useNavigation();
   const [posts, setPosts] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
@@ -92,7 +92,7 @@ function Feed() {
   const openNotifs = async () => {
     navigation.navigate('notifications');
   };
-  const onScroll = ({nativeEvent}) => {
+  const onScroll = ({ nativeEvent }) => {
     const currentScrollPosition =
       Math.floor(nativeEvent?.contentOffset?.y) ?? 0;
 
@@ -128,19 +128,19 @@ function Feed() {
     </View>
   );
   const listLoading = (
-    <View style={{paddingTop: 20, paddingBottom: 30}}>
+    <View style={{ paddingTop: 20, paddingBottom: 30 }}>
       {!isRefreshing && (
         <Button
           loading={isLoading}
           mode="contained-tonal"
-          style={{marginLeft: 'auto', marginRight: 'auto'}}
+          style={{ marginLeft: 'auto', marginRight: 'auto' }}
           onPress={handleLoadMore}>
           Load more
         </Button>
       )}
     </View>
   );
-  const renderItem = React.useCallback(({item}) => <Post post={item} />, []);
+  const renderItem = React.useCallback(({ item }) => <Post post={item} />, []);
   return (
     <View
       style={{
@@ -175,10 +175,11 @@ function Feed() {
           windowSize={21}
         />
       ) : (
-        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+        <View
+          style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
           <Text
             variant="titleLarge"
-            style={{width: '70%', textAlign: 'center', marginBottom: 10}}>
+            style={{ width: '70%', textAlign: 'center', marginBottom: 10 }}>
             Get the most out of wasteof.mobile
           </Text>
           <Button
