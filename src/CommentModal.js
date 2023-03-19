@@ -48,7 +48,7 @@ const CommentModal = ({ postId, closeModal }) => {
     return <></>;
   };
   const renderItem = React.useCallback(
-    ({ item }) => <Comment comment={item} />,
+    ({ item }) => <Comment comment={item} depth={1} />,
     [],
   );
   return (

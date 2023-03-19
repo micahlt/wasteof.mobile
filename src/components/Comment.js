@@ -16,9 +16,8 @@ const Comment = React.memo(
     const { width } = useWindowDimensions();
     const [filteredHTML, setFilteredHTML] = React.useState(null);
     const [replies, setReplies] = React.useState([]);
-    const [replyPage, setReplyPage] = React.useState([]);
     const { shouldFilter } = React.useContext(GlobalContext);
-    const MAX_DEPTH = 6;
+    const MAX_DEPTH = 5;
     React.useEffect(() => {
       if (shouldFilter && !filteredHTML) {
         filter(comment.content)
@@ -31,11 +30,17 @@ const Comment = React.memo(
       } else if (!shouldFilter && !filteredHTML) {
         setFilteredHTML(comment.content);
       }
-      fetch(`${apiURL}/comments/${comment._id}/replies?page=${replyPage}`)
-        .then(res => res.json())
-        .then(data => {
-          setReplies([...replies, ...data.comments]);
-        });
+      const getReplies = page => {
+        fetch(`${apiURL}/comments/${comment._id}/replies?page=${1}`)
+          .then(res => res.json())
+          .then(data => {
+            setReplies([...replies, ...data.comments]);
+            if (!data.last) {
+              getReplies(page + 1);
+            }
+          });
+      };
+      getReplies(1);
     }, []);
     const ImageRenderer = ({ tnode }) => {
       return <AutoImage source={tnode.attributes.src} />;
@@ -72,7 +77,7 @@ const Comment = React.memo(
         <Card
           style={{
             ...(inNotif ? {} : s.regularComment),
-            marginLeft: inNotif ? 0 : (depth || 1) * 10,
+            marginLeft: inNotif ? 0 : depth * 10,
           }}
           mode="outlined">
           <Card.Content
@@ -97,7 +102,7 @@ const Comment = React.memo(
         </Card>
         {replies.map(reply => (
           <Comment
-            depth={(depth | 1) + 1}
+            depth={depth <= MAX_DEPTH ? depth + 1 : depth}
             comment={reply}
             key={reply._id}
             originalPoster={comment.poster.name}
