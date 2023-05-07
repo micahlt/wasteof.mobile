@@ -7,7 +7,7 @@ import links from '../utils/links';
 import Comment from './components/Comment';
 
 const CommentModal = ({ postId, closeModal }) => {
-  const { username: myUsername, token } = React.useContext(GlobalContext);
+  // const { username: myUsername, token } = React.useContext(GlobalContext);
   const { colors } = useTheme();
   const [comments, setComments] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
@@ -25,7 +25,6 @@ const CommentModal = ({ postId, closeModal }) => {
         return res.json();
       })
       .then(json => {
-        console.log(json);
         setComments([...comments, ...json.comments]);
         setPage(page + 1);
         setIsRefreshing(false);
@@ -53,7 +52,7 @@ const CommentModal = ({ postId, closeModal }) => {
   );
   return (
     <>
-      <Appbar style={{ backgroundColor: colors.elevation.level2 }}>
+      <Appbar style={{ backgroundColor: colors.elevation.level2, zIndex: 1 }}>
         <Appbar.BackAction onPress={closeModal} />
         <Appbar.Content title="Comments" />
         <Appbar.Action
