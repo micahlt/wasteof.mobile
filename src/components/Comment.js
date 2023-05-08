@@ -95,47 +95,49 @@ const Comment = React.memo(
               paddingVertical: 0,
               paddingBottom: 15,
             }}>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'flex-start',
-                justifyContent: 'center',
-              }}>
-              <UserChip username={comment.poster.name} />
-              {isReply && (
-                <Text
-                  variant="labelLarge"
-                  style={{
-                    opacity: 0.6,
-                    fontWeight: 'normal',
-                    marginTop: 5,
-                    marginRight: 10,
-                  }}>
-                  to {originalPoster}
-                </Text>
-              )}
-              {comment.poster.name == username && (
-                <Tooltip title="Delete comment">
-                  <IconButton
-                    icon="delete"
-                    size={16}
-                    style={{ margin: 0 }}
-                    onPress={() => deleteHandler(comment._id)}
-                  />
-                </Tooltip>
-              )}
-              <IconButton
-                icon="reply"
-                size={16}
-                onPress={() =>
-                  replyHandler({
-                    username: comment.poster.name,
-                    id: comment._id,
-                  })
-                }
-                style={{ margin: 0 }}
-              />
-            </View>
+            {!inNotif && (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'flex-start',
+                  justifyContent: 'center',
+                }}>
+                <UserChip username={comment.poster.name} />
+                {isReply && (
+                  <Text
+                    variant="labelLarge"
+                    style={{
+                      opacity: 0.6,
+                      fontWeight: 'normal',
+                      marginTop: 5,
+                      marginRight: 10,
+                    }}>
+                    to {originalPoster}
+                  </Text>
+                )}
+                {comment.poster.name == username && (
+                  <Tooltip title="Delete comment">
+                    <IconButton
+                      icon="delete"
+                      size={16}
+                      style={{ margin: 0 }}
+                      onPress={() => deleteHandler(comment._id)}
+                    />
+                  </Tooltip>
+                )}
+                <IconButton
+                  icon="reply"
+                  size={16}
+                  onPress={() =>
+                    replyHandler({
+                      username: comment.poster.name,
+                      id: comment._id,
+                    })
+                  }
+                  style={{ margin: 0 }}
+                />
+              </View>
+            )}
             {filteredHTML && <WebDisplay html={comment.content} />}
           </Card.Content>
         </Card>
