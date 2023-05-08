@@ -24,7 +24,7 @@ const Comment = React.memo(
     const { width } = useWindowDimensions();
     const [filteredHTML, setFilteredHTML] = React.useState(null);
     const [replies, setReplies] = React.useState([]);
-    const { shouldFilter, username, token } = React.useContext(GlobalContext);
+    const { shouldFilter, username } = React.useContext(GlobalContext);
     const MAX_DEPTH = 5;
     React.useEffect(() => {
       if (shouldFilter && !filteredHTML) {
@@ -146,6 +146,8 @@ const Comment = React.memo(
             key={reply._id}
             originalPoster={comment.poster.name}
             isReply={true}
+            deleteHandler={deleteHandler}
+            replyHandler={replyHandler}
           />
         ))}
       </>
