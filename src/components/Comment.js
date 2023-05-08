@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Text, Card, useTheme } from 'react-native-paper';
+import { Text, Card, useTheme, IconButton, Tooltip } from 'react-native-paper';
 import { View, useWindowDimensions } from 'react-native';
 import RenderHtml from 'react-native-render-html';
 import s from '../../styles/Comment.module.css';
@@ -11,12 +11,20 @@ import UserChip from './UserChip';
 import { apiURL } from '../apiURL';
 
 const Comment = React.memo(
-  ({ comment, depth, originalPoster, isReply, inNotif }) => {
+  ({
+    comment,
+    depth,
+    originalPoster,
+    isReply,
+    inNotif,
+    replyHandler,
+    deleteHandler,
+  }) => {
     const { colors } = useTheme();
     const { width } = useWindowDimensions();
     const [filteredHTML, setFilteredHTML] = React.useState(null);
     const [replies, setReplies] = React.useState([]);
-    const { shouldFilter } = React.useContext(GlobalContext);
+    const { shouldFilter, username, token } = React.useContext(GlobalContext);
     const MAX_DEPTH = 5;
     React.useEffect(() => {
       if (shouldFilter && !filteredHTML) {
@@ -40,7 +48,7 @@ const Comment = React.memo(
             }
           });
       };
-      getReplies(1);
+      if (!inNotif) getReplies(1);
     }, []);
     const ImageRenderer = ({ tnode }) => {
       return <AutoImage source={tnode.attributes.src} />;
@@ -87,15 +95,46 @@ const Comment = React.memo(
               paddingVertical: 0,
               paddingBottom: 15,
             }}>
-            <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'flex-start',
+                justifyContent: 'center',
+              }}>
               <UserChip username={comment.poster.name} />
               {isReply && (
                 <Text
                   variant="labelLarge"
-                  style={{ opacity: 0.6, fontWeight: 'normal' }}>
-                  reply to {originalPoster}
+                  style={{
+                    opacity: 0.6,
+                    fontWeight: 'normal',
+                    marginTop: 5,
+                    marginRight: 10,
+                  }}>
+                  to {originalPoster}
                 </Text>
               )}
+              {comment.poster.name == username && (
+                <Tooltip title="Delete comment">
+                  <IconButton
+                    icon="delete"
+                    size={16}
+                    style={{ margin: 0 }}
+                    onPress={() => deleteHandler(comment._id)}
+                  />
+                </Tooltip>
+              )}
+              <IconButton
+                icon="reply"
+                size={16}
+                onPress={() =>
+                  replyHandler({
+                    username: comment.poster.name,
+                    id: comment._id,
+                  })
+                }
+                style={{ margin: 0 }}
+              />
             </View>
             {filteredHTML && <WebDisplay html={comment.content} />}
           </Card.Content>
