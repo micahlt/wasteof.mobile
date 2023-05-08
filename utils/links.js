@@ -8,7 +8,6 @@ import rgbHex from 'rgb-hex';
  * @param {string} [color] - a color for the InAppBrowser toolbar
  */
 const open = async (url, color) => {
-  console.log(color);
   if (await InAppBrowser.isAvailable()) {
     await InAppBrowser.open(url, {
       toolbarColor: color

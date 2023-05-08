@@ -61,11 +61,9 @@ const CommentModal = ({ postId, closeModal }) => {
       }),
     })
       .then(res => {
-        console.log(res);
         return res.json();
       })
       .then(data => {
-        console.log(data);
         setIsCommenting(false);
         refresh();
       });
