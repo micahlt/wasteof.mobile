@@ -23,17 +23,20 @@ const App = () => {
   const [notificationCount, setNotificationCount] = React.useState(0);
   const [didGet, setDidGet] = React.useState(false);
   const [changelogViewed, setChangelogViewed] = React.useState(null);
+  const [allAccounts, setAllAccounts] = React.useState(null);
   React.useEffect(() => {
     Promise.all([
       AsyncStorage.getItem('filter'),
       AsyncStorage.getItem('username'),
       AsyncStorage.getItem('token'),
       AsyncStorage.getItem('changelogViewed'),
+      AsyncStorage.getItem('accounts'),
     ]).then(vals => {
       setShouldFilter(vals[0] == 'true' ? true : false);
       setUsername(vals[1]);
       setToken(vals[2]);
       setChangelogViewed(vals[3]);
+      setAllAccounts(vals[4] ? JSON.parse(vals[4]) : []);
       setDidGet(true);
     });
   }, []);
@@ -51,6 +54,8 @@ const App = () => {
         changelogViewed,
         username,
         setUsername,
+        allAccounts,
+        setAllAccounts,
         token,
         setToken,
         notificationCount,

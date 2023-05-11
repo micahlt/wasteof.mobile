@@ -22,20 +22,17 @@ const Changelog = ({ closeExternal, dismissable }) => {
         </Dialog.Title>
         <Dialog.ScrollArea style={{ padding: 10 }}>
           <Paragraph style={{ marginBottom: 5 }}>
-            This release includes some major additions! Here's what's new:
+            This release includes a much-requested feature! Here's what's new:
           </Paragraph>
           <Paragraph style={{ marginLeft: 10 }}>
-            &bull; Writing new comments
+            &bull; Switch between accounts
           </Paragraph>
           <Paragraph style={{ marginLeft: 10 }}>
-            &bull; Replying to comments
-          </Paragraph>
-          <Paragraph style={{ marginLeft: 10 }}>
-            &bull; Deleting your own comments
+            &bull; Minor bugfixes
           </Paragraph>
           <Paragraph style={{ marginTop: 5 }}>
-            User experience improvements to this feature are coming soon, with
-            post creation and user walls on the way as well!
+            Post creation, better notifications, and user walls are on the way,
+            so keep an eye out!
           </Paragraph>
         </Dialog.ScrollArea>
         <Dialog.Actions>
