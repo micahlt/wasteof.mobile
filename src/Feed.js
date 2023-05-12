@@ -20,8 +20,8 @@ import { apiURL } from './apiURL';
 import { wasteofURL } from './apiURL';
 import links from '../utils/links';
 import EditorModal from './EditorModal';
-import uniqueMerge from '../utils/uniquemerge';
 import timeSort from '../utils/timeSort';
+import uniqueMerge from '../utils/uniqueMerge';
 
 function Feed() {
   const { colors } = useTheme();
