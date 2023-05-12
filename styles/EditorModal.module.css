@@ -1,0 +1,13 @@
+.toolbar {
+  flex-direction: row;
+  padding-left: 5;
+}
+
+.formatIcon {
+  margin-right: 0;
+  margin-left: 0;
+}
+
+.underlineStyle {
+  border-radius: 0;
+}

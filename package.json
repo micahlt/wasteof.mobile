@@ -11,6 +11,7 @@
     "postinstall": "patch-package"
   },
   "dependencies": {
+    "@accordproject/markdown-it-underline": "^0.14.2-20211025125152",
     "@babel/plugin-proposal-export-namespace-from": "^7.18.9",
     "@react-native-async-storage/async-storage": "^1.18.1",
     "@react-navigation/core": "^6.4.8",
@@ -19,6 +20,8 @@
     "bad-words": "^3.0.4",
     "linkify-html": "^3.0.5",
     "linkifyjs": "^3.0.5",
+    "markdown-it": "^13.0.1",
+    "markdown-it-mark": "^3.0.1",
     "react": "18.2.0",
     "react-native": "0.71.7",
     "react-native-gesture-handler": "^2.10.0",

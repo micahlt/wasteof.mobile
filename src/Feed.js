@@ -6,6 +6,8 @@ import {
   Badge,
   Button,
   AnimatedFAB,
+  Portal,
+  Modal,
   useTheme,
 } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
@@ -17,6 +19,7 @@ import { version as appVersion } from '../package.json';
 import { apiURL } from './apiURL';
 import { wasteofURL } from './apiURL';
 import links from '../utils/links';
+import EditorModal from './EditorModal';
 
 function Feed() {
   const { colors } = useTheme();
@@ -26,6 +29,12 @@ function Feed() {
   const [isRefreshing, setIsRefreshing] = React.useState(true);
   const [isExtended, setIsExtended] = React.useState(true);
   const [page, setPage] = React.useState(1);
+  const [modalOpen, setModalOpen] = React.useState(false);
+  const showModal = () => setModalOpen(true);
+  const hideModal = shouldRefresh => {
+    setModalOpen(false);
+    if (shouldRefresh) refresh();
+  };
   const {
     username,
     token,
@@ -42,8 +51,8 @@ function Feed() {
     }
   }, [token]);
   const refresh = () => {
-    setIsRefreshing(true);
     setPosts([]);
+    setIsRefreshing(true);
     fetchPosts(null, true);
   };
   const fetchMessages = () => {
@@ -69,15 +78,40 @@ function Feed() {
   const fetchPosts = (e, isInitial) => {
     setIsLoading(true);
     if (isInitial) {
+      setPosts([]);
       setPage(1);
       fetchMessages();
     }
-    fetch(`${apiURL}/users/${username}/following/posts?page=${page}`)
+    fetch(
+      `${apiURL}/users/${username}/following/posts?page=${
+        isInitial ? 1 : page
+      }&cachebust=${isInitial ? Math.floor(Math.random() * 100) : 0}`,
+      {
+        headers: isInitial
+          ? {
+              'Cache-Control': 'no-cache',
+              pragma: 'no-cache',
+            }
+          : {},
+      },
+    )
       .then(response => {
         return response.json();
       })
       .then(json => {
-        setPosts([...posts, ...json.posts]);
+        let map = new Map();
+        [...posts, ...json.posts].forEach(item => {
+          if (!map.has(item._id)) {
+            map.set(item._id, item);
+          }
+        });
+        setPosts(
+          Array.from(map.values()).sort((a, b) => {
+            if (a.time > b.time) return -1;
+            if (a.time < b.time) return 1;
+            return 0;
+          }),
+        );
         setPage(page + 1);
         setIsLoading(false);
         setIsRefreshing(false);
@@ -87,7 +121,7 @@ function Feed() {
       });
   };
   const handleFab = async () => {
-    links.open(`${wasteofURL}/posts/new`, colors.primary);
+    showModal();
   };
   const openNotifs = async () => {
     navigation.navigate('notifications');
@@ -190,6 +224,20 @@ function Feed() {
           </Button>
         </View>
       )}
+      <Portal>
+        <Modal
+          visible={modalOpen}
+          onDismiss={hideModal}
+          contentContainerStyle={{
+            flex: 1,
+            justifyContent: 'flex-start',
+            padding: 0,
+            paddingVertical: 0,
+          }}
+          style={{ marginTop: 0 }}>
+          <EditorModal closeModal={hideModal} />
+        </Modal>
+      </Portal>
     </View>
   );
 }
