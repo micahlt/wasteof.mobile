@@ -5,6 +5,7 @@ import {
   IconButton,
   TextInput,
   ProgressBar,
+  Banner,
   useTheme,
 } from 'react-native-paper';
 import MarkdownIt from 'markdown-it';
@@ -14,6 +15,7 @@ import s from '../styles/EditorModal.module.css';
 import { GlobalContext } from '../App';
 import markdownItUnderline from '@accordproject/markdown-it-underline';
 import markdownItMark from 'markdown-it-mark';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const EditorModal = ({ closeModal }) => {
   const { colors } = useTheme();
@@ -21,7 +23,18 @@ const EditorModal = ({ closeModal }) => {
   const [selection, setSelection] = React.useState({ start: 0, end: 0 });
   const [postContent, setPostContent] = React.useState('');
   const [isPosting, setIsPosting] = React.useState(false);
+  const [showBanner, setShowBanner] = React.useState(null);
   const inputRef = React.useRef(null);
+  AsyncStorage.removeItem('editorBanner');
+  React.useEffect(() => {
+    AsyncStorage.getItem('editorBanner').then(value => {
+      if (value == 'seen') {
+        setShowBanner(false);
+      } else {
+        setShowBanner(true);
+      }
+    });
+  }, []);
   const submitPost = () => {
     setIsPosting(true);
     const md = new MarkdownIt().use(markdownItUnderline).use(markdownItMark);
@@ -145,10 +158,27 @@ const EditorModal = ({ closeModal }) => {
           accessibilityLabel="Share post"
         />
       </Appbar>
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1, backgroundColor: colors.surfaceVariant }}>
+        <Banner
+          visible={showBanner === true}
+          actions={[
+            {
+              label: 'Okay, thanks',
+              onPress: () => {
+                AsyncStorage.setItem('editorBanner', 'seen').then(() => {
+                  setShowBanner(false);
+                });
+              },
+            },
+          ]}
+          icon="flask">
+          The post editor is a new feature that's still in beta! You may
+          encounter bugs and issues for the next few weeks until it's fully
+          stable.
+        </Banner>
         <ProgressBar
           indeterminate={isPosting}
-          progress={0}
+          visible={false}
           color={colors.primary}
         />
         <TextInput
