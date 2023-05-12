@@ -22,17 +22,20 @@ const Changelog = ({ closeExternal, dismissable }) => {
         </Dialog.Title>
         <Dialog.ScrollArea style={{ padding: 10 }}>
           <Paragraph style={{ marginBottom: 5 }}>
-            This release includes a much-requested feature! Here's what's new:
+            This release includes a major feature addition! Here's what's new:
           </Paragraph>
           <Paragraph style={{ marginLeft: 10 }}>
-            &bull; Switch between accounts
+            &bull; Create posts in-app
           </Paragraph>
           <Paragraph style={{ marginLeft: 10 }}>
-            &bull; Minor bugfixes
+            &bull; Use Markdown/rich text in posts
+          </Paragraph>
+          <Paragraph style={{ marginLeft: 10 }}>
+            &bull; Comment thread UX improvements
           </Paragraph>
           <Paragraph style={{ marginTop: 5 }}>
-            Post creation, better notifications, and user walls are on the way,
-            so keep an eye out!
+            This update brings wasteof.mobile even closer to full compatibility
+            with the wasteof website!
           </Paragraph>
         </Dialog.ScrollArea>
         <Dialog.Actions>
