@@ -134,7 +134,11 @@ function Notifications() {
             <Avatar.Icon
               size={128}
               icon="email-check-outline"
-              style={{ backgroundColor: 'transparent' }}
+              style={{
+                backgroundColor: colors.elevation.level4,
+                marginTop: 50,
+                marginBottom: 20,
+              }}
             />
             <Text variant="labelLarge">No unread messages</Text>
           </View>

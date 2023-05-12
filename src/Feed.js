@@ -20,6 +20,8 @@ import { apiURL } from './apiURL';
 import { wasteofURL } from './apiURL';
 import links from '../utils/links';
 import EditorModal from './EditorModal';
+import uniqueMerge from '../utils/uniquemerge';
+import timeSort from '../utils/timeSort';
 
 function Feed() {
   const { colors } = useTheme();
@@ -99,19 +101,8 @@ function Feed() {
         return response.json();
       })
       .then(json => {
-        let map = new Map();
-        [...posts, ...json.posts].forEach(item => {
-          if (!map.has(item._id)) {
-            map.set(item._id, item);
-          }
-        });
-        setPosts(
-          Array.from(map.values()).sort((a, b) => {
-            if (a.time > b.time) return -1;
-            if (a.time < b.time) return 1;
-            return 0;
-          }),
-        );
+        let dedupedPosts = uniqueMerge(posts, json.posts, '_id');
+        setPosts(timeSort(dedupedPosts));
         setPage(page + 1);
         setIsLoading(false);
         setIsRefreshing(false);

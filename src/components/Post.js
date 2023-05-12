@@ -136,6 +136,7 @@ const Post = React.memo(({ post, isRepost, repostCount, hideUser }) => {
               justifyContent: 'flex-start',
               padding: 0,
               paddingVertical: 0,
+              backgroundColor: colors.background,
             }}
             style={{ marginTop: 0 }}>
             <CommentModal postId={post._id} closeModal={hideModal} />

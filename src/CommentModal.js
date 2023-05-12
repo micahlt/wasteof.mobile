@@ -3,6 +3,8 @@ import { View, FlatList } from 'react-native';
 import {
   Appbar,
   ActivityIndicator,
+  Avatar,
+  Text,
   useTheme,
   TextInput,
   IconButton,
@@ -26,10 +28,10 @@ const CommentModal = ({ postId, closeModal }) => {
     setIsRefreshing(true);
     setPage(1);
     setComments([]);
-    fetchComments();
+    fetchComments(null, 1);
   };
-  const fetchComments = () => {
-    fetch(`${apiURL}/posts/${postId}/comments?page=${page}`)
+  const fetchComments = (e, forceFirstPage) => {
+    fetch(`${apiURL}/posts/${postId}/comments?page=${forceFirstPage || page}`)
       .then(res => {
         return res.json();
       })
@@ -89,7 +91,29 @@ const CommentModal = ({ postId, closeModal }) => {
     );
   };
   const listHeader = () => {
-    return <></>;
+    return (
+      <>
+        {!isLoading && comments.length == 0 && (
+          <View
+            style={{
+              alignItems: 'center',
+              flex: 1,
+              backgroundColor: colors.background,
+            }}>
+            <Avatar.Icon
+              size={128}
+              icon="comment-remove-outline"
+              style={{
+                backgroundColor: colors.elevation.level4,
+                marginTop: 50,
+                marginBottom: 20,
+              }}
+            />
+            <Text variant="labelLarge">No comments</Text>
+          </View>
+        )}
+      </>
+    );
   };
   const renderItem = React.useCallback(
     ({ item }) => (
@@ -104,7 +128,8 @@ const CommentModal = ({ postId, closeModal }) => {
   );
   return (
     <>
-      <Appbar style={{ backgroundColor: colors.elevation.level2, zIndex: 1 }}>
+      <Appbar.Header
+        style={{ backgroundColor: colors.elevation.level2, zIndex: 1 }}>
         <Appbar.BackAction onPress={closeModal} />
         <Appbar.Content title="Comments" />
         <Appbar.Action
@@ -119,7 +144,7 @@ const CommentModal = ({ postId, closeModal }) => {
           iconColor={colors.secondary}
           accessibilityLabel="Open comments in browser"
         />
-      </Appbar>
+      </Appbar.Header>
       {startComment && (
         <View style={{ flex: 1 }}>
           <FlatList
