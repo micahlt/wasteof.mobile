@@ -10,7 +10,7 @@ import {
 } from 'react-native-paper';
 import MarkdownIt from 'markdown-it';
 import links from '../utils/links';
-import { wasteofURL } from './apiURL';
+import { wasteofURL, apiURL } from './apiURL';
 import s from '../styles/EditorModal.module.css';
 import { GlobalContext } from '../App';
 import markdownItUnderline from '@accordproject/markdown-it-underline';
@@ -39,7 +39,7 @@ const EditorModal = ({ closeModal }) => {
     setIsPosting(true);
     const md = new MarkdownIt().use(markdownItUnderline).use(markdownItMark);
     const post = md.render(postContent).trim();
-    fetch(`https://api.wasteof.money/posts/`, {
+    fetch(`${apiURL}/posts/`, {
       method: 'POST',
       headers: {
         authorization: token,
