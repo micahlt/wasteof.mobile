@@ -51,7 +51,7 @@ const CommentModal = ({ postId, closeModal }) => {
     links.open(`${wasteofURL}/posts/${postId}#comments`);
   };
   const sendComment = () => {
-    fetch(`https://api.wasteof.money/posts/${postId}/comments`, {
+    fetch(`${apiURL}/posts/${postId}/comments`, {
       method: 'POST',
       headers: {
         authorization: token,
@@ -71,7 +71,7 @@ const CommentModal = ({ postId, closeModal }) => {
       });
   };
   const deleteComment = commentId => {
-    fetch(`https://api.wasteof.money/comments/${commentId}`, {
+    fetch(`${apiURL}/comments/${commentId}`, {
       method: 'DELETE',
       headers: {
         authorization: token,

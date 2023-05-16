@@ -17,7 +17,7 @@ import g from '../styles/Global.module.css';
 import RNRestart from 'react-native-restart';
 import { GlobalContext } from '../App';
 import Changelog from './components/Changelog';
-import { apiURL } from './apiURL';
+import { apiURL, wasteofURL } from './apiURL';
 import links from '../utils/links';
 
 function Settings() {
@@ -209,7 +209,7 @@ function Settings() {
                 <Text
                   style={{ ...g.link, color: colors.primary }}
                   onPress={() =>
-                    links.open('https://wasteof.money/rules', colors.primary)
+                    links.open(`${wasteofURL}/rules`, colors.primary)
                   }>
                   Rules
                 </Text>
@@ -246,7 +246,7 @@ function Settings() {
               }}
               variant="bodySmall"
               onPress={() =>
-                links.open('https://wasteof.money/join', colors.primary)
+                links.open(`${wasteofURL}/join`, colors.primary)
               }>
               Don't have an account?
             </Text>
