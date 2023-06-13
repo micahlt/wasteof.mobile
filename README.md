@@ -21,7 +21,6 @@ First, clone the repository, switch to the correct branch, and install your depe
 ```bash
 git clone https://github.com/micahlt/wasteof.mobile
 cd wasteof.mobile
-git checkout reactnative
 npm install
 ```
 
