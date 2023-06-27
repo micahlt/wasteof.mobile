@@ -9,6 +9,7 @@ import {
   Avatar,
 } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { GlobalContext } from '../App';
 import Notif from './components/Notif';
 import s from '../styles/Notifications.module.css';
@@ -35,6 +36,7 @@ function Notifications() {
     if (token) loadNotifications();
   }, [mode]);
   const loadNotifications = n => {
+    AsyncStorage.setItem('lastUnreadNotifCount', '0');
     if (!n) {
       setNotifs([]);
       setIsEnd(false);
