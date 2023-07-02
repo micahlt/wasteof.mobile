@@ -11,6 +11,7 @@ function Feed() {
   const [isRefreshing, setIsRefreshing] = React.useState(false);
   const [query, setQuery] = React.useState('');
   const [page, setPage] = React.useState(1);
+  const [last, setLast] = React.useState(false);
   const onChangeSearch = q => {
     setQuery(q);
     if (q == '') {
@@ -37,6 +38,7 @@ function Feed() {
         setPage(page + 1);
         setIsLoading(false);
         setIsRefreshing(false);
+        setLast(json.last);
       })
       .catch(err => {
         alert(err);
@@ -62,7 +64,7 @@ function Feed() {
   );
   const listLoading = (
     <View style={{ paddingTop: 20, paddingBottom: 30 }}>
-      {!isRefreshing && posts[0] ? (
+      {!isRefreshing && posts[0] && !last ? (
         <Button
           loading={isLoading}
           mode="contained-tonal"
