@@ -12,7 +12,8 @@ import {
 import { GlobalContext } from '../App';
 import { apiURL, wasteofURL } from './apiURL';
 import links from '../utils/links';
-import dedupeArray from '../utils/dedupeArray';
+import uniqueMerge from '../utils/uniqueMerge';
+import timeSort from '../utils/timeSort';
 import Comment from './components/Comment';
 
 const CommentModal = ({ postId, closeModal }) => {
@@ -37,7 +38,7 @@ const CommentModal = ({ postId, closeModal }) => {
         return res.json();
       })
       .then(json => {
-        setComments(dedupeArray([...comments, ...json.comments], '_id'));
+        setComments(timeSort(uniqueMerge(comments, json.comments, '_id')));
         setPage(page + 1);
         setIsRefreshing(false);
         setIsLoading(false);
