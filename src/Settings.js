@@ -13,12 +13,14 @@ import {
 } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Logo from '../static/logo.svg';
-import g from '../styles/Global.module.css';
 import RNRestart from 'react-native-restart';
+import g from '../styles/Global.module.css';
 import { GlobalContext } from '../App';
 import Changelog from './components/Changelog';
 import { apiURL } from './apiURL';
 import links from '../utils/links';
+import initBackgroundFetch from '../utils/initBackgroundFetch';
+import BackgroundFetch from 'react-native-background-fetch';
 
 function Settings() {
   const { colors } = useTheme();
@@ -29,6 +31,28 @@ function Settings() {
   const [localUsername, setLocalUsername] = React.useState('');
   const [showChangelog, setShowChangelog] = React.useState(false);
   const [addingAccount, setAddingAccount] = React.useState(false);
+  const [pushNotifs, setPushNotifs] = React.useState(false);
+  React.useEffect(() => {
+    AsyncStorage.getItem('localNotifsEnabled').then(val => {
+      if (!val) {
+        setPushNotifs(false);
+      } else {
+        setPushNotifs(val === 'true');
+      }
+    });
+  }, []);
+  React.useEffect(() => {
+    AsyncStorage.setItem('localNotifsEnabled', String(pushNotifs)).then(() => {
+      if (pushNotifs) {
+        console.log('BackgroundFetch: STARTED');
+        initBackgroundFetch();
+        BackgroundFetch.start();
+      } else {
+        console.log('BackgroundFetch: STOPPED');
+        BackgroundFetch.stop();
+      }
+    });
+  }, [pushNotifs]);
   const handleCheckbox = () => {
     if (hasAccepted == 'unchecked') {
       accept('checked');
@@ -306,13 +330,22 @@ function Settings() {
       )}
       <Card mode="outlined" style={{ marginTop: 15, maxWidth: 500 }}>
         <Card.Content>
-          <View style={g.inline}>
+          <View style={{ ...g.inline, marginBottom: 8 }}>
             <Switch
               value={shouldFilter}
               onValueChange={val => setShouldFilter(val)}
             />
             <Text style={{ marginLeft: 10 }} variant="labelLarge">
               Profanity filter
+            </Text>
+          </View>
+          <View style={g.inline}>
+            <Switch
+              value={pushNotifs}
+              onValueChange={val => setPushNotifs(val)}
+            />
+            <Text style={{ marginLeft: 10 }} variant="labelLarge">
+              Push notifications
             </Text>
           </View>
           <View style={{ ...g.inline, marginTop: 10 }}>

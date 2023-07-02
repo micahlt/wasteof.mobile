@@ -25,7 +25,6 @@ const EditorModal = ({ closeModal }) => {
   const [isPosting, setIsPosting] = React.useState(false);
   const [showBanner, setShowBanner] = React.useState(null);
   const inputRef = React.useRef(null);
-  AsyncStorage.removeItem('editorBanner');
   React.useEffect(() => {
     AsyncStorage.getItem('editorBanner').then(value => {
       if (value == 'seen') {

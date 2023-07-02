@@ -7,9 +7,9 @@ import { Provider as PaperProvider } from 'react-native-paper';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import BackgroundFetch from 'react-native-background-fetch';
 import { darkTheme, lightTheme } from './src/theme';
-import { Notifications } from 'react-native-notifications';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { apiURL } from './src/apiURL';
+import notifee from '@notifee/react-native';
 
 const Main = () => {
   const [theme, setTheme] = React.useState(null);
@@ -61,22 +61,44 @@ const backgroundFetchHeadlessTask = async event => {
         if (res.status == 200) {
           return res.json();
         } else {
-          alert(`Error ${res.status} - try again later.`);
+          console.error(`Error ${res.status} - try again later.`);
+          BackgroundFetch.finish(event.taskId);
         }
       })
       .then(json => {
         if (lastUnreadNotifCount === String(json.count)) return;
-        Notifications.postLocalNotification({
-          title: `${json.count} unread messages on wasteof.money`,
-          body: 'Tap to check your messages',
-        });
-        BackgroundFetch.finish(event.taskId);
+        notifee
+          .createChannel({
+            id: 'newmessages',
+            name: 'New Messages',
+          })
+          .then(channelId => {
+            notifee.displayNotification({
+              title: `${json.count} unread notifications on wasteof.money`,
+              body: 'Tap to read them now',
+              android: {
+                channelId,
+                pressAction: {
+                  id: 'default',
+                },
+                smallIcon: 'ic_wasteof',
+              },
+            });
+            AsyncStorage.setItem('lastUnreadNotifCount', String(json.count));
+            BackgroundFetch.finish(event.taskId);
+          });
       })
       .catch(err => {
-        alert(err);
+        console.error(err);
+        BackgroundFetch.finish(event.taskId);
       });
+  } else {
+    BackgroundFetch.finish(event.taskId);
   }
 };
 
-/// Now register the handler.
+notifee.onBackgroundEvent(async () => {
+  return;
+});
+
 BackgroundFetch.registerHeadlessTask(backgroundFetchHeadlessTask);
