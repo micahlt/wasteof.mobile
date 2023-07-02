@@ -2,6 +2,8 @@
 
 💸 A mobile app for the wasteof.money social network, written in React Native.
 
+[![](https://github.com/micahlt/wasteof.mobile/blob/master/play/Google_Play_Store_badge_EN.png?raw=true)](https://play.google.com/store/apps/details?id=com.micahlindley.wasteofmobile)
+
 ## Tech Stack
 
 - [React 18.x](https://reactjs.org/)
