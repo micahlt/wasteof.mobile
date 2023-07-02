@@ -8,18 +8,26 @@ import {
   ActivityIndicator,
   useTheme,
 } from 'react-native-paper';
-import ImageColors from 'react-native-image-colors';
 import { InAppBrowser } from 'react-native-inappbrowser-reborn';
 import Post from './components/Post';
 import s from '../styles/UserModal.module.css';
 import { GlobalContext } from '../App';
 import { apiURL, wasteofURL } from './apiURL';
+import getColorFromTheme from '../utils/getColorFromTheme';
 
 const UserModal = ({ username, closeModal }) => {
   const { username: myUsername, token } = React.useContext(GlobalContext);
   const { colors, isDark } = useTheme();
-  const [headerColor, setHeaderColor] = React.useState(colors.surface);
-  const [outlineColor, setOutlineColor] = React.useState(colors.outline);
+  // Brush is the term for wasteof.money's custom profile theming system
+  const [brush, setBrush] = React.useState({
+    headerColor: colors.surface,
+    outlineColor: colors.outline,
+    buttonBg: colors.secondaryContainer,
+    buttonText: colors.onSecondaryContainer,
+  });
+  const [headerTextColor, setHeaderTextColor] = React.useState(
+    colors.secondary,
+  );
   const [data, setData] = React.useState(null);
   const [posts, setPosts] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
@@ -30,19 +38,6 @@ const UserModal = ({ username, closeModal }) => {
   const [isTogglingFollow, setIsTogglingFollow] = React.useState(false);
   const refresh = () => {
     setIsRefreshing(true);
-    ImageColors.getColors(`${apiURL}/users/${username}/banner?optimized=true`, {
-      fallback: colors.surface,
-      cache: true,
-      key: String(Math.random()),
-    })
-      .then(res => {
-        if (isDark) setHeaderColor(res.darkMuted);
-        else setHeaderColor(res.lightMuted);
-        setOutlineColor(res.lightVibrant);
-      })
-      .catch(() => {
-        return;
-      });
     fetch(`${apiURL}/users/${username}`)
       .then(res => {
         return res.json();
@@ -50,6 +45,10 @@ const UserModal = ({ username, closeModal }) => {
       .then(json => {
         setData(json);
         setFollowers(json.stats.followers);
+        if (json.color) {
+          setBrush(getColorFromTheme(json.color, isDark));
+          setHeaderTextColor('#000000');
+        }
       });
     setPage(1);
     setPosts([]);
@@ -107,7 +106,7 @@ const UserModal = ({ username, closeModal }) => {
   const openUser = async () => {
     if (await InAppBrowser.isAvailable()) {
       await InAppBrowser.open(`${wasteofURL}/@${username}`, {
-        toolbarColor: headerColor,
+        toolbarColor: brush.headerColor,
       });
     } else {
       Linking.open(`${wasteofURL}/@${username}`);
@@ -136,14 +135,15 @@ const UserModal = ({ username, closeModal }) => {
           resizeMode="cover"
           style={{
             ...s.avatar,
-            borderColor: outlineColor,
+            borderColor: brush.outlineColor,
           }}
         />
         {data && (
           <View style={s.info}>
             <Button
               icon={following ? 'account-remove' : 'account-plus'}
-              iconColor={colors.onSurface}
+              textColor={brush.buttonText}
+              buttonColor={brush.buttonBg}
               size={20}
               onPress={toggleFollow}
               mode="contained-tonal"
@@ -154,21 +154,21 @@ const UserModal = ({ username, closeModal }) => {
             {data.verified && (
               <IconButton
                 icon="check-decagram"
-                iconColor={colors.primary}
+                iconColor={brush.headerColor || colors.primary}
                 style={s.badge}
               />
             )}
             {data.permissions.admin && (
               <IconButton
                 icon="shield-star"
-                iconColor={colors.primary}
+                iconColor={brush.headerColor || colors.primary}
                 style={s.badge}
               />
             )}
             {data.beta && (
               <IconButton
                 icon="flask-outline"
-                iconColor={colors.primary}
+                iconColor={brush.headerColor || colors.primary}
                 style={s.badge}
               />
             )}
@@ -188,18 +188,24 @@ const UserModal = ({ username, closeModal }) => {
   const renderItem = React.useCallback(({ item }) => <Post post={item} />, []);
   return (
     <>
-      <Appbar style={{ backgroundColor: headerColor }}>
-        <Appbar.BackAction onPress={closeModal} />
-        <Appbar.Content title={username} />
+      <Appbar style={{ backgroundColor: brush.headerColor }}>
+        <Appbar.BackAction
+          onPress={closeModal}
+          color={headerTextColor || colors.secondary}
+        />
+        <Appbar.Content
+          title={username}
+          color={headerTextColor || colors.secondary}
+        />
         <Appbar.Action
           icon="flag-remove"
           onPress={() => {}}
-          iconColor={colors.secondary}
+          iconColor={headerTextColor || colors.secondary}
         />
         <Appbar.Action
           icon="open-in-new"
           onPress={openUser}
-          iconColor={colors.secondary}
+          iconColor={headerTextColor || colors.secondary}
         />
       </Appbar>
       <FlatList
