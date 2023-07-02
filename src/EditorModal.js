@@ -17,7 +17,7 @@ import markdownItUnderline from '@accordproject/markdown-it-underline';
 import markdownItMark from 'markdown-it-mark';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const EditorModal = ({ closeModal }) => {
+const EditorModal = ({ closeModal, repostId }) => {
   const { colors } = useTheme();
   const { token } = React.useContext(GlobalContext);
   const [selection, setSelection] = React.useState({ start: 0, end: 0 });
@@ -46,7 +46,7 @@ const EditorModal = ({ closeModal }) => {
       },
       body: JSON.stringify({
         post: post,
-        repost: null,
+        repost: repostId || null,
       }),
     })
       .then(res => {
@@ -143,7 +143,7 @@ const EditorModal = ({ closeModal }) => {
     <>
       <Appbar style={{ backgroundColor: colors.elevation.level2, zIndex: 1 }}>
         <Appbar.BackAction onPress={() => closeModal(false)} />
-        <Appbar.Content title="New post" />
+        <Appbar.Content title={repostId ? 'New repost' : 'New post'} />
         <Appbar.Action
           icon="open-in-new"
           onPress={browserEditor}

@@ -20,6 +20,7 @@ import AutoImage from './AutoImage';
 import { GlobalContext } from '../../App';
 import { apiURL, wasteofURL } from '../apiURL';
 import CommentModal from '../CommentModal';
+import EditorModal from '../EditorModal';
 
 const Post = React.memo(({ post, isRepost, repostCount, hideUser }) => {
   const { colors } = useTheme();
@@ -28,6 +29,7 @@ const Post = React.memo(({ post, isRepost, repostCount, hideUser }) => {
   const [loved, setLoved] = React.useState(false);
   const [loves, setLoves] = React.useState(post.loves);
   const [modalOpen, setModalOpen] = React.useState(false);
+  const [modalMode, setModalMode] = React.useState('');
   const showModal = () => setModalOpen(true);
   const hideModal = () => setModalOpen(false);
   const [localRepostCount, setLocalRepostCount] = React.useState(
@@ -79,9 +81,11 @@ const Post = React.memo(({ post, isRepost, repostCount, hideUser }) => {
       });
   };
   const handleComment = async () => {
-    // FALLBACK LINK OPENER
-    //  links.open(`${wasteofURL}/posts/${post._id}`, colors.primary);
-    // NEW COMMENT MODAL HANDLER
+    setModalMode('comment');
+    showModal(true);
+  };
+  const handleRepost = async () => {
+    setModalMode('post');
     showModal(true);
   };
   const ImageRenderer = ({ tnode }) => {
@@ -139,7 +143,12 @@ const Post = React.memo(({ post, isRepost, repostCount, hideUser }) => {
               backgroundColor: colors.background,
             }}
             style={{ marginTop: 0 }}>
-            <CommentModal postId={post._id} closeModal={hideModal} />
+            {modalMode === 'comment' && (
+              <CommentModal postId={post._id} closeModal={hideModal} />
+            )}
+            {modalMode === 'post' && (
+              <EditorModal repostId={post._id} closeModal={hideModal} />
+            )}
           </Modal>
         </Portal>
         {!hideUser && (
@@ -187,6 +196,7 @@ const Post = React.memo(({ post, isRepost, repostCount, hideUser }) => {
             animated={false}
             style={s.statButton}
             iconColor={colors.outline}
+            onPress={handleRepost}
           />
           <Text style={{ ...s.stat, color: colors.outline }}>
             {post.reposts}
