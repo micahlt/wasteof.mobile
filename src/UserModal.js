@@ -14,6 +14,7 @@ import s from '../styles/UserModal.module.css';
 import { GlobalContext } from '../App';
 import { apiURL, wasteofURL } from './apiURL';
 import getColorFromTheme from '../utils/getColorFromTheme';
+import { StatusBar } from 'react-native';
 
 const UserModal = ({ username, closeModal }) => {
   const { username: myUsername, token } = React.useContext(GlobalContext);
@@ -46,7 +47,8 @@ const UserModal = ({ username, closeModal }) => {
         setData(json);
         setFollowers(json.stats.followers);
         if (json.color) {
-          setBrush(getColorFromTheme(json.color, isDark));
+          const brushData = getColorFromTheme(json.color, isDark);
+          setBrush(brushData);
           setHeaderTextColor('#000000');
         }
       });
@@ -124,6 +126,11 @@ const UserModal = ({ username, closeModal }) => {
   const listHeader = () => {
     return (
       <>
+        <StatusBar
+          backgroundColor={brush.headerColor}
+          barStyle="dark-content"
+          animated={true}
+        />
         <ImageBackground
           source={{
             uri: `${apiURL}/users/${username}/banner?optimized=true`,

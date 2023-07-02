@@ -5,7 +5,7 @@ import {
   NavigationContainer,
   useNavigation,
 } from '@react-navigation/native';
-import { Easing, Linking } from 'react-native';
+import { Easing, Linking, StatusBar } from 'react-native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { Portal, useTheme } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -77,6 +77,11 @@ const App = () => {
       }}>
       {didGet && (
         <NavigationContainer theme={theme} linking={deepLinkConfig}>
+          <StatusBar
+            backgroundColor={theme.colors.background}
+            barStyle="light-content"
+            animated={true}
+          />
           <Portal.Host>
             <Tab.Navigator
               sceneAnimationType="shifting"

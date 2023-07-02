@@ -5,7 +5,9 @@ import { apiURL } from '../apiURL';
 const UserChip = ({ username, inline, lastInline }) => {
   const [modalOpen, setModalOpen] = React.useState(false);
   const showModal = () => setModalOpen(true);
-  const hideModal = () => setModalOpen(false);
+  const hideModal = () => {
+    setModalOpen(false);
+  };
   return (
     <>
       <Portal>

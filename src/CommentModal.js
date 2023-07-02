@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, FlatList } from 'react-native';
+import { View, FlatList, StatusBar } from 'react-native';
 import {
   Appbar,
   ActivityIndicator,
@@ -128,6 +128,7 @@ const CommentModal = ({ postId, closeModal }) => {
   );
   return (
     <>
+      <StatusBar backgroundColor={colors.elevation.level2} animated={true} />
       <Appbar.Header
         style={{ backgroundColor: colors.elevation.level2, zIndex: 1 }}>
         <Appbar.BackAction onPress={closeModal} />

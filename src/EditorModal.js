@@ -16,6 +16,7 @@ import { GlobalContext } from '../App';
 import markdownItUnderline from '@accordproject/markdown-it-underline';
 import markdownItMark from 'markdown-it-mark';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { StatusBar } from 'react-native';
 
 const EditorModal = ({ closeModal, repostId }) => {
   const { colors } = useTheme();
@@ -141,6 +142,7 @@ const EditorModal = ({ closeModal, repostId }) => {
   };
   return (
     <>
+      <StatusBar backgroundColor={colors.elevation.level2} animated={true} />
       <Appbar style={{ backgroundColor: colors.elevation.level2, zIndex: 1 }}>
         <Appbar.BackAction onPress={() => closeModal(false)} />
         <Appbar.Content title={repostId ? 'New repost' : 'New post'} />
