@@ -117,13 +117,16 @@ const CommentModal = ({ postId, closeModal }) => {
       </>
     );
   };
-  const renderItem = ({ item }) => (
-    <Comment
-      comment={item}
-      depth={1}
-      replyHandler={startComment}
-      deleteHandler={deleteComment}
-    />
+  const renderItem = React.useCallback(
+    ({ item }) => (
+      <Comment
+        comment={item}
+        depth={1}
+        replyHandler={startComment}
+        deleteHandler={deleteComment}
+      />
+    ),
+    [],
   );
   return (
     <>

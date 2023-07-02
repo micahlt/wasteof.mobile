@@ -153,10 +153,12 @@ const EditorModal = ({ closeModal, repostId }) => {
           accessibilityLabel="Open editor in browser"
         />
         <Appbar.Action
-          icon="check"
+          icon={isPosting ? 'check-all' : 'check'}
+          animated={true}
           onPress={submitPost}
           iconColor={colors.secondary}
           accessibilityLabel="Share post"
+          disabled={isPosting}
         />
       </Appbar>
       <View style={{ flex: 1, backgroundColor: colors.surfaceVariant }}>
@@ -179,7 +181,7 @@ const EditorModal = ({ closeModal, repostId }) => {
         </Banner>
         <ProgressBar
           indeterminate={isPosting}
-          visible={false}
+          visible={isPosting}
           color={colors.primary}
         />
         <TextInput
