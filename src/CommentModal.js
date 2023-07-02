@@ -12,6 +12,7 @@ import {
 import { GlobalContext } from '../App';
 import { apiURL, wasteofURL } from './apiURL';
 import links from '../utils/links';
+import dedupeArray from '../utils/dedupeArray';
 import Comment from './components/Comment';
 
 const CommentModal = ({ postId, closeModal }) => {
@@ -36,7 +37,7 @@ const CommentModal = ({ postId, closeModal }) => {
         return res.json();
       })
       .then(json => {
-        setComments([...comments, ...json.comments]);
+        setComments(dedupeArray([...comments, ...json.comments], '_id'));
         setPage(page + 1);
         setIsRefreshing(false);
         setIsLoading(false);
@@ -78,7 +79,7 @@ const CommentModal = ({ postId, closeModal }) => {
         'Content-Type': 'application/json',
       },
     }).then(() => {
-      refresh();
+      setComments(comments.filter(obj => obj._id != commentId));
     });
   };
   const listLoading = () => {
@@ -115,20 +116,21 @@ const CommentModal = ({ postId, closeModal }) => {
       </>
     );
   };
-  const renderItem = React.useCallback(
-    ({ item }) => (
-      <Comment
-        comment={item}
-        depth={1}
-        replyHandler={startComment}
-        deleteHandler={deleteComment}
-      />
-    ),
-    [],
+  const renderItem = ({ item }) => (
+    <Comment
+      comment={item}
+      depth={1}
+      replyHandler={startComment}
+      deleteHandler={deleteComment}
+    />
   );
   return (
     <>
-      <StatusBar backgroundColor={colors.elevation.level2} animated={true} />
+      <StatusBar
+        backgroundColor={colors.elevation.level2}
+        animated={true}
+        barStyle="light-content"
+      />
       <Appbar.Header
         style={{ backgroundColor: colors.elevation.level2, zIndex: 1 }}>
         <Appbar.BackAction onPress={closeModal} />
