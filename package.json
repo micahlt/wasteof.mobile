@@ -7,8 +7,7 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint .",
-    "postinstall": "patch-package"
+    "lint": "eslint ."
   },
   "dependencies": {
     "@accordproject/markdown-it-underline": "^0.14.2-20211025125152",
@@ -49,7 +48,6 @@
     "babel-plugin-transform-remove-console": "^6.9.4",
     "eslint": "^7.32.0",
     "metro-react-native-babel-preset": "^0.73.10",
-    "patch-package": "^6.5.1",
     "react-native-css-transformer": "^1.2.4",
     "react-native-svg-transformer": "^1.0.0"
   }
