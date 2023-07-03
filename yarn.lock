@@ -1401,10 +1401,10 @@
   resolved "https://registry.npmjs.org/@notifee/react-native/-/react-native-7.8.0.tgz"
   integrity sha512-sx8h62U4FrR4pqlbN1rkgPsdamDt9Tad0zgfO6VtP6rNJq/78k8nxUnh0xIX3WPDcCV8KAzdYCE7+UNvhF1CpQ==
 
-"@react-native-async-storage/async-storage@^1.18.2":
-  version "1.18.2"
-  resolved "https://registry.npmjs.org/@react-native-async-storage/async-storage/-/async-storage-1.18.2.tgz"
-  integrity sha512-dM8AfdoeIxlh+zqgr0o5+vCTPQ0Ru1mrPzONZMsr7ufp5h+6WgNxQNza7t0r5qQ6b04AJqTlBNixTWZxqP649Q==
+"@react-native-async-storage/async-storage@^1.19.0":
+  version "1.19.0"
+  resolved "https://registry.npmjs.org/@react-native-async-storage/async-storage/-/async-storage-1.19.0.tgz"
+  integrity sha512-xOFkz/FaQctD6yNJDur+WnHdSTigOs3pTz6HmfC8X8PYwcnnN3R9UxuWiwsfK8vvT2WioAxUkQt3lB7GySNA2w==
   dependencies:
     merge-options "^3.0.4"
 
@@ -1979,6 +1979,11 @@
   version "1.1.0"
   resolved "https://registry.npmjs.org/@yarnpkg/lockfile/-/lockfile-1.1.0.tgz"
   integrity sha512-GpSwvyXOcOOlV70vbnzjj4fW5xW/FdUF6nQEt1ENy7m4ZCczi1+/buVUPAqmGfqznsORNFzUMjctTIp8a9tuCQ==
+
+"@yz1311/react-native-intent-launcher@^0.3.4":
+  version "0.3.4"
+  resolved "https://registry.npmjs.org/@yz1311/react-native-intent-launcher/-/react-native-intent-launcher-0.3.4.tgz"
+  integrity sha512-Lr298cbkMReGy9d3HuQ2M0fEquNyoBmOANlPX+eUlv10VMlb7Y5W86N4/nDyqBm6aGby0E/b+n9qYFmD3UmALg==
 
 abort-controller@^3.0.0:
   version "3.0.0"

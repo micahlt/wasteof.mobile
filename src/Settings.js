@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Pressable, ScrollView, View } from 'react-native';
+import { Pressable, ScrollView, View, ToastAndroid } from 'react-native';
 import {
   Text,
   Card,
@@ -11,6 +11,7 @@ import {
   useTheme,
   Avatar,
 } from 'react-native-paper';
+import IntentLauncher from '@yz1311/react-native-intent-launcher';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Logo from '../static/logo.svg';
 import RNRestart from 'react-native-restart';
@@ -137,6 +138,16 @@ function Settings() {
           });
         }
       });
+    });
+  };
+  const openLinkHandlingSettings = () => {
+    ToastAndroid.show(
+      'Add wasteof.money as a supported link',
+      ToastAndroid.LONG,
+    );
+    IntentLauncher.startActivity({
+      action: 'android.settings.APP_OPEN_BY_DEFAULT_SETTINGS',
+      data: 'package:com.micahlindley.wasteofmobile',
     });
   };
   const authButtons = () => {
@@ -347,6 +358,11 @@ function Settings() {
             <Text style={{ marginLeft: 10 }} variant="labelLarge">
               Push notifications
             </Text>
+          </View>
+          <View style={{ ...g.inline, marginTop: 10 }}>
+            <Button mode="contained-tonal" onPress={openLinkHandlingSettings}>
+              Allow handling wasteof links
+            </Button>
           </View>
           <View style={{ ...g.inline, marginTop: 10 }}>
             <Button
