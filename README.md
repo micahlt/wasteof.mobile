@@ -26,7 +26,7 @@ cd wasteof.mobile
 npm install
 ```
 
-Next, set up your Android environment. There's some great documentation on this by the React Native team [here](https://reactnative.dev/docs/environment-setup). Hopefully soon I'll set up a Docker image that will make this a lot easier!
+Next, set up your Android environment. There's some great documentation on this by the React Native team [here](https://reactnative.dev/docs/environment-setup). You can also use a Docker container like https://github.com/mreichelt/docker-android that has good presets for Android development.
 
 ### Connect a device or emulator
 
