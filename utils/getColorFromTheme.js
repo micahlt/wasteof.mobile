@@ -1,8 +1,8 @@
 /**
- *
+ * Brush palette generator based on wasteof4 alpha
  * @param {string} colorString a color word from the wasteof2 API
  * @param {bool} isDark whether a dark theme is active
- * @returns {object} containing a headerColor and outlineColor
+ * @returns {object} an object containing `headerColor`, `outlineColor`, `buttonBg`, and `buttonText`
  */
 const getColorFromTheme = (colorString, isDark) => {
   switch (colorString) {
@@ -157,6 +157,23 @@ const getColorFromTheme = (colorString, isDark) => {
           outlineColor: '#c2410c',
           buttonBg: '#fed7aa',
           buttonText: '#7c2d12',
+        };
+      }
+    }
+    default: {
+      if (isDark) {
+        return {
+          headerColor: '#818cf8',
+          outlineColor: '#4338ca',
+          buttonBg: '#312e81',
+          buttonText: '#a5b4fc',
+        };
+      } else {
+        return {
+          headerColor: '#818cf8',
+          outlineColor: '#4338ca',
+          buttonBg: '#c7d2fe',
+          buttonText: '#312e81',
         };
       }
     }

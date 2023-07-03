@@ -96,8 +96,8 @@ android {
         applicationId "com.micahlindley.wasteofmobile"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 23
-        versionName "2.4.5"
+        versionCode 25
+        versionName "2.5.1"
     }
 
     splits {

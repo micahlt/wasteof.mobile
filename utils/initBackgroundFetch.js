@@ -1,4 +1,7 @@
 import BackgroundFetch from 'react-native-background-fetch';
+/**
+ * Initializes the background fetch protocol for local notifications
+ */
 const initBackgroundFetch = async () => {
   const status = await BackgroundFetch.configure(
     {

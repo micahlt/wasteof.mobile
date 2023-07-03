@@ -49,7 +49,11 @@ const Post = React.memo(({ post, isRepost, repostCount, hideUser }) => {
       setFilteredHTML(post.content);
     }
     if (token) {
-      fetch(`${apiURL}/posts/${post._id}/loves/${username}`)
+      fetch(`${apiURL}/posts/${post._id}/loves/${username}`, {
+        headers: {
+          Authorization: token,
+        },
+      })
         .then(res => {
           return res.json();
         })
