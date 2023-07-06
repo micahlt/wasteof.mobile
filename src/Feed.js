@@ -205,7 +205,7 @@ function Feed() {
           <Text
             variant="titleLarge"
             style={{ width: '70%', textAlign: 'center', marginBottom: 10 }}>
-            Get the most out of wasteof.mobile
+            Get the most out of wasteof for Android
           </Text>
           <Button
             mode="contained-tonal"
