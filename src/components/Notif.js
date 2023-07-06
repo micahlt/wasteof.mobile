@@ -24,7 +24,9 @@ const Notif = React.memo(({ notif, changeReadStatus }) => {
           paddingBottom: 15,
         }}>
         <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
-          <UserChip username={notif.data.actor.name} />
+          {t != 'admin_notification' && (
+            <UserChip username={notif.data.actor.name} />
+          )}
           <Text
             variant="labelLarge"
             style={{ opacity: 0.6, fontWeight: 'normal' }}>

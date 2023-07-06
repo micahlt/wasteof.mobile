@@ -34,7 +34,7 @@ const App = () => {
   React.useEffect(() => {
     notifee.getInitialNotification().then(n => {
       if (n) {
-        Linking.openURL('wasteofmobile://messages');
+        Linking.openURL('wasteof://messages');
       }
     });
     Promise.all([

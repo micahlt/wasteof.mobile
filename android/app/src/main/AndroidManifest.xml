@@ -11,15 +11,17 @@
         <category android:name="android.intent.category.DEFAULT"/>
         <category android:name="android.intent.category.BROWSABLE"/>
         <data android:scheme="wasteofmobile"/>
+        <data android:scheme="wasteof"/>
       </intent-filter>
       <intent-filter>
-        <action android:name="android.intent.action.VIEW" android:autoVerify="true" />
-        <category android:name="android.intent.category.DEFAULT" />
-        <category android:name="android.intent.category.BROWSABLE" />
-        <data android:scheme="http" />
-        <data android:scheme="https" />
-        <data android:host="wasteof.money" />
-    </intent-filter>
+        <action android:name="android.intent.action.VIEW" android:autoVerify="true"/>
+        <category android:name="android.intent.category.DEFAULT"/>
+        <category android:name="android.intent.category.BROWSABLE"/>
+        <data android:scheme="http"/>
+        <data android:scheme="https"/>
+        <data android:host="wasteof.money"/>
+        <data android:scheme="wasteof"/>
+      </intent-filter>
     </activity>
   </application>
 </manifest>

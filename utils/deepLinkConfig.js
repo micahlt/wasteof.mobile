@@ -1,6 +1,8 @@
 const config = {
   screens: {
-    home: '',
+    home: {
+      path: '',
+    },
     notifications: 'messages',
     explore: 'explore',
     search: 'search',
@@ -9,7 +11,7 @@ const config = {
 };
 
 const linking = {
-  prefixes: ['wasteofmobile://', 'https://wasteof.money'],
+  prefixes: ['wasteofmobile://', 'https://wasteof.money', 'wasteof://'],
   config,
 };
 

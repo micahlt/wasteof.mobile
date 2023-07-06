@@ -18,7 +18,7 @@ import linkifyHtml from 'linkify-html';
 import UserChip from './UserChip';
 import AutoImage from './AutoImage';
 import { GlobalContext } from '../../App';
-import { apiURL, wasteofURL } from '../apiURL';
+import { apiURL } from '../apiURL';
 import CommentModal from '../CommentModal';
 import EditorModal from '../EditorModal';
 
