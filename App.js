@@ -1,10 +1,6 @@
 import React from 'react';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
-import {
-  Link,
-  NavigationContainer,
-  useNavigation,
-} from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import { Easing, Linking, StatusBar } from 'react-native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { Portal, useTheme } from 'react-native-paper';
@@ -18,9 +14,8 @@ import Notifications from './src/Notifications';
 import notifee from '@notifee/react-native';
 import deepLinkConfig from './utils/deepLinkConfig';
 import initBackgroundFetch from './utils/initBackgroundFetch';
-import UserModal from './src/UserModal';
-const Tab = createMaterialBottomTabNavigator();
 
+const Tab = createMaterialBottomTabNavigator();
 export const GlobalContext = React.createContext();
 const App = () => {
   const theme = useTheme();
