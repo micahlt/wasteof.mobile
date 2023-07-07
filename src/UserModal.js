@@ -62,9 +62,7 @@ const UserModal = ({ username, closeModal }) => {
         return res.json();
       })
       .then(json => {
-        let newArr = [...posts, ...json.posts];
-        newArr.shift();
-        setPosts(newArr);
+        setPosts([...posts, ...json.posts]);
         setPage(page + 1);
         setIsRefreshing(false);
         setIsLoading(false);
