@@ -76,8 +76,8 @@ android {
         applicationId "com.micahlindley.wasteofmobile"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 27
-        versionName "2.5.4"
+        versionCode 28
+        versionName "2.5.5"
     }
 
     signingConfigs {
