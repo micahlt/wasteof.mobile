@@ -23,16 +23,17 @@ const Changelog = ({ closeExternal, dismissable }) => {
         </Dialog.Title>
         <Dialog.ScrollArea style={{ padding: 10 }}>
           <Paragraph style={{ marginBottom: 5 }}>
-            wasteof.mobile is now{' '}
-            <Text style={{ fontFamily: 'space_bold' }}>
-              wasteof for Android
-            </Text>
-            , the official way to access wasteof.money on Android devices! This
-            means that you can expect even more features that a third-party
-            client simply can't have, like social login.
+            This release includes minor improvements and bug fixes. Here's
+            what's new:
           </Paragraph>
-          <Paragraph style={{ marginTop: 5 }}>
-            We're super excited to bring you more official features soon!
+          <Paragraph style={{ marginLeft: 10 }}>
+            &bull; Comment posting fixes
+          </Paragraph>
+          <Paragraph style={{ marginLeft: 10 }}>
+            &bull; Added users to search page
+          </Paragraph>
+          <Paragraph style={{ marginLeft: 10 }}>
+            &bull; Updated Android target version
           </Paragraph>
         </Dialog.ScrollArea>
         <Dialog.Actions>
