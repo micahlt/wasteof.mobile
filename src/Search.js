@@ -52,6 +52,10 @@ function Feed() {
       .then(json => {
         setUsers(json.results);
         setLoadState(loadState - 1);
+        setIsRefreshing(false);
+      })
+      .catch(err => {
+        alert(err);
       });
   };
   const handleLoadMore = () => {
@@ -104,24 +108,28 @@ function Feed() {
     </View>
   );
   const renderItem = React.useCallback(
-    ({ item, index }) =>
-      index > 0 ? (
-        <Post post={item} />
-      ) : (
-        <React.Fragment key="userList">
-          {users.length > 0 && (
-            <UserList
-              userObjects={users}
-              style={{
-                marginLeft: -3,
-                marginBottom: 0,
-                marginTop: 0,
-                marginRight: -10,
-              }}
-            />
-          )}
-        </React.Fragment>
-      ),
+    ({ item, index }) => {
+      if (index > 0) {
+        return <Post post={item} key={item._id} />;
+      } else {
+        return (
+          <React.Fragment key={index}>
+            {users.length > 0 && (
+              <UserList
+                userObjects={users}
+                style={{
+                  marginLeft: -3,
+                  marginBottom: 0,
+                  marginTop: 0,
+                  marginRight: -10,
+                }}
+                key={index}
+              />
+            )}
+          </React.Fragment>
+        );
+      }
+    },
     [users],
   );
   return (
