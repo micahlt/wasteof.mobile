@@ -3,11 +3,13 @@ import { View, FlatList } from 'react-native';
 import { Avatar, Button, Searchbar, Text, useTheme } from 'react-native-paper';
 import { apiURL } from './apiURL';
 import Post from './components/Post';
+import UserList from './components/UserList';
 
 function Feed() {
   const { colors } = useTheme();
   const [posts, setPosts] = React.useState([]);
-  const [isLoading, setIsLoading] = React.useState(false);
+  const [users, setUsers] = React.useState([]);
+  const [loadState, setLoadState] = React.useState(2);
   const [isRefreshing, setIsRefreshing] = React.useState(false);
   const [query, setQuery] = React.useState('');
   const [page, setPage] = React.useState(1);
@@ -17,48 +19,56 @@ function Feed() {
     if (q == '') {
       setPage(1);
       setPosts([]);
+      setUsers([]);
+      setLoadState(2);
     }
   };
   const refresh = () => {
     setIsRefreshing(true);
     setPosts([]);
+    setUsers([]);
+    setLoadState(2);
   };
-  const searchPosts = isInitial => {
-    setIsLoading(true);
+  const search = isInitial => {
+    setLoadState(2);
     if (isInitial) {
       setPage(1);
       setIsRefreshing(true);
     }
     fetch(`${apiURL}/search/posts?q=${query}&page=${page}`)
-      .then(response => {
-        return response.json();
-      })
+      .then(response => response.json())
       .then(json => {
         setPosts([...posts, ...json.results]);
         setPage(page + 1);
-        setIsLoading(false);
+        setLoadState(loadState - 1);
         setIsRefreshing(false);
         setLast(json.last);
       })
       .catch(err => {
         alert(err);
       });
+    fetch(`${apiURL}/search/users?q=${query}`)
+      .then(response => response.json())
+      .then(json => {
+        setUsers(json.results);
+        setLoadState(loadState - 1);
+      });
   };
   const handleLoadMore = () => {
-    if (!isLoading) {
-      searchPosts(false);
+    if (loadState == 0) {
+      search(false);
     }
   };
   const listHeader = (
-    <View style={{ padding: 10 }}>
+    <View>
       <Searchbar
         placeholder="Search"
         onChangeText={onChangeSearch}
         value={query}
         elevation={5}
         autoFocus={true}
-        onSubmitEditing={searchPosts}
-        style={{ borderRadius: 10 }}
+        onSubmitEditing={search}
+        style={{ borderRadius: 10, margin: 10 }}
       />
     </View>
   );
@@ -66,7 +76,7 @@ function Feed() {
     <View style={{ paddingTop: 20, paddingBottom: 30 }}>
       {!isRefreshing && posts[0] && !last ? (
         <Button
-          loading={isLoading}
+          loading={loadState > 0}
           mode="contained-tonal"
           style={{ marginLeft: 'auto', marginRight: 'auto' }}
           onPress={handleLoadMore}>
@@ -93,7 +103,27 @@ function Feed() {
       )}
     </View>
   );
-  const renderItem = React.useCallback(({ item }) => <Post post={item} />, []);
+  const renderItem = React.useCallback(
+    ({ item, index }) =>
+      index > 0 ? (
+        <Post post={item} />
+      ) : (
+        <React.Fragment key="userList">
+          {users.length > 0 && (
+            <UserList
+              userObjects={users}
+              style={{
+                marginLeft: -3,
+                marginBottom: 0,
+                marginTop: 0,
+                marginRight: -10,
+              }}
+            />
+          )}
+        </React.Fragment>
+      ),
+    [users],
+  );
   return (
     <View
       style={{
@@ -102,7 +132,7 @@ function Feed() {
       }}>
       <FlatList
         stickyHeaderIndices={[0]}
-        data={posts}
+        data={[{}, ...posts]}
         keyExtractor={item => item._id}
         renderItem={renderItem}
         ListHeaderComponent={listHeader}

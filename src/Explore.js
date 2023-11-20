@@ -12,6 +12,7 @@ import Post from './components/Post';
 import UserChip from './components/UserChip';
 import g from '../styles/Global.module.css';
 import { apiURL } from './apiURL';
+import UserList from './components/UserList';
 
 function Explore() {
   const { colors } = useTheme();
@@ -102,25 +103,7 @@ function Explore() {
       <Text variant="titleLarge" style={g.header}>
         Top users
       </Text>
-      <ScrollView
-        horizontal={true}
-        showsHorizontalScrollIndicator={false}
-        style={{
-          paddingTop: 10,
-          paddingBottom: 10,
-          paddingLeft: 20,
-          paddingRight: 0,
-          marginLeft: -20,
-        }}>
-        {topUsers.map((username, i) => (
-          <UserChip
-            username={username}
-            inline={true}
-            key={username}
-            lastInline={i == topUsers.length - 1}
-          />
-        ))}
-      </ScrollView>
+      <UserList userNames={topUsers} style={{ marginLeft: -20 }} />
       <Text variant="titleLarge" style={g.header}>
         {timePeriod.text}
       </Text>

@@ -9,7 +9,6 @@ import {
   useTheme,
 } from 'react-native-paper';
 import { useWindowDimensions } from 'react-native';
-import links from '../../utils/links';
 import RenderHtml from 'react-native-render-html';
 import ago from 's-ago';
 import s from '../../styles/Post.module.css';
