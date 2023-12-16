@@ -27,11 +27,6 @@ const App = () => {
   const [changelogViewed, setChangelogViewed] = React.useState(null);
   const [allAccounts, setAllAccounts] = React.useState(null);
   React.useEffect(() => {
-    notifee.getInitialNotification().then(n => {
-      if (n) {
-        Linking.openURL('wasteof://messages');
-      }
-    });
     Promise.all([
       AsyncStorage.getItem('filter'),
       AsyncStorage.getItem('username'),
@@ -52,6 +47,15 @@ const App = () => {
   React.useEffect(() => {
     AsyncStorage.setItem('filter', String(shouldFilter));
   }, [shouldFilter]);
+  React.useEffect(() => {
+    if (didGet) {
+      notifee.getInitialNotification().then(n => {
+        if (n != null) {
+          Linking.openURL('wasteof://messages');
+        }
+      });
+    }
+  }, [didGet]);
   const genTabIcon = (e, active, inactive) => {
     return <Icon name={e.focused ? active : inactive || active} size={24} />;
   };

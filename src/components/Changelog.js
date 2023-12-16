@@ -27,10 +27,8 @@ const Changelog = ({ closeExternal, dismissable }) => {
             what's new:
           </Paragraph>
           <Paragraph style={{ marginLeft: 10 }}>
-            &bull; Themed icon for Android 13+
-          </Paragraph>
-          <Paragraph style={{ marginLeft: 10 }}>
-            &bull; Shorter app name on home screen
+            &bull; Automatically open messages page when notifications are
+            clicked
           </Paragraph>
         </Dialog.ScrollArea>
         <Dialog.Actions>

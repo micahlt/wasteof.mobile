@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, FlatList } from 'react-native';
+import { View, FlatList, Linking } from 'react-native';
 import {
   Text,
   IconButton,
@@ -17,8 +17,6 @@ import { GlobalContext } from '../App';
 import Changelog from './components/Changelog';
 import { version as appVersion } from '../package.json';
 import { apiURL } from './apiURL';
-import { wasteofURL } from './apiURL';
-import links from '../utils/links';
 import EditorModal from './EditorModal';
 import timeSort from '../utils/timeSort';
 import uniqueMerge from '../utils/uniqueMerge';
@@ -115,7 +113,8 @@ function Feed() {
     showModal();
   };
   const openNotifs = async () => {
-    navigation.navigate('notifications');
+    Linking.openURL('wasteof://messages');
+    // navigation.navigate('notifications');
   };
   const onScroll = ({ nativeEvent }) => {
     const currentScrollPosition =
