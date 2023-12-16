@@ -27,13 +27,10 @@ const Changelog = ({ closeExternal, dismissable }) => {
             what's new:
           </Paragraph>
           <Paragraph style={{ marginLeft: 10 }}>
-            &bull; Comment posting fixes
+            &bull; Themed icon for Android 13+
           </Paragraph>
           <Paragraph style={{ marginLeft: 10 }}>
-            &bull; Added users to search page
-          </Paragraph>
-          <Paragraph style={{ marginLeft: 10 }}>
-            &bull; Updated Android target version
+            &bull; Shorter app name on home screen
           </Paragraph>
         </Dialog.ScrollArea>
         <Dialog.Actions>

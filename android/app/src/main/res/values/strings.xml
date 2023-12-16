@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">wasteof for Android</string>
+    <string name="short_name">wasteof</string>
 </resources>
