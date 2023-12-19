@@ -113,7 +113,7 @@ function Feed() {
         return <Post post={item} key={item._id} />;
       } else {
         return (
-          <React.Fragment key={index}>
+          <React.Fragment key={item._id}>
             {users.length > 0 && (
               <UserList
                 userObjects={users}
@@ -123,7 +123,7 @@ function Feed() {
                   marginTop: 0,
                   marginRight: -10,
                 }}
-                key={index}
+                key={`WASTEOF_INTERNAL_0}`}
               />
             )}
           </React.Fragment>
@@ -140,7 +140,7 @@ function Feed() {
       }}>
       <FlatList
         stickyHeaderIndices={[0]}
-        data={[{}, ...posts]}
+        data={[{ _id: `WASTEOF_INTERNAL_0` }, ...posts]}
         keyExtractor={item => item._id}
         renderItem={renderItem}
         ListHeaderComponent={listHeader}

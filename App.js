@@ -3,12 +3,14 @@ import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { Easing, Linking, StatusBar } from 'react-native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Portal, useTheme } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Feed from './src/Feed';
 import Explore from './src/Explore';
 import Settings from './src/Settings';
 import Search from './src/Search';
+import UserPage from './src/UserPage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Notifications from './src/Notifications';
 import notifee from '@notifee/react-native';
@@ -16,6 +18,8 @@ import deepLinkConfig from './utils/deepLinkConfig';
 import initBackgroundFetch from './utils/initBackgroundFetch';
 
 const Tab = createMaterialBottomTabNavigator();
+const Stack = createNativeStackNavigator();
+
 export const GlobalContext = React.createContext();
 const App = () => {
   const theme = useTheme();
@@ -82,6 +86,13 @@ const App = () => {
             animated={true}
           />
           <Portal.Host>
+            <Stack.Navigator
+              initialRouteName="parent"
+              screenOptions={{
+                headerShown: false,
+              }}>
+              <Stack.Screen name="parent">
+                {() => (
             <Tab.Navigator
               sceneAnimationType="shifting"
               sceneAnimationEnabled={true}
@@ -130,6 +141,14 @@ const App = () => {
                 }}
               />
             </Tab.Navigator>
+                )}
+              </Stack.Screen>
+              <Stack.Screen
+                name="users"
+                component={UserPage}
+                options={{ animation: 'fade_from_bottom' }}
+              />
+            </Stack.Navigator>
           </Portal.Host>
         </NavigationContainer>
       )}

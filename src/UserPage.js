@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   useTheme,
 } from 'react-native-paper';
+import { useFocusEffect } from '@react-navigation/core';
 import { InAppBrowser } from 'react-native-inappbrowser-reborn';
 import Post from './components/Post';
 import s from '../styles/UserModal.module.css';
@@ -15,8 +16,10 @@ import { GlobalContext } from '../App';
 import { apiURL, wasteofURL } from './apiURL';
 import getColorFromTheme from '../utils/getColorFromTheme';
 import { StatusBar } from 'react-native';
+import { goBackIfCan } from '../utils/goBackIfCan';
 
-const UserModal = ({ username, closeModal }) => {
+const UserPage = ({ route, navigation }) => {
+  const { username } = route.params;
   const { username: myUsername, token } = React.useContext(GlobalContext);
   const { colors, isDark } = useTheme();
   // Brush is the term for wasteof.money's custom profile theming system
@@ -68,22 +71,33 @@ const UserModal = ({ username, closeModal }) => {
         setIsLoading(false);
       });
   };
-  React.useEffect(() => {
-    if (token) {
-      refresh();
-      fetch(`${apiURL}/users/${username}/followers/${myUsername}`)
-        .then(res => {
-          return res.json();
-        })
-        .then(json => {
-          if (json) {
-            setFollowing(true);
-          } else {
-            setFollowing(false);
-          }
-        });
-    }
-  }, [token]);
+  useFocusEffect(
+    React.useCallback(() => {
+      setData(null);
+      setFollowers(null);
+      setFollowing(null);
+      setBrush({
+        headerColor: colors.surface,
+        outlineColor: colors.outline,
+        buttonBg: colors.secondaryContainer,
+        buttonText: colors.onSecondaryContainer,
+      });
+      if (token) {
+        refresh();
+        fetch(`${apiURL}/users/${username}/followers/${myUsername}`)
+          .then(res => {
+            return res.json();
+          })
+          .then(json => {
+            if (json) {
+              setFollowing(true);
+            } else {
+              setFollowing(false);
+            }
+          });
+      }
+    }, [token]),
+  );
   const toggleFollow = () => {
     setIsTogglingFollow(true);
     fetch(`${apiURL}/users/${username}/followers`, {
@@ -197,7 +211,7 @@ const UserModal = ({ username, closeModal }) => {
     <>
       <Appbar style={{ backgroundColor: brush.headerColor }}>
         <Appbar.BackAction
-          onPress={closeModal}
+          onPress={() => goBackIfCan(navigation)}
           color={headerTextColor || colors.secondary}
         />
         <Appbar.Content
@@ -235,4 +249,4 @@ const UserModal = ({ username, closeModal }) => {
   );
 };
 
-export default UserModal;
+export default UserPage;

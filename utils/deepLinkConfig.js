@@ -1,12 +1,15 @@
 const config = {
   screens: {
-    home: {
-      path: '',
-    },
+    parent: {
+      screens: {
+        home: '',
     notifications: 'messages',
     explore: 'explore',
     search: 'search',
     settings: 'settings',
+      },
+    },
+    users: 'users/:username',
   },
 };
 
