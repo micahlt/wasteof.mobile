@@ -40,6 +40,7 @@ function Settings() {
   const [showChangelog, setShowChangelog] = React.useState(false);
   const [addingAccount, setAddingAccount] = React.useState(false);
   const [pushNotifs, setPushNotifs] = React.useState(false);
+  const [showPinnedPosts, setShowPinnedPosts] = React.useState(null);
   React.useEffect(() => {
     AsyncStorage.getItem('localNotifsEnabled').then(val => {
       if (!val) {
@@ -48,7 +49,21 @@ function Settings() {
         setPushNotifs(val === 'true');
       }
     });
+    AsyncStorage.getItem('showPinnedPosts').then(val => {
+      if (!val) {
+        AsyncStorage.setItem('showPinnedPosts', 'true');
+        setShowPinnedPosts(true);
+      } else if (val === 'false') {
+        setShowPinnedPosts(false);
+      } else {
+        setShowPinnedPosts(val === 'true');
+      }
+    });
   }, []);
+  React.useEffect(() => {
+    if (showPinnedPosts === null) return;
+    AsyncStorage.setItem('showPinnedPosts', String(showPinnedPosts));
+  }, [showPinnedPosts]);
   React.useEffect(() => {
     AsyncStorage.setItem('localNotifsEnabled', String(pushNotifs)).then(() => {
       if (pushNotifs) {
@@ -374,6 +389,15 @@ function Settings() {
         mode="outlined"
         style={{ marginTop: 15, maxWidth: 500, marginBottom: 50 }}>
         <Card.Content>
+          <View style={{ ...g.inline, marginBottom: 8 }}>
+            <Switch
+              value={showPinnedPosts}
+              onValueChange={val => setShowPinnedPosts(val)}
+            />
+            <Text style={{ marginLeft: 10 }} variant="labelLarge">
+              Show pinned posts
+            </Text>
+          </View>
           <View style={{ ...g.inline, marginBottom: 8 }}>
             <Switch
               value={shouldFilter}

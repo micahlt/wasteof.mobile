@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View } from 'react-native';
+import { ToastAndroid, View } from 'react-native';
 import {
   Card,
   IconButton,
@@ -7,6 +7,7 @@ import {
   Portal,
   Modal,
   useTheme,
+  Icon,
 } from 'react-native-paper';
 import { useWindowDimensions } from 'react-native';
 import RenderHtml from 'react-native-render-html';
@@ -21,207 +22,230 @@ import { apiURL } from '../apiURL';
 import CommentModal from '../CommentModal';
 import EditorModal from '../EditorModal';
 
-const Post = React.memo(({ post, isRepost, repostCount, hideUser }) => {
-  const { colors } = useTheme();
-  const { width } = useWindowDimensions();
-  const [filteredHTML, setFilteredHTML] = React.useState(null);
-  const [loved, setLoved] = React.useState(false);
-  const [loves, setLoves] = React.useState(post.loves);
-  const [modalOpen, setModalOpen] = React.useState(false);
-  const [modalMode, setModalMode] = React.useState('');
-  const showModal = () => setModalOpen(true);
-  const hideModal = () => setModalOpen(false);
-  const [localRepostCount, setLocalRepostCount] = React.useState(
-    repostCount || 1,
-  );
-  const { shouldFilter, username, token } = React.useContext(GlobalContext);
-  React.useEffect(() => {
-    if (shouldFilter && !filteredHTML) {
-      filter(post.content)
-        .then(c => {
-          setFilteredHTML(c);
+const Post = React.memo(
+  ({ post, isRepost, repostCount, hideUser, isPinned, brush }) => {
+    const { colors } = useTheme();
+    const { width } = useWindowDimensions();
+    const [filteredHTML, setFilteredHTML] = React.useState(null);
+    const [loved, setLoved] = React.useState(false);
+    const [loves, setLoves] = React.useState(post.loves);
+    const [modalOpen, setModalOpen] = React.useState(false);
+    const [modalMode, setModalMode] = React.useState('');
+    const showModal = () => setModalOpen(true);
+    const hideModal = () => setModalOpen(false);
+    const [localRepostCount, setLocalRepostCount] = React.useState(
+      repostCount || 1,
+    );
+    const { shouldFilter, username, token } = React.useContext(GlobalContext);
+    React.useEffect(() => {
+      if (shouldFilter && !filteredHTML) {
+        filter(post.content)
+          .then(c => {
+            setFilteredHTML(c);
+          })
+          .catch(err => {
+            setFilteredHTML(post.content);
+          });
+      } else if (!shouldFilter && !filteredHTML) {
+        setFilteredHTML(post.content);
+      }
+      if (token) {
+        fetch(`${apiURL}/posts/${post._id}/loves/${username}`, {
+          headers: {
+            Authorization: token,
+          },
         })
-        .catch(err => {
-          setFilteredHTML(post.content);
-        });
-    } else if (!shouldFilter && !filteredHTML) {
-      setFilteredHTML(post.content);
-    }
-    if (token) {
-      fetch(`${apiURL}/posts/${post._id}/loves/${username}`, {
+          .then(res => {
+            return res.json();
+          })
+          .then(json => {
+            if (json) setLoved(true);
+          })
+          .catch(err => {
+            return;
+          });
+      }
+    }, []);
+    const handleLove = () => {
+      fetch(`${apiURL}/posts/${post._id}/loves`, {
+        method: 'POST',
         headers: {
           Authorization: token,
         },
       })
         .then(res => {
+          if (res.status != 200) {
+            alert(`Error code ${res.status}, try again later.`);
+          } else {
+            setLoved(!loved);
+          }
           return res.json();
         })
         .then(json => {
-          if (json) setLoved(true);
-        })
-        .catch(err => {
-          return;
+          setLoves(json.new.loves);
         });
-    }
-  }, []);
-  const handleLove = () => {
-    fetch(`${apiURL}/posts/${post._id}/loves`, {
-      method: 'POST',
-      headers: {
-        Authorization: token,
-      },
-    })
-      .then(res => {
-        if (res.status != 200) {
-          alert(`Error code ${res.status}, try again later.`);
-        } else {
-          setLoved(!loved);
-        }
-        return res.json();
-      })
-      .then(json => {
-        setLoves(json.new.loves);
-      });
-  };
-  const handleComment = async () => {
-    setModalMode('comment');
-    showModal(true);
-  };
-  const handleRepost = async () => {
-    setModalMode('post');
-    showModal(true);
-  };
-  const ImageRenderer = ({ tnode }) => {
+    };
+    const handleComment = async () => {
+      setModalMode('comment');
+      showModal(true);
+    };
+    const handleRepost = async () => {
+      setModalMode('post');
+      showModal(true);
+    };
+    const ImageRenderer = ({ tnode }) => {
+      return (
+        <AutoImage
+          source={tnode.attributes.src}
+          fitWidth={width - 65 * localRepostCount}
+        />
+      );
+    };
+    const WebDisplay = React.memo(function WebDisplay() {
+      return (
+        <RenderHtml
+          source={{
+            html: linkify(filteredHTML),
+          }}
+          contentWidth={width - 65 * localRepostCount}
+          tagsStyles={{
+            a: { color: colors.primary },
+            p: {
+              color: colors.onSurface,
+              fontSize: '1.035rem',
+              marginTop: 0,
+              marginBottom: 0,
+            },
+            h1: {
+              marginTop: 0,
+              marginBottom: 0,
+            },
+            h2: {
+              marginTop: 0,
+              marginBottom: 0,
+            },
+          }}
+          baseStyle={{ color: colors.onSurface }}
+          renderers={{ img: React.useCallback(ImageRenderer, []) }}
+        />
+      );
+    });
     return (
-      <AutoImage
-        source={tnode.attributes.src}
-        fitWidth={width - 65 * localRepostCount}
-      />
-    );
-  };
-  const WebDisplay = React.memo(function WebDisplay() {
-    return (
-      <RenderHtml
-        source={{
-          html: linkify(filteredHTML),
+      <Card
+        style={{
+          ...(isRepost ? s.repostPost : s.regularPost),
+          ...(isPinned ? s.pinnedPost : {}),
+          backgroundColor: colors.elevation.level1,
         }}
-        contentWidth={width - 65 * localRepostCount}
-        tagsStyles={{
-          a: { color: colors.primary },
-          p: {
-            color: colors.onSurface,
-            fontSize: '1.035rem',
-            marginTop: 0,
-            marginBottom: 0,
-          },
-          h1: {
-            marginTop: 0,
-            marginBottom: 0,
-          },
-          h2: {
-            marginTop: 0,
-            marginBottom: 0,
-          },
-        }}
-        baseStyle={{ color: colors.onSurface }}
-        renderers={{ img: React.useCallback(ImageRenderer, []) }}
-      />
-    );
-  });
-  return (
-    <Card
-      style={{
-        ...(isRepost ? s.repostPost : s.regularPost),
-        backgroundColor: colors.elevation.level1,
-      }}
-      mode={isRepost ? 'outlined' : 'elevated'}>
-      <Card.Content style={{ margin: 0, paddingTop: 15, paddingVertical: 0 }}>
-        <Portal>
-          <Modal
-            visible={modalOpen}
-            onDismiss={hideModal}
-            contentContainerStyle={{
-              flex: 1,
-              justifyContent: 'flex-start',
-              padding: 0,
-              paddingVertical: 0,
-              backgroundColor: colors.background,
-            }}
-            style={{ marginTop: 0 }}>
-            {modalMode === 'comment' && (
-              <CommentModal postId={post._id} closeModal={hideModal} />
-            )}
-            {modalMode === 'post' && (
-              <EditorModal repostId={post._id} closeModal={hideModal} />
-            )}
-          </Modal>
-        </Portal>
-        {!hideUser && (
-          <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
-            <UserChip username={post.poster.name} />
-            <Text
-              variant="labelLarge"
-              style={{ opacity: 0.6, fontWeight: 'normal' }}>
-              {ago(new Date(post.time))}
-            </Text>
-          </View>
-        )}
-        {filteredHTML && <WebDisplay html={post.content} />}
-        {post.repost && (
-          <Post
-            post={post.repost}
-            isRepost={true}
-            repostCount={localRepostCount + 1}
-          />
-        )}
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          {loved ? (
-            <IconButton
-              icon="heart"
-              size={20}
-              animated={false}
-              style={s.statButton}
-              iconColor={loved ? colors.primary : colors.outline}
-              onPress={handleLove}
-            />
-          ) : (
-            <IconButton
-              icon="heart-outline"
-              animated={false}
-              size={20}
-              style={s.statButton}
-              iconColor={loved ? colors.primary : colors.outline}
-              onPress={handleLove}
+        mode={isRepost ? 'outlined' : 'elevated'}
+        onLongPress={() => ToastAndroid.show(post._id, ToastAndroid.SHORT)}>
+        <Card.Content style={{ margin: 0, paddingTop: 15, paddingVertical: 0 }}>
+          <Portal>
+            <Modal
+              visible={modalOpen}
+              onDismiss={hideModal}
+              contentContainerStyle={{
+                flex: 1,
+                justifyContent: 'flex-start',
+                padding: 0,
+                paddingVertical: 0,
+                backgroundColor: colors.background,
+              }}
+              style={{ marginTop: 0 }}>
+              {modalMode === 'comment' && (
+                <CommentModal postId={post._id} closeModal={hideModal} />
+              )}
+              {modalMode === 'post' && (
+                <EditorModal repostId={post._id} closeModal={hideModal} />
+              )}
+            </Modal>
+          </Portal>
+          {!hideUser && (
+            <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
+              <UserChip username={post.poster.name} />
+              <Text
+                variant="labelLarge"
+                style={{ opacity: 0.6, fontWeight: 'normal' }}>
+                {ago(new Date(post.time))}
+              </Text>
+            </View>
+          )}
+          {isPinned && (
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'flex-start',
+                marginBottom: 5,
+              }}>
+              <Icon source="pin" size={24} color={brush.headerColor} />
+              <Text
+                variant="titleMedium"
+                style={{
+                  color: brush.buttonText,
+                  lineHeight: 22,
+                  marginLeft: 5,
+                }}>
+                Pinned post
+              </Text>
+            </View>
+          )}
+          {filteredHTML && <WebDisplay html={post.content} />}
+          {post.repost && (
+            <Post
+              post={post.repost}
+              isRepost={true}
+              repostCount={localRepostCount + 1}
             />
           )}
-          <Text style={{ ...s.stat, color: colors.outline }}>{loves}</Text>
-          <IconButton
-            icon="recycle-variant"
-            size={20}
-            animated={false}
-            style={s.statButton}
-            iconColor={colors.outline}
-            onPress={handleRepost}
-          />
-          <Text style={{ ...s.stat, color: colors.outline }}>
-            {post.reposts}
-          </Text>
-          <IconButton
-            icon="comment-outline"
-            size={20}
-            style={s.statButton}
-            animated={false}
-            iconColor={colors.outline}
-            onPress={handleComment}
-          />
-          <Text style={{ ...s.stat, color: colors.outline }}>
-            {post.comments}
-          </Text>
-        </View>
-      </Card.Content>
-    </Card>
-  );
-});
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            {loved ? (
+              <IconButton
+                icon="heart"
+                size={20}
+                animated={false}
+                style={s.statButton}
+                iconColor={loved ? colors.primary : colors.outline}
+                onPress={handleLove}
+              />
+            ) : (
+              <IconButton
+                icon="heart-outline"
+                animated={false}
+                size={20}
+                style={s.statButton}
+                iconColor={loved ? colors.primary : colors.outline}
+                onPress={handleLove}
+              />
+            )}
+            <Text style={{ ...s.stat, color: colors.outline }}>{loves}</Text>
+            <IconButton
+              icon="recycle-variant"
+              size={20}
+              animated={false}
+              style={s.statButton}
+              iconColor={colors.outline}
+              onPress={handleRepost}
+            />
+            <Text style={{ ...s.stat, color: colors.outline }}>
+              {post.reposts}
+            </Text>
+            <IconButton
+              icon="comment-outline"
+              size={20}
+              style={s.statButton}
+              animated={false}
+              iconColor={colors.outline}
+              onPress={handleComment}
+            />
+            <Text style={{ ...s.stat, color: colors.outline }}>
+              {post.comments}
+            </Text>
+          </View>
+        </Card.Content>
+      </Card>
+    );
+  },
+);
 
 Post.whyDidYouRender = {
   logOnDifferentValues: true,

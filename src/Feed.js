@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, FlatList, Linking } from 'react-native';
+import { View, FlatList, Linking, ToastAndroid } from 'react-native';
 import {
   Text,
   IconButton,
@@ -20,6 +20,7 @@ import { apiURL } from './apiURL';
 import EditorModal from './EditorModal';
 import timeSort from '../utils/timeSort';
 import uniqueMerge from '../utils/uniqueMerge';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function Feed() {
   const { colors } = useTheme();

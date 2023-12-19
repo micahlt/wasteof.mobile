@@ -21,6 +21,7 @@ import RenderHtml from 'react-native-render-html';
 import { goBackIfCan } from '../utils/goBackIfCan';
 import ErrorCard from './components/ErrorCard';
 import linkify from '../utils/linkify';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const UserPage = ({ route, navigation }) => {
   const { username } = route.params;
@@ -38,6 +39,7 @@ const UserPage = ({ route, navigation }) => {
   );
   const [data, setData] = React.useState(null);
   const [posts, setPosts] = React.useState([]);
+  const [pinnedPost, setPinnedPost] = React.useState(null);
   const [isLoading, setIsLoading] = React.useState(true);
   const [isRefreshing, setIsRefreshing] = React.useState(true);
   const [page, setPage] = React.useState(1);
@@ -47,6 +49,9 @@ const UserPage = ({ route, navigation }) => {
   const [error, setError] = React.useState(null);
   const refresh = () => {
     setIsRefreshing(true);
+    setPage(1);
+    setPosts([]);
+    setPinnedPost(null);
     fetch(`${apiURL}/users/${username}`)
       .then(async res => {
         if (res.ok) {
@@ -58,8 +63,6 @@ const UserPage = ({ route, navigation }) => {
       .then(json => {
         setData(json);
         setFollowers(json.stats.followers);
-        setPage(1);
-        setPosts([]);
         fetchPosts();
         if (json.color) {
           const brushData = getColorFromTheme(json.color, isDark);
@@ -90,6 +93,13 @@ const UserPage = ({ route, navigation }) => {
       })
       .then(json => {
         setPosts([...posts, ...json.posts]);
+        AsyncStorage.getItem('showPinnedPosts').then(res => {
+          if (res === 'true') {
+            if (json.pinned[0]) {
+              setPinnedPost(json.pinned[0]);
+            }
+          }
+        });
         setPage(page + 1);
         setIsRefreshing(false);
         setIsLoading(false);
@@ -271,6 +281,17 @@ const UserPage = ({ route, navigation }) => {
               horizontalInset={true}
               bold={true}
               style={{ marginTop: 5, marginBottom: 15 }}
+            />
+          </>
+        )}
+        {pinnedPost && (
+          <>
+            <Post
+              post={pinnedPost}
+              isRepost={true}
+              isPinned={true}
+              hideUser={true}
+              brush={brush}
             />
           </>
         )}

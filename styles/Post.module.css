@@ -17,3 +17,9 @@
 .repostPost {
   margin-top: 10;
 }
+
+.pinnedPost {
+  margin-left: 16;
+  margin-right: 16;
+  margin-bottom: 15;
+}
