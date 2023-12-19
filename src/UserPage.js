@@ -7,6 +7,7 @@ import {
   Text,
   ActivityIndicator,
   useTheme,
+  Divider,
 } from 'react-native-paper';
 import { useFocusEffect } from '@react-navigation/core';
 import { InAppBrowser } from 'react-native-inappbrowser-reborn';
@@ -15,9 +16,11 @@ import s from '../styles/UserModal.module.css';
 import { GlobalContext } from '../App';
 import { apiURL, wasteofURL } from './apiURL';
 import getColorFromTheme from '../utils/getColorFromTheme';
-import { StatusBar } from 'react-native';
+import { StatusBar, useWindowDimensions } from 'react-native';
+import RenderHtml from 'react-native-render-html';
 import { goBackIfCan } from '../utils/goBackIfCan';
 import ErrorCard from './components/ErrorCard';
+import linkify from '../utils/linkify';
 
 const UserPage = ({ route, navigation }) => {
   const { username } = route.params;
@@ -169,6 +172,35 @@ const UserPage = ({ route, navigation }) => {
       </View>
     );
   };
+  const WebDisplay = React.memo(function WebDisplay() {
+    const { width } = useWindowDimensions();
+    return (
+      <RenderHtml
+        source={{
+          html: linkify(data.bio),
+        }}
+        contentWidth={width}
+        tagsStyles={{
+          a: { color: colors.primary },
+          p: {
+            color: colors.onSurface,
+            fontSize: '1.035rem',
+            marginTop: 0,
+            marginBottom: 0,
+          },
+          h1: {
+            marginTop: 0,
+            marginBottom: 0,
+          },
+          h2: {
+            marginTop: 0,
+            marginBottom: 0,
+          },
+        }}
+        baseStyle={s.bio}
+      />
+    );
+  });
   const listHeader = () => {
     return (
       <>
@@ -231,10 +263,15 @@ const UserPage = ({ route, navigation }) => {
         )}
         {data?.bio && (
           <>
-            <Text variant="bodyLarge" style={s.heading}>
+            <Text variant="titleMedium" style={s.heading}>
               About me
             </Text>
-            <Text style={s.bio}>{data.bio}</Text>
+            <WebDisplay />
+            <Divider
+              horizontalInset={true}
+              bold={true}
+              style={{ marginTop: 5, marginBottom: 15 }}
+            />
           </>
         )}
       </>
@@ -243,7 +280,7 @@ const UserPage = ({ route, navigation }) => {
   const renderItem = React.useCallback(({ item }) => <Post post={item} />, []);
   return (
     <>
-      <Appbar style={{ backgroundColor: brush.headerColor }}>
+      <Appbar style={{ backgroundColor: brush.headerColor, zIndex: 1 }}>
         <Appbar.BackAction
           onPress={() => goBackIfCan(navigation)}
           color={headerTextColor || colors.secondary}

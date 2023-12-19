@@ -13,8 +13,7 @@ import RenderHtml from 'react-native-render-html';
 import ago from 's-ago';
 import s from '../../styles/Post.module.css';
 import filter from '../../utils/filter';
-import linkify from 'linkify-html';
-import 'linkify-plugin-mention';
+import linkify from '../../utils/linkify';
 import UserChip from './UserChip';
 import AutoImage from './AutoImage';
 import { GlobalContext } from '../../App';
@@ -100,15 +99,11 @@ const Post = React.memo(({ post, isRepost, repostCount, hideUser }) => {
       />
     );
   };
-  const WebDisplay = React.memo(function WebDisplay({ html }) {
+  const WebDisplay = React.memo(function WebDisplay() {
     return (
       <RenderHtml
         source={{
-          html: linkify(filteredHTML, {
-            formatHref: {
-              mention: href => `wasteof://users/${href}`,
-            },
-          }),
+          html: linkify(filteredHTML),
         }}
         contentWidth={width - 65 * localRepostCount}
         tagsStyles={{
