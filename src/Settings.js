@@ -1,5 +1,11 @@
 import * as React from 'react';
-import { Pressable, ScrollView, View, ToastAndroid } from 'react-native';
+import {
+  Pressable,
+  ScrollView,
+  View,
+  ToastAndroid,
+  Linking,
+} from 'react-native';
 import {
   Text,
   Card,
@@ -10,6 +16,7 @@ import {
   IconButton,
   useTheme,
   Avatar,
+  Tooltip,
 } from 'react-native-paper';
 import IntentLauncher from '@yz1311/react-native-intent-launcher';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -142,37 +149,57 @@ function Settings() {
   };
   const openLinkHandlingSettings = () => {
     ToastAndroid.show(
-      'Add wasteof.money as a supported link',
+      'Select wasteof.money as a link to handle',
       ToastAndroid.LONG,
     );
-    IntentLauncher.startActivity({
+    IntentLauncher.isIntentAvailable({
       action: 'android.settings.APP_OPEN_BY_DEFAULT_SETTINGS',
       data: 'package:com.micahlindley.wasteofmobile',
+    }).then(val => {
+      if (val) {
+        IntentLauncher.startActivity({
+          action: 'android.settings.APP_OPEN_BY_DEFAULT_SETTINGS',
+          data: 'package:com.micahlindley.wasteofmobile',
+        });
+      } else {
+        Linking.openSettings();
+      }
     });
   };
   const authButtons = () => {
     return (
       <View style={{ display: 'flex', flexDirection: 'row' }}>
-        <IconButton
-          icon="account-plus-outline"
-          size={20}
-          mode="outlined"
-          onPress={() => setAddingAccount(true)}
-          style={{
-            margin: 0,
-            marginRight: 5,
-            height: 42,
-            width: 42,
-            borderRadius: 42,
-          }}
-          iconColor={colors.primary}
-        />
-        <Button
-          mode="outlined"
-          style={{ marginRight: 16, height: 42 }}
-          onPress={signOut}>
-          Sign Out
-        </Button>
+        <Tooltip title="Add account">
+          <IconButton
+            icon="account-plus-outline"
+            size={20}
+            mode="outlined"
+            onPress={() => setAddingAccount(true)}
+            style={{
+              margin: 0,
+              marginRight: 5,
+              height: 42,
+              width: 42,
+              borderRadius: 42,
+            }}
+            iconColor={colors.primary}
+          />
+        </Tooltip>
+        <Tooltip title="Sign out">
+          <IconButton
+            icon="exit-to-app"
+            size={20}
+            mode="outlined"
+            style={{
+              margin: 0,
+              marginRight: 15,
+              height: 42,
+              width: 42,
+              borderRadius: 42,
+            }}
+            iconColor={colors.primary}
+            onPress={signOut}></IconButton>
+        </Tooltip>
       </View>
     );
   };
@@ -191,7 +218,9 @@ function Settings() {
       )}
       <Text
         variant="titleLarge"
-        style={{ fontWeight: 'bold', marginBottom: 10 }}>
+        style={{
+          marginBottom: 10,
+        }}>
         Settings
       </Text>
       {!username || addingAccount ? (
@@ -288,7 +317,10 @@ function Settings() {
           </Card.Content>
         </Card>
       ) : (
-        <Card mode="outlined" style={{ maxWidth: 500 }}>
+        <Card
+          mode="outlined"
+          style={{ maxWidth: 500 }}
+          onPress={() => Linking.openURL(`wasteof://users/${username}`)}>
           <Card.Cover
             source={{
               uri: `${apiURL}/users/${username}/banner`,
@@ -296,7 +328,6 @@ function Settings() {
           <Card.Title
             title={String(username)}
             titleVariant="titleLarge"
-            titleStyle={{ fontWeight: 'bold' }}
             right={authButtons}
           />
         </Card>
@@ -339,7 +370,9 @@ function Settings() {
           </Card.Content>
         </Card>
       )}
-      <Card mode="outlined" style={{ marginTop: 15, maxWidth: 500 }}>
+      <Card
+        mode="outlined"
+        style={{ marginTop: 15, maxWidth: 500, marginBottom: 50 }}>
         <Card.Content>
           <View style={{ ...g.inline, marginBottom: 8 }}>
             <Switch

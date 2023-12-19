@@ -108,7 +108,6 @@ const Comment = React.memo(
                     variant="labelLarge"
                     style={{
                       opacity: 0.6,
-                      fontWeight: 'normal',
                       marginTop: 5,
                       marginRight: 10,
                     }}>

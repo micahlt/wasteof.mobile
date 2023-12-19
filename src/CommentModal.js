@@ -8,6 +8,7 @@ import {
   useTheme,
   TextInput,
   IconButton,
+  FAB,
 } from 'react-native-paper';
 import { GlobalContext } from '../App';
 import { apiURL, wasteofURL } from './apiURL';
@@ -15,6 +16,7 @@ import links from '../utils/links';
 import uniqueMerge from '../utils/uniqueMerge';
 import timeSort from '../utils/timeSort';
 import Comment from './components/Comment';
+import g from '../styles/Global.module.css';
 
 const CommentModal = ({ postId, closeModal }) => {
   const { username: myUsername, token } = React.useContext(GlobalContext);
@@ -140,12 +142,6 @@ const CommentModal = ({ postId, closeModal }) => {
         <Appbar.BackAction onPress={closeModal} />
         <Appbar.Content title="Comments" />
         <Appbar.Action
-          icon="plus"
-          onPress={() => startComment(null)}
-          iconColor={colors.secondary}
-          accessibilityLabel="New comment"
-        />
-        <Appbar.Action
           icon="open-in-new"
           onPress={openComments}
           iconColor={colors.secondary}
@@ -154,6 +150,13 @@ const CommentModal = ({ postId, closeModal }) => {
       </Appbar.Header>
       {startComment && (
         <View style={{ flex: 1 }}>
+          <FAB
+            onPress={
+              isCommenting ? () => sendComment() : () => startComment(null)
+            }
+            icon={isCommenting ? 'send' : 'pencil-plus'}
+            style={g.fab}
+            variant={isCommenting ? 'primary' : 'secondary'}></FAB>
           <FlatList
             style={{
               paddingTop: 10,
@@ -181,7 +184,7 @@ const CommentModal = ({ postId, closeModal }) => {
                   ? `Reply to ${replyMetadata.username}`
                   : `Write your comment`
               }
-              right={<TextInput.Icon icon="send" onPress={sendComment} />}
+              // right={<TextInput.Icon icon="send" onPress={sendComment} />}
             />
           ) : (
             <></>
