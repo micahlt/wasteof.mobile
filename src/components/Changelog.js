@@ -23,12 +23,23 @@ const Changelog = ({ closeExternal, dismissable }) => {
         </Dialog.Title>
         <Dialog.ScrollArea style={{ padding: 10 }}>
           <Paragraph style={{ marginBottom: 5 }}>
-            This release includes minor improvements and bug fixes. Here's
+            This release includes major brand-new features and bug fixes. Here's
             what's new:
           </Paragraph>
           <Paragraph style={{ marginLeft: 10 }}>
-            &bull; Automatically open messages page when notifications are
-            clicked
+            &bull; Pinned posts (at last 🥳)
+          </Paragraph>
+          <Paragraph style={{ marginLeft: 10 }}>
+            &bull; Mentions in posts and on profiles
+          </Paragraph>
+          <Paragraph style={{ marginLeft: 10 }}>
+            &bull; Improved comments UI
+          </Paragraph>
+          <Paragraph style={{ marginLeft: 10 }}>
+            &bull; Optional deep linking
+          </Paragraph>
+          <Paragraph style={{ marginLeft: 10 }}>
+            &bull; Settings bugfixes
           </Paragraph>
         </Dialog.ScrollArea>
         <Dialog.Actions>
