@@ -22,6 +22,7 @@ import { goBackIfCan } from '../utils/goBackIfCan';
 import ErrorCard from './components/ErrorCard';
 import linkify from '../utils/linkify';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import links from '../utils/links';
 
 const UserPage = ({ route, navigation }) => {
   const { username } = route.params;
@@ -311,8 +312,13 @@ const UserPage = ({ route, navigation }) => {
           color={headerTextColor || colors.secondary}
         />
         <Appbar.Action
-          icon="flag-remove"
+          icon="flag-remove-outline"
           onPress={() => {}}
+          iconColor={headerTextColor || colors.secondary}
+        />
+        <Appbar.Action
+          icon="forum-outline"
+          onPress={() => links.open(`${wasteofURL}/users/${username}/wall`)}
           iconColor={headerTextColor || colors.secondary}
         />
         <Appbar.Action

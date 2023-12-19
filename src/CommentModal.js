@@ -17,8 +17,10 @@ import uniqueMerge from '../utils/uniqueMerge';
 import timeSort from '../utils/timeSort';
 import Comment from './components/Comment';
 import g from '../styles/Global.module.css';
+import { useNavigation } from '@react-navigation/core';
 
 const CommentModal = ({ postId, closeModal }) => {
+  const navigation = useNavigation();
   const { username: myUsername, token } = React.useContext(GlobalContext);
   const { colors } = useTheme();
   const [comments, setComments] = React.useState([]);
@@ -85,6 +87,20 @@ const CommentModal = ({ postId, closeModal }) => {
       setComments(comments.filter(obj => obj._id != commentId));
     });
   };
+  React.useEffect(
+    () =>
+      navigation.addListener('beforeRemove', e => {
+        if (!isCommenting) {
+          // If we don't have unsaved changes, then we don't need to do anything
+          return;
+        }
+
+        // Prevent default behavior of leaving the screen
+        e.preventDefault();
+        setIsCommenting(false);
+      }),
+    [navigation, isCommenting],
+  );
   const listLoading = () => {
     return (
       <View style={{ padding: 20 }}>
@@ -179,6 +195,7 @@ const CommentModal = ({ postId, closeModal }) => {
               multiline={true}
               autoFocus={true}
               onChangeText={setCommentContent}
+              contentStyle={{ paddingRight: 100 }}
               label={
                 replyMetadata
                   ? `Reply to ${replyMetadata.username}`

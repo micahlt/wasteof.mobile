@@ -33,6 +33,9 @@ const Changelog = ({ closeExternal, dismissable }) => {
             &bull; Mentions in posts and on profiles
           </Paragraph>
           <Paragraph style={{ marginLeft: 10 }}>
+            &bull; Shortcut to user walls
+          </Paragraph>
+          <Paragraph style={{ marginLeft: 10 }}>
             &bull; Improved comments UI
           </Paragraph>
           <Paragraph style={{ marginLeft: 10 }}>
