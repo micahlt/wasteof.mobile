@@ -131,7 +131,7 @@ const UserPage = ({ route, navigation }) => {
             }
           });
       }
-    }, [token]),
+    }, [token, route]),
   );
   const toggleFollow = () => {
     setIsTogglingFollow(true);
