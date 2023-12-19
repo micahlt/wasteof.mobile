@@ -17,6 +17,7 @@ import { apiURL, wasteofURL } from './apiURL';
 import getColorFromTheme from '../utils/getColorFromTheme';
 import { StatusBar } from 'react-native';
 import { goBackIfCan } from '../utils/goBackIfCan';
+import ErrorCard from './components/ErrorCard';
 
 const UserPage = ({ route, navigation }) => {
   const { username } = route.params;
@@ -40,35 +41,66 @@ const UserPage = ({ route, navigation }) => {
   const [following, setFollowing] = React.useState(false);
   const [followers, setFollowers] = React.useState(0);
   const [isTogglingFollow, setIsTogglingFollow] = React.useState(false);
+  const [error, setError] = React.useState(null);
   const refresh = () => {
     setIsRefreshing(true);
     fetch(`${apiURL}/users/${username}`)
-      .then(res => {
-        return res.json();
+      .then(async res => {
+        if (res.ok) {
+          return res.json();
+        } else {
+          throw new ErrorCard(res.status);
+        }
       })
       .then(json => {
         setData(json);
         setFollowers(json.stats.followers);
+        setPage(1);
+        setPosts([]);
+        fetchPosts();
         if (json.color) {
           const brushData = getColorFromTheme(json.color, isDark);
           setBrush(brushData);
           setHeaderTextColor('#000000');
         }
+      })
+      .catch(err => {
+        setBrush({ ...brush, headerColor: colors.errorContainer });
+        setHeaderTextColor(colors.onErrorContainer);
+        setError({
+          code: err,
+          message:
+            "Something went wrong while loading this profile.  Maybe it doesn't exist?",
+        });
+        setIsLoading(false);
+        setIsRefreshing(false);
       });
-    setPage(1);
-    setPosts([]);
-    fetchPosts();
   };
   const fetchPosts = () => {
     fetch(`${apiURL}/users/${username}/posts?page=${page}`)
       .then(res => {
-        return res.json();
+        if (res.ok) {
+          return res.json();
+        } else {
+          throw new Error(res.status);
+        }
       })
       .then(json => {
         setPosts([...posts, ...json.posts]);
         setPage(page + 1);
         setIsRefreshing(false);
         setIsLoading(false);
+      })
+      .catch(err => {
+        setError({
+          code: err.message,
+          message:
+            "Something went wrong while loading this profile's posts.  Maybe this user doesn't exist?",
+        });
+        setBrush({ ...brush, headerColor: colors.errorContainer });
+        setHeaderTextColor(colors.onErrorContainer);
+        setIsLoading(false);
+        setIsRefreshing(false);
       });
   };
   useFocusEffect(
@@ -145,55 +177,57 @@ const UserPage = ({ route, navigation }) => {
           barStyle="dark-content"
           animated={true}
         />
-        <ImageBackground
-          source={{
-            uri: `${apiURL}/users/${username}/banner?optimized=true`,
-          }}
-          style={s.imageBackground}
-          resizeMode="cover"></ImageBackground>
-        <Image
-          source={{ uri: `${apiURL}/users/${username}/picture` }}
-          resizeMode="cover"
-          style={{
-            ...s.avatar,
-            borderColor: brush.outlineColor,
-          }}
-        />
         {data && (
-          <View style={s.info}>
-            <Button
-              icon={following ? 'account-remove' : 'account-plus'}
-              textColor={brush.buttonText}
-              buttonColor={brush.buttonBg}
-              size={20}
-              onPress={toggleFollow}
-              mode="contained-tonal"
-              loading={isTogglingFollow}
-              style={{ marginRight: 10 }}>
-              {following ? 'Unfollow' : 'Follow'} ({followers})
-            </Button>
-            {data.verified && (
-              <IconButton
-                icon="check-decagram"
-                iconColor={brush.headerColor || colors.primary}
-                style={s.badge}
-              />
-            )}
-            {data.permissions.admin && (
-              <IconButton
-                icon="shield-star"
-                iconColor={brush.headerColor || colors.primary}
-                style={s.badge}
-              />
-            )}
-            {data.beta && (
-              <IconButton
-                icon="flask-outline"
-                iconColor={brush.headerColor || colors.primary}
-                style={s.badge}
-              />
-            )}
-          </View>
+          <>
+            <ImageBackground
+              source={{
+                uri: `${apiURL}/users/${username}/banner?optimized=true`,
+              }}
+              style={s.imageBackground}
+              resizeMode="cover"></ImageBackground>
+            <Image
+              source={{ uri: `${apiURL}/users/${username}/picture` }}
+              resizeMode="cover"
+              style={{
+                ...s.avatar,
+                borderColor: brush.outlineColor,
+              }}
+            />
+            <View style={s.info}>
+              <Button
+                icon={following ? 'account-remove' : 'account-plus'}
+                textColor={brush.buttonText}
+                buttonColor={brush.buttonBg}
+                size={20}
+                onPress={toggleFollow}
+                mode="contained-tonal"
+                loading={isTogglingFollow}
+                style={{ marginRight: 10 }}>
+                {following ? 'Unfollow' : 'Follow'} ({followers})
+              </Button>
+              {data.verified && (
+                <IconButton
+                  icon="check-decagram"
+                  iconColor={brush.headerColor || colors.primary}
+                  style={s.badge}
+                />
+              )}
+              {data.permissions.admin && (
+                <IconButton
+                  icon="shield-star"
+                  iconColor={brush.headerColor || colors.primary}
+                  style={s.badge}
+                />
+              )}
+              {data.beta && (
+                <IconButton
+                  icon="flask-outline"
+                  iconColor={brush.headerColor || colors.primary}
+                  style={s.badge}
+                />
+              )}
+            </View>
+          </>
         )}
         {data?.bio && (
           <>
@@ -229,6 +263,9 @@ const UserPage = ({ route, navigation }) => {
           iconColor={headerTextColor || colors.secondary}
         />
       </Appbar>
+      {error && (
+        <ErrorCard errorCode={error.code} errorMessage={error.message} />
+      )}
       <FlatList
         style={{
           flex: 1,
