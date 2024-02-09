@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ToastAndroid, View } from 'react-native';
+import { View } from 'react-native';
 import {
   Card,
   IconButton,
@@ -11,6 +11,8 @@ import {
 } from 'react-native-paper';
 import { useWindowDimensions } from 'react-native';
 import RenderHtml from 'react-native-render-html';
+import ViewShot, { captureRef } from 'react-native-view-shot';
+import Share from 'react-native-share';
 import ago from 's-ago';
 import s from '../../styles/Post.module.css';
 import filter from '../../utils/filter';
@@ -37,6 +39,7 @@ const Post = React.memo(
       repostCount || 1,
     );
     const { shouldFilter, username, token } = React.useContext(GlobalContext);
+    const viewRef = React.useRef();
     React.useEffect(() => {
       if (shouldFilter && !filteredHTML) {
         filter(post.content)
@@ -93,6 +96,19 @@ const Post = React.memo(
       setModalMode('post');
       showModal(true);
     };
+    const handleLongPress = () => {
+      console.log('LONG');
+      viewRef.current.capture().then(
+        uri => {
+          console.log('Image saved to', uri);
+          Share.open({
+            url: uri,
+            title: 'Share this post elsewhere',
+          });
+        },
+        error => console.error('Oops, snapshot failed', error),
+      );
+    };
     const ImageRenderer = ({ tnode }) => {
       return (
         <AutoImage
@@ -131,118 +147,125 @@ const Post = React.memo(
       );
     });
     return (
-      <Card
-        style={{
-          ...(isRepost ? s.repostPost : s.regularPost),
-          ...(isPinned ? s.pinnedPost : {}),
-          backgroundColor: colors.elevation.level1,
-        }}
-        mode={isRepost ? 'outlined' : 'elevated'}
-        onLongPress={() => ToastAndroid.show(post._id, ToastAndroid.SHORT)}>
-        <Card.Content style={{ margin: 0, paddingTop: 15, paddingVertical: 0 }}>
-          <Portal>
-            <Modal
-              visible={modalOpen}
-              onDismiss={hideModal}
-              contentContainerStyle={{
-                flex: 1,
-                justifyContent: 'flex-start',
-                padding: 0,
-                paddingVertical: 0,
-                backgroundColor: colors.background,
-              }}
-              style={{ marginTop: 0 }}>
-              {modalMode === 'comment' && (
-                <CommentModal postId={post._id} closeModal={hideModal} />
-              )}
-              {modalMode === 'post' && (
-                <EditorModal repostId={post._id} closeModal={hideModal} />
-              )}
-            </Modal>
-          </Portal>
-          {!hideUser && (
-            <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
-              <UserChip username={post.poster.name} />
-              <Text
-                variant="labelLarge"
-                style={{ opacity: 0.6, fontWeight: 'normal' }}>
-                {ago(new Date(post.time))}
-              </Text>
-            </View>
-          )}
-          {isPinned && (
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'flex-start',
-                marginBottom: 5,
-              }}>
-              <Icon source="pin" size={24} color={brush.headerColor} />
-              <Text
-                variant="titleMedium"
+      <ViewShot
+        ref={viewRef}
+        options={{ format: 'png', quality: 1 }}
+        style={{ backgroundColor: '#ffffff00' }}>
+        <Card
+          style={{
+            ...(isRepost ? s.repostPost : s.regularPost),
+            ...(isPinned ? s.pinnedPost : {}),
+            backgroundColor: colors.elevation.level1,
+          }}
+          innerRef={viewRef}
+          mode={isRepost ? 'outlined' : 'elevated'}
+          onLongPress={handleLongPress}>
+          <Card.Content
+            style={{ margin: 0, paddingTop: 15, paddingVertical: 0 }}>
+            <Portal>
+              <Modal
+                visible={modalOpen}
+                onDismiss={hideModal}
+                contentContainerStyle={{
+                  flex: 1,
+                  justifyContent: 'flex-start',
+                  padding: 0,
+                  paddingVertical: 0,
+                  backgroundColor: colors.background,
+                }}
+                style={{ marginTop: 0 }}>
+                {modalMode === 'comment' && (
+                  <CommentModal postId={post._id} closeModal={hideModal} />
+                )}
+                {modalMode === 'post' && (
+                  <EditorModal repostId={post._id} closeModal={hideModal} />
+                )}
+              </Modal>
+            </Portal>
+            {!hideUser && (
+              <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
+                <UserChip username={post.poster.name} />
+                <Text
+                  variant="labelLarge"
+                  style={{ opacity: 0.6, fontWeight: 'normal' }}>
+                  {ago(new Date(post.time))}
+                </Text>
+              </View>
+            )}
+            {isPinned && (
+              <View
                 style={{
-                  color: brush.buttonText,
-                  lineHeight: 22,
-                  marginLeft: 5,
+                  flexDirection: 'row',
+                  alignItems: 'flex-start',
+                  marginBottom: 5,
                 }}>
-                Pinned post
-              </Text>
-            </View>
-          )}
-          {filteredHTML && <WebDisplay html={post.content} />}
-          {post.repost && (
-            <Post
-              post={post.repost}
-              isRepost={true}
-              repostCount={localRepostCount + 1}
-            />
-          )}
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            {loved ? (
-              <IconButton
-                icon="heart"
-                size={20}
-                animated={false}
-                style={s.statButton}
-                iconColor={loved ? colors.primary : colors.outline}
-                onPress={handleLove}
-              />
-            ) : (
-              <IconButton
-                icon="heart-outline"
-                animated={false}
-                size={20}
-                style={s.statButton}
-                iconColor={loved ? colors.primary : colors.outline}
-                onPress={handleLove}
+                <Icon source="pin" size={24} color={brush.headerColor} />
+                <Text
+                  variant="titleMedium"
+                  style={{
+                    color: brush.buttonText,
+                    lineHeight: 22,
+                    marginLeft: 5,
+                  }}>
+                  Pinned post
+                </Text>
+              </View>
+            )}
+            {filteredHTML && <WebDisplay html={post.content} />}
+            {post.repost && (
+              <Post
+                post={post.repost}
+                isRepost={true}
+                repostCount={localRepostCount + 1}
               />
             )}
-            <Text style={{ ...s.stat, color: colors.outline }}>{loves}</Text>
-            <IconButton
-              icon="recycle-variant"
-              size={20}
-              animated={false}
-              style={s.statButton}
-              iconColor={colors.outline}
-              onPress={handleRepost}
-            />
-            <Text style={{ ...s.stat, color: colors.outline }}>
-              {post.reposts}
-            </Text>
-            <IconButton
-              icon="comment-outline"
-              size={20}
-              style={s.statButton}
-              animated={false}
-              iconColor={colors.outline}
-              onPress={handleComment}
-            />
-            <Text style={{ ...s.stat, color: colors.outline }}>
-              {post.comments}
-            </Text>
-          </View>
-        </Card.Content>
-      </Card>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              {loved ? (
+                <IconButton
+                  icon="heart"
+                  size={20}
+                  animated={false}
+                  style={s.statButton}
+                  iconColor={loved ? colors.primary : colors.outline}
+                  onPress={handleLove}
+                />
+              ) : (
+                <IconButton
+                  icon="heart-outline"
+                  animated={false}
+                  size={20}
+                  style={s.statButton}
+                  iconColor={loved ? colors.primary : colors.outline}
+                  onPress={handleLove}
+                />
+              )}
+              <Text style={{ ...s.stat, color: colors.outline }}>{loves}</Text>
+              <IconButton
+                icon="recycle-variant"
+                size={20}
+                animated={false}
+                style={s.statButton}
+                iconColor={colors.outline}
+                onPress={handleRepost}
+              />
+              <Text style={{ ...s.stat, color: colors.outline }}>
+                {post.reposts}
+              </Text>
+              <IconButton
+                icon="comment-outline"
+                size={20}
+                style={s.statButton}
+                animated={false}
+                iconColor={colors.outline}
+                onPress={handleComment}
+              />
+              <Text style={{ ...s.stat, color: colors.outline }}>
+                {post.comments}
+              </Text>
+            </View>
+          </Card.Content>
+        </Card>
+      </ViewShot>
     );
   },
 );
