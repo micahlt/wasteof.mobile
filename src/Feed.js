@@ -83,7 +83,6 @@ function Feed() {
       setPage(1);
       fetchMessages();
     }
-    console.log('beforeFetch');
     fetch(
       `${apiURL}/users/${username}/following/posts?page=${
         isInitial ? 1 : page
@@ -98,7 +97,6 @@ function Feed() {
       },
     )
       .then(response => {
-        console.log('RES');
         return response.json();
       })
       .then(json => {

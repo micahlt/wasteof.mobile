@@ -11,7 +11,7 @@ import {
 } from 'react-native-paper';
 import { useWindowDimensions } from 'react-native';
 import RenderHtml from 'react-native-render-html';
-import ViewShot, { captureRef } from 'react-native-view-shot';
+import ViewShot from 'react-native-view-shot';
 import Share from 'react-native-share';
 import ago from 's-ago';
 import s from '../../styles/Post.module.css';
@@ -97,13 +97,15 @@ const Post = React.memo(
       showModal(true);
     };
     const handleLongPress = () => {
-      console.log('LONG');
       viewRef.current.capture().then(
         uri => {
-          console.log('Image saved to', uri);
           Share.open({
             url: uri,
+            message: uri,
             title: 'Share this post elsewhere',
+            failOnCancel: false,
+            type: 'image/png',
+            filename: 'wasteof-post.png',
           });
         },
         error => console.error('Oops, snapshot failed', error),
