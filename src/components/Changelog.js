@@ -27,22 +27,14 @@ const Changelog = ({ closeExternal, dismissable }) => {
             what's new:
           </Paragraph>
           <Paragraph style={{ marginLeft: 10 }}>
-            &bull; Pinned posts (at last 🥳)
+            &bull; Optional Material You theming on supported devices running
+            Android 12 and up
           </Paragraph>
           <Paragraph style={{ marginLeft: 10 }}>
-            &bull; Mentions in posts and on profiles
+            &bull; [BETA] Long press posts to share as images
           </Paragraph>
           <Paragraph style={{ marginLeft: 10 }}>
-            &bull; Shortcut to user walls
-          </Paragraph>
-          <Paragraph style={{ marginLeft: 10 }}>
-            &bull; Improved comments UI
-          </Paragraph>
-          <Paragraph style={{ marginLeft: 10 }}>
-            &bull; Optional deep linking
-          </Paragraph>
-          <Paragraph style={{ marginLeft: 10 }}>
-            &bull; Settings bugfixes
+            &bull; Minor bugfixes
           </Paragraph>
         </Dialog.ScrollArea>
         <Dialog.Actions>
