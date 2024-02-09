@@ -7,18 +7,33 @@ import { Provider as PaperProvider } from 'react-native-paper';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import BackgroundFetch from 'react-native-background-fetch';
 import { darkTheme, lightTheme } from './src/theme';
+import { useMaterial3Theme } from '@pchmn/expo-material3-theme';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { apiURL } from './src/apiURL';
 import notifee from '@notifee/react-native';
 
 const Main = () => {
+  const { theme: deviceTheme } = useMaterial3Theme({
+    fallbackSourceColor: '#494bd6',
+  });
+  const { theme: defaultTheme } = useMaterial3Theme({
+    sourceColor: '#494bd6',
+  });
   const [theme, setTheme] = React.useState(null);
-  const updateTheme = () => {
+  const updateTheme = async () => {
+    let useDeviceTheme = await AsyncStorage.getItem('useDeviceTheme');
+    useDeviceTheme = useDeviceTheme != 'false';
     const colorScheme = Appearance.getColorScheme();
     if (colorScheme === 'dark') {
-      setTheme(darkTheme);
+      setTheme({
+        ...darkTheme,
+        colors: useDeviceTheme ? deviceTheme.dark : defaultTheme.dark,
+      });
     } else {
-      setTheme(lightTheme);
+      setTheme({
+        ...lightTheme,
+        colors: useDeviceTheme ? deviceTheme.light : defaultTheme.light,
+      });
     }
   };
   React.useEffect(() => {

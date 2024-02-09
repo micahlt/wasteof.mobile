@@ -41,6 +41,7 @@ function Settings() {
   const [addingAccount, setAddingAccount] = React.useState(false);
   const [pushNotifs, setPushNotifs] = React.useState(false);
   const [showPinnedPosts, setShowPinnedPosts] = React.useState(null);
+  const [useDeviceTheme, setUseDeviceTheme] = React.useState(null);
   React.useEffect(() => {
     AsyncStorage.getItem('localNotifsEnabled').then(val => {
       if (!val) {
@@ -57,6 +58,15 @@ function Settings() {
         setShowPinnedPosts(false);
       } else {
         setShowPinnedPosts(val === 'true');
+      }
+    });
+    AsyncStorage.getItem('useDeviceTheme').then(val => {
+      if (!val) {
+        setUseDeviceTheme(true);
+      } else if (val === 'false') {
+        setUseDeviceTheme(false);
+      } else {
+        setUseDeviceTheme(val === 'true');
       }
     });
   }, []);
@@ -263,6 +273,8 @@ function Settings() {
               style={{ marginBottom: 5 }}
               autoCapitalize="none"
               autoComplete="username"
+              importantForAutofill="yes"
+              autoCorrect={false}
             />
             <TextInput
               label="Password"
@@ -270,7 +282,10 @@ function Settings() {
               onChangeText={text => setPassword(text)}
               mode="outlined"
               secureTextEntry={true}
-              autoComplete="password"
+              autoComplete="current-password"
+              autoCapitalize="none"
+              importantForAutofill="yes"
+              autoCorrect={false}
             />
             <View
               style={{
@@ -389,6 +404,19 @@ function Settings() {
         mode="outlined"
         style={{ marginTop: 15, maxWidth: 500, marginBottom: 50 }}>
         <Card.Content>
+          <View style={{ ...g.inline, marginBottom: 8 }}>
+            <Switch
+              value={useDeviceTheme}
+              onValueChange={val => {
+                AsyncStorage.setItem('useDeviceTheme', String(val)).then(() =>
+                  RNRestart.Restart(),
+                );
+              }}
+            />
+            <Text style={{ marginLeft: 10 }} variant="labelLarge">
+              Use device theme
+            </Text>
+          </View>
           <View style={{ ...g.inline, marginBottom: 8 }}>
             <Switch
               value={showPinnedPosts}
