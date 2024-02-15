@@ -1,7 +1,9 @@
 import * as React from 'react';
-import { Image, Linking, Pressable } from 'react-native';
+import { Image } from 'expo-image';
+import { Linking, Pressable } from 'react-native';
+
 const AutoImage = ({ source, fitWidth = 0 }) => {
-  const [aspect, setAspect] = React.useState(0);
+  const [aspect, setAspect] = React.useState(0.5);
   return (
     <Pressable
       onPress={() => Linking.openURL(source)}
@@ -9,19 +11,15 @@ const AutoImage = ({ source, fitWidth = 0 }) => {
       useForeground={true}
       android_ripple={{ color: 'rgba(0,0,0,0.2)', foreground: true }}>
       <Image
-        source={{ uri: source }}
+        source={source}
         style={{
           width: fitWidth,
           height: fitWidth * aspect,
           borderRadius: 7,
         }}
-        resizeMode="cover"
-        onLoad={({
-          nativeEvent: {
-            source: { width, height },
-          },
-        }) => {
-          setAspect(height / width);
+        contentFit="cover"
+        onLoad={e => {
+          setAspect(e.source.height / e.source.width);
         }}
       />
     </Pressable>
