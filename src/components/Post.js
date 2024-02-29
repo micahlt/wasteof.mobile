@@ -23,6 +23,9 @@ import { GlobalContext } from '../../App';
 import { apiURL } from '../apiURL';
 import CommentModal from '../CommentModal';
 import EditorModal from '../EditorModal';
+import ShowMoreReposts from './ShowMoreReposts';
+
+const MAX_REPOSTS = 5;
 
 const Post = React.memo(
   ({ post, isRepost, repostCount, hideUser, isPinned, brush }) => {
@@ -214,12 +217,14 @@ const Post = React.memo(
               </View>
             )}
             {filteredHTML && <WebDisplay html={post.content} />}
-            {post.repost && (
+            {post.repost && localRepostCount < MAX_REPOSTS ? (
               <Post
                 post={post.repost}
                 isRepost={true}
                 repostCount={localRepostCount + 1}
               />
+            ) : (
+              post.repost && <ShowMoreReposts />
             )}
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               {loved ? (

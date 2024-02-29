@@ -23,18 +23,10 @@ const Changelog = ({ closeExternal, dismissable }) => {
         </Dialog.Title>
         <Dialog.ScrollArea style={{ padding: 10 }}>
           <Paragraph style={{ marginBottom: 5 }}>
-            This release includes major brand-new features and bug fixes. Here's
-            what's new:
+            This release includes features and bug fixes. Here's what's new:
           </Paragraph>
           <Paragraph style={{ marginLeft: 10 }}>
-            &bull; Optional Material You theming on supported devices running
-            Android 12 and up
-          </Paragraph>
-          <Paragraph style={{ marginLeft: 10 }}>
-            &bull; [BETA] Long press posts to share as images
-          </Paragraph>
-          <Paragraph style={{ marginLeft: 10 }}>
-            &bull; Minor bugfixes
+            &bull; Hide big repost chains for performance reasons
           </Paragraph>
         </Dialog.ScrollArea>
         <Dialog.Actions>
