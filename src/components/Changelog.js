@@ -28,6 +28,9 @@ const Changelog = ({ closeExternal, dismissable }) => {
           <Paragraph style={{ marginLeft: 10 }}>
             &bull; Hide big repost chains for performance reasons
           </Paragraph>
+          <Paragraph style={{ marginLeft: 10 }}>
+            &bull; Bring search UI in line with Material 3 guidelines
+          </Paragraph>
         </Dialog.ScrollArea>
         <Dialog.Actions>
           <Button onPress={close}>Close</Button>

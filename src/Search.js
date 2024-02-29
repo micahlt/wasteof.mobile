@@ -69,10 +69,11 @@ function Feed() {
         placeholder="Search"
         onChangeText={onChangeSearch}
         value={query}
-        elevation={5}
+        elevation={3}
         autoFocus={true}
         onSubmitEditing={search}
-        style={{ borderRadius: 10, margin: 10 }}
+        style={{ margin: 10 }}
+        mode="bar"
       />
     </View>
   );
