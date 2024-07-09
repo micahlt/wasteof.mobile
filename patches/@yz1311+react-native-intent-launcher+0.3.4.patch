@@ -1,0 +1,474 @@
+diff --git a/node_modules/@yz1311/react-native-intent-launcher/android/.classpath b/node_modules/@yz1311/react-native-intent-launcher/android/.classpath
+new file mode 100644
+index 0000000..bbe97e5
+--- /dev/null
++++ b/node_modules/@yz1311/react-native-intent-launcher/android/.classpath
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<classpath>
++	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-17/"/>
++	<classpathentry kind="con" path="org.eclipse.buildship.core.gradleclasspathcontainer"/>
++	<classpathentry kind="output" path="bin/default"/>
++</classpath>
+diff --git a/node_modules/@yz1311/react-native-intent-launcher/android/.project b/node_modules/@yz1311/react-native-intent-launcher/android/.project
+new file mode 100644
+index 0000000..d2f849a
+--- /dev/null
++++ b/node_modules/@yz1311/react-native-intent-launcher/android/.project
+@@ -0,0 +1,34 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<projectDescription>
++	<name>yz1311_react-native-intent-launcher</name>
++	<comment>Project yz1311_react-native-intent-launcher created by Buildship.</comment>
++	<projects>
++	</projects>
++	<buildSpec>
++		<buildCommand>
++			<name>org.eclipse.jdt.core.javabuilder</name>
++			<arguments>
++			</arguments>
++		</buildCommand>
++		<buildCommand>
++			<name>org.eclipse.buildship.core.gradleprojectbuilder</name>
++			<arguments>
++			</arguments>
++		</buildCommand>
++	</buildSpec>
++	<natures>
++		<nature>org.eclipse.jdt.core.javanature</nature>
++		<nature>org.eclipse.buildship.core.gradleprojectnature</nature>
++	</natures>
++	<filteredResources>
++		<filter>
++			<id>1720489556791</id>
++			<name></name>
++			<type>30</type>
++			<matcher>
++				<id>org.eclipse.core.resources.regexFilterMatcher</id>
++				<arguments>node_modules|\.git|__CREATED_BY_JAVA_LANGUAGE_SERVER__</arguments>
++			</matcher>
++		</filter>
++	</filteredResources>
++</projectDescription>
+diff --git a/node_modules/@yz1311/react-native-intent-launcher/android/.settings/org.eclipse.buildship.core.prefs b/node_modules/@yz1311/react-native-intent-launcher/android/.settings/org.eclipse.buildship.core.prefs
+new file mode 100644
+index 0000000..68c9fab
+--- /dev/null
++++ b/node_modules/@yz1311/react-native-intent-launcher/android/.settings/org.eclipse.buildship.core.prefs
+@@ -0,0 +1,2 @@
++connection.project.dir=../../../../android
++eclipse.preferences.version=1
+diff --git a/node_modules/@yz1311/react-native-intent-launcher/android/build/.transforms/b82d222d87aaee1047ae805c8c9feddd/results.bin b/node_modules/@yz1311/react-native-intent-launcher/android/build/.transforms/b82d222d87aaee1047ae805c8c9feddd/results.bin
+new file mode 100644
+index 0000000..0d259dd
+--- /dev/null
++++ b/node_modules/@yz1311/react-native-intent-launcher/android/build/.transforms/b82d222d87aaee1047ae805c8c9feddd/results.bin
+@@ -0,0 +1 @@
++o/classes
+diff --git a/node_modules/@yz1311/react-native-intent-launcher/android/build/.transforms/b82d222d87aaee1047ae805c8c9feddd/transformed/classes/classes_dex/classes.dex b/node_modules/@yz1311/react-native-intent-launcher/android/build/.transforms/b82d222d87aaee1047ae805c8c9feddd/transformed/classes/classes_dex/classes.dex
+new file mode 100644
+index 0000000..28af3f9
+Binary files /dev/null and b/node_modules/@yz1311/react-native-intent-launcher/android/build/.transforms/b82d222d87aaee1047ae805c8c9feddd/transformed/classes/classes_dex/classes.dex differ
+diff --git a/node_modules/@yz1311/react-native-intent-launcher/android/build/generated/source/buildConfig/debug/com/poberwong/launcher/BuildConfig.java b/node_modules/@yz1311/react-native-intent-launcher/android/build/generated/source/buildConfig/debug/com/poberwong/launcher/BuildConfig.java
+new file mode 100644
+index 0000000..4dc5b57
+--- /dev/null
++++ b/node_modules/@yz1311/react-native-intent-launcher/android/build/generated/source/buildConfig/debug/com/poberwong/launcher/BuildConfig.java
+@@ -0,0 +1,10 @@
++/**
++ * Automatically generated file. DO NOT MODIFY
++ */
++package com.poberwong.launcher;
++
++public final class BuildConfig {
++  public static final boolean DEBUG = Boolean.parseBoolean("true");
++  public static final String LIBRARY_PACKAGE_NAME = "com.poberwong.launcher";
++  public static final String BUILD_TYPE = "debug";
++}
+diff --git a/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/aapt_friendly_merged_manifests/debug/aapt/AndroidManifest.xml b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/aapt_friendly_merged_manifests/debug/aapt/AndroidManifest.xml
+new file mode 100644
+index 0000000..80b0b81
+--- /dev/null
++++ b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/aapt_friendly_merged_manifests/debug/aapt/AndroidManifest.xml
+@@ -0,0 +1,19 @@
++<?xml version="1.0" encoding="utf-8"?>
++<manifest xmlns:android="http://schemas.android.com/apk/res/android"
++    package="com.poberwong.launcher" >
++
++    <uses-sdk android:minSdkVersion="23" />
++
++    <application>
++        <provider
++            android:name="com.poberwong.launcher.FileProviderClass"
++            android:authorities="dollar_openBracket_applicationId_closeBracket.intent_provider"
++            android:exported="false"
++            android:grantUriPermissions="true" >
++            <meta-data
++                android:name="android.support.FILE_PROVIDER_PATHS"
++                android:resource="@xml/intent_file_paths" />
++        </provider>
++    </application>
++
++</manifest>
+\ No newline at end of file
+diff --git a/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/aapt_friendly_merged_manifests/debug/aapt/output-metadata.json b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/aapt_friendly_merged_manifests/debug/aapt/output-metadata.json
+new file mode 100644
+index 0000000..e66f018
+--- /dev/null
++++ b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/aapt_friendly_merged_manifests/debug/aapt/output-metadata.json
+@@ -0,0 +1,18 @@
++{
++  "version": 3,
++  "artifactType": {
++    "type": "AAPT_FRIENDLY_MERGED_MANIFESTS",
++    "kind": "Directory"
++  },
++  "applicationId": "com.poberwong.launcher",
++  "variantName": "debug",
++  "elements": [
++    {
++      "type": "SINGLE",
++      "filters": [],
++      "attributes": [],
++      "outputFile": "AndroidManifest.xml"
++    }
++  ],
++  "elementType": "File"
++}
+\ No newline at end of file
+diff --git a/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/aar_metadata/debug/aar-metadata.properties b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/aar_metadata/debug/aar-metadata.properties
+new file mode 100644
+index 0000000..1211b1e
+--- /dev/null
++++ b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/aar_metadata/debug/aar-metadata.properties
+@@ -0,0 +1,6 @@
++aarFormatVersion=1.0
++aarMetadataVersion=1.0
++minCompileSdk=1
++minCompileSdkExtension=0
++minAndroidGradlePluginVersion=1.0.0
++coreLibraryDesugaringEnabled=false
+diff --git a/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/annotation_processor_list/debug/annotationProcessors.json b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/annotation_processor_list/debug/annotationProcessors.json
+new file mode 100644
+index 0000000..9e26dfe
+--- /dev/null
++++ b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/annotation_processor_list/debug/annotationProcessors.json
+@@ -0,0 +1 @@
++{}
+\ No newline at end of file
+diff --git a/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/compile_library_classes_jar/debug/classes.jar b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/compile_library_classes_jar/debug/classes.jar
+new file mode 100644
+index 0000000..f07eea5
+Binary files /dev/null and b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/compile_library_classes_jar/debug/classes.jar differ
+diff --git a/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/compile_r_class_jar/debug/R.jar b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/compile_r_class_jar/debug/R.jar
+new file mode 100644
+index 0000000..948a6d7
+Binary files /dev/null and b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/compile_r_class_jar/debug/R.jar differ
+diff --git a/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/compile_symbol_list/debug/R.txt b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/compile_symbol_list/debug/R.txt
+new file mode 100644
+index 0000000..90bb968
+--- /dev/null
++++ b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/compile_symbol_list/debug/R.txt
+@@ -0,0 +1 @@
++int xml intent_file_paths 0x0
+diff --git a/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/compiled_local_resources/debug/out/xml_intent_file_paths.xml.flat b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/compiled_local_resources/debug/out/xml_intent_file_paths.xml.flat
+new file mode 100644
+index 0000000..410bcfa
+Binary files /dev/null and b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/compiled_local_resources/debug/out/xml_intent_file_paths.xml.flat differ
+diff --git a/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/incremental/debug/packageDebugResources/compile-file-map.properties b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/incremental/debug/packageDebugResources/compile-file-map.properties
+new file mode 100644
+index 0000000..6b27b73
+--- /dev/null
++++ b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/incremental/debug/packageDebugResources/compile-file-map.properties
+@@ -0,0 +1,2 @@
++#Mon Jul 08 22:52:48 CDT 2024
++com.poberwong.launcher.yz1311_react-native-intent-launcher-main-6\:/xml/intent_file_paths.xml=C\:\\Users\\Public\\Documents\\Code\\wasteof.mobile\\node_modules\\@yz1311\\react-native-intent-launcher\\android\\build\\intermediates\\packaged_res\\debug\\xml\\intent_file_paths.xml
+diff --git a/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/incremental/debug/packageDebugResources/merger.xml b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/incremental/debug/packageDebugResources/merger.xml
+new file mode 100644
+index 0000000..c83fc91
+--- /dev/null
++++ b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/incremental/debug/packageDebugResources/merger.xml
+@@ -0,0 +1,2 @@
++<?xml version="1.0" encoding="utf-8"?>
++<merger version="3"><dataSet aapt-namespace="http://schemas.android.com/apk/res-auto" config="main$Generated" generated="true" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="C:\Users\Public\Documents\Code\wasteof.mobile\node_modules\@yz1311\react-native-intent-launcher\android\src\main\res"/></dataSet><dataSet aapt-namespace="http://schemas.android.com/apk/res-auto" config="main" generated-set="main$Generated" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="C:\Users\Public\Documents\Code\wasteof.mobile\node_modules\@yz1311\react-native-intent-launcher\android\src\main\res"><file name="intent_file_paths" path="C:\Users\Public\Documents\Code\wasteof.mobile\node_modules\@yz1311\react-native-intent-launcher\android\src\main\res\xml\intent_file_paths.xml" qualifiers="" type="xml"/></source></dataSet><dataSet aapt-namespace="http://schemas.android.com/apk/res-auto" config="debug$Generated" generated="true" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="C:\Users\Public\Documents\Code\wasteof.mobile\node_modules\@yz1311\react-native-intent-launcher\android\src\debug\res"/></dataSet><dataSet aapt-namespace="http://schemas.android.com/apk/res-auto" config="debug" generated-set="debug$Generated" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="C:\Users\Public\Documents\Code\wasteof.mobile\node_modules\@yz1311\react-native-intent-launcher\android\src\debug\res"/></dataSet><dataSet aapt-namespace="http://schemas.android.com/apk/res-auto" config="generated$Generated" generated="true" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="C:\Users\Public\Documents\Code\wasteof.mobile\node_modules\@yz1311\react-native-intent-launcher\android\build\generated\res\resValues\debug"/></dataSet><dataSet aapt-namespace="http://schemas.android.com/apk/res-auto" config="generated" generated-set="generated$Generated" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="C:\Users\Public\Documents\Code\wasteof.mobile\node_modules\@yz1311\react-native-intent-launcher\android\build\generated\res\resValues\debug"/></dataSet><mergedItems/></merger>
+\ No newline at end of file
+diff --git a/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/incremental/mergeDebugJniLibFolders/merger.xml b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/incremental/mergeDebugJniLibFolders/merger.xml
+new file mode 100644
+index 0000000..9f40fd1
+--- /dev/null
++++ b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/incremental/mergeDebugJniLibFolders/merger.xml
+@@ -0,0 +1,2 @@
++<?xml version="1.0" encoding="utf-8"?>
++<merger version="3"><dataSet config="main" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="C:\Users\Public\Documents\Code\wasteof.mobile\node_modules\@yz1311\react-native-intent-launcher\android\src\main\jniLibs"/></dataSet><dataSet config="debug" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="C:\Users\Public\Documents\Code\wasteof.mobile\node_modules\@yz1311\react-native-intent-launcher\android\src\debug\jniLibs"/></dataSet></merger>
+\ No newline at end of file
+diff --git a/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/incremental/mergeDebugShaders/merger.xml b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/incremental/mergeDebugShaders/merger.xml
+new file mode 100644
+index 0000000..b4a907a
+--- /dev/null
++++ b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/incremental/mergeDebugShaders/merger.xml
+@@ -0,0 +1,2 @@
++<?xml version="1.0" encoding="utf-8"?>
++<merger version="3"><dataSet config="main" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="C:\Users\Public\Documents\Code\wasteof.mobile\node_modules\@yz1311\react-native-intent-launcher\android\src\main\shaders"/></dataSet><dataSet config="debug" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="C:\Users\Public\Documents\Code\wasteof.mobile\node_modules\@yz1311\react-native-intent-launcher\android\src\debug\shaders"/></dataSet></merger>
+\ No newline at end of file
+diff --git a/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/incremental/packageDebugAssets/merger.xml b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/incremental/packageDebugAssets/merger.xml
+new file mode 100644
+index 0000000..fc4e2ef
+--- /dev/null
++++ b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/incremental/packageDebugAssets/merger.xml
+@@ -0,0 +1,2 @@
++<?xml version="1.0" encoding="utf-8"?>
++<merger version="3"><dataSet config="main" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="C:\Users\Public\Documents\Code\wasteof.mobile\node_modules\@yz1311\react-native-intent-launcher\android\src\main\assets"/></dataSet><dataSet config="debug" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="C:\Users\Public\Documents\Code\wasteof.mobile\node_modules\@yz1311\react-native-intent-launcher\android\src\debug\assets"/></dataSet><dataSet config="generated" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="C:\Users\Public\Documents\Code\wasteof.mobile\node_modules\@yz1311\react-native-intent-launcher\android\build\intermediates\shader_assets\debug\out"/></dataSet></merger>
+\ No newline at end of file
+diff --git a/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/javac/debug/classes/com/poberwong/launcher/ActivityUtilsModule.class b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/javac/debug/classes/com/poberwong/launcher/ActivityUtilsModule.class
+new file mode 100644
+index 0000000..f8fadb3
+Binary files /dev/null and b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/javac/debug/classes/com/poberwong/launcher/ActivityUtilsModule.class differ
+diff --git a/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/javac/debug/classes/com/poberwong/launcher/AppUtilsModule.class b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/javac/debug/classes/com/poberwong/launcher/AppUtilsModule.class
+new file mode 100644
+index 0000000..5316e1c
+Binary files /dev/null and b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/javac/debug/classes/com/poberwong/launcher/AppUtilsModule.class differ
+diff --git a/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/javac/debug/classes/com/poberwong/launcher/BrightnessUtilsModule.class b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/javac/debug/classes/com/poberwong/launcher/BrightnessUtilsModule.class
+new file mode 100644
+index 0000000..c959f1c
+Binary files /dev/null and b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/javac/debug/classes/com/poberwong/launcher/BrightnessUtilsModule.class differ
+diff --git a/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/javac/debug/classes/com/poberwong/launcher/BuildConfig.class b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/javac/debug/classes/com/poberwong/launcher/BuildConfig.class
+new file mode 100644
+index 0000000..11cb663
+Binary files /dev/null and b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/javac/debug/classes/com/poberwong/launcher/BuildConfig.class differ
+diff --git a/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/javac/debug/classes/com/poberwong/launcher/FileProviderClass.class b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/javac/debug/classes/com/poberwong/launcher/FileProviderClass.class
+new file mode 100644
+index 0000000..9b26c3c
+Binary files /dev/null and b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/javac/debug/classes/com/poberwong/launcher/FileProviderClass.class differ
+diff --git a/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/javac/debug/classes/com/poberwong/launcher/FlashlightUtilsModule.class b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/javac/debug/classes/com/poberwong/launcher/FlashlightUtilsModule.class
+new file mode 100644
+index 0000000..14f4b5a
+Binary files /dev/null and b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/javac/debug/classes/com/poberwong/launcher/FlashlightUtilsModule.class differ
+diff --git a/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/javac/debug/classes/com/poberwong/launcher/IntentLauncherModule.class b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/javac/debug/classes/com/poberwong/launcher/IntentLauncherModule.class
+new file mode 100644
+index 0000000..f79778e
+Binary files /dev/null and b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/javac/debug/classes/com/poberwong/launcher/IntentLauncherModule.class differ
+diff --git a/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/javac/debug/classes/com/poberwong/launcher/IntentLauncherPackage.class b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/javac/debug/classes/com/poberwong/launcher/IntentLauncherPackage.class
+new file mode 100644
+index 0000000..6a40c9a
+Binary files /dev/null and b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/javac/debug/classes/com/poberwong/launcher/IntentLauncherPackage.class differ
+diff --git a/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/javac/debug/classes/com/poberwong/launcher/KeyboardUtilsModule.class b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/javac/debug/classes/com/poberwong/launcher/KeyboardUtilsModule.class
+new file mode 100644
+index 0000000..644959d
+Binary files /dev/null and b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/javac/debug/classes/com/poberwong/launcher/KeyboardUtilsModule.class differ
+diff --git a/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/javac/debug/classes/com/poberwong/launcher/PathUtilsModule.class b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/javac/debug/classes/com/poberwong/launcher/PathUtilsModule.class
+new file mode 100644
+index 0000000..cc7bbe5
+Binary files /dev/null and b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/javac/debug/classes/com/poberwong/launcher/PathUtilsModule.class differ
+diff --git a/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/javac/debug/classes/com/poberwong/launcher/RomUtilsModule.class b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/javac/debug/classes/com/poberwong/launcher/RomUtilsModule.class
+new file mode 100644
+index 0000000..d986464
+Binary files /dev/null and b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/javac/debug/classes/com/poberwong/launcher/RomUtilsModule.class differ
+diff --git a/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/javac/debug/classes/com/poberwong/launcher/ScreenUtilsModule.class b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/javac/debug/classes/com/poberwong/launcher/ScreenUtilsModule.class
+new file mode 100644
+index 0000000..93ddf2a
+Binary files /dev/null and b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/javac/debug/classes/com/poberwong/launcher/ScreenUtilsModule.class differ
+diff --git a/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/javac/debug/classes/com/poberwong/launcher/ServiceUtilsModule.class b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/javac/debug/classes/com/poberwong/launcher/ServiceUtilsModule.class
+new file mode 100644
+index 0000000..eb8f66f
+Binary files /dev/null and b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/javac/debug/classes/com/poberwong/launcher/ServiceUtilsModule.class differ
+diff --git a/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/javac/debug/classes/com/poberwong/launcher/ShellUtilsModule.class b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/javac/debug/classes/com/poberwong/launcher/ShellUtilsModule.class
+new file mode 100644
+index 0000000..6158c39
+Binary files /dev/null and b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/javac/debug/classes/com/poberwong/launcher/ShellUtilsModule.class differ
+diff --git a/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/javac/debug/classes/com/poberwong/launcher/VibrateUtilsModule.class b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/javac/debug/classes/com/poberwong/launcher/VibrateUtilsModule.class
+new file mode 100644
+index 0000000..b0ec66e
+Binary files /dev/null and b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/javac/debug/classes/com/poberwong/launcher/VibrateUtilsModule.class differ
+diff --git a/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/javac/debug/classes/com/poberwong/launcher/VolumeUtilsModule.class b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/javac/debug/classes/com/poberwong/launcher/VolumeUtilsModule.class
+new file mode 100644
+index 0000000..5b14566
+Binary files /dev/null and b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/javac/debug/classes/com/poberwong/launcher/VolumeUtilsModule.class differ
+diff --git a/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/javac/debug/classes/com/poberwong/launcher/ZipUtilsModule.class b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/javac/debug/classes/com/poberwong/launcher/ZipUtilsModule.class
+new file mode 100644
+index 0000000..b585f18
+Binary files /dev/null and b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/javac/debug/classes/com/poberwong/launcher/ZipUtilsModule.class differ
+diff --git a/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/local_only_symbol_list/debug/R-def.txt b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/local_only_symbol_list/debug/R-def.txt
+new file mode 100644
+index 0000000..6cb0f16
+--- /dev/null
++++ b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/local_only_symbol_list/debug/R-def.txt
+@@ -0,0 +1,3 @@
++R_DEF: Internal format may change without notice
++local
++xml intent_file_paths
+diff --git a/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/manifest_merge_blame_file/debug/manifest-merger-blame-debug-report.txt b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/manifest_merge_blame_file/debug/manifest-merger-blame-debug-report.txt
+new file mode 100644
+index 0000000..04f0f40
+--- /dev/null
++++ b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/manifest_merge_blame_file/debug/manifest-merger-blame-debug-report.txt
+@@ -0,0 +1,28 @@
++1<?xml version="1.0" encoding="utf-8"?>
++2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
++3    package="com.poberwong.launcher" >
++4
++5    <uses-sdk android:minSdkVersion="23" />
++6
++7    <application>
++7-->C:\Users\Public\Documents\Code\wasteof.mobile\node_modules\@yz1311\react-native-intent-launcher\android\src\main\AndroidManifest.xml:3:5-13:19
++8        <provider
++8-->C:\Users\Public\Documents\Code\wasteof.mobile\node_modules\@yz1311\react-native-intent-launcher\android\src\main\AndroidManifest.xml:4:9-12:20
++9            android:name="com.poberwong.launcher.FileProviderClass"
++9-->C:\Users\Public\Documents\Code\wasteof.mobile\node_modules\@yz1311\react-native-intent-launcher\android\src\main\AndroidManifest.xml:5:13-46
++10            android:authorities="${applicationId}.intent_provider"
++10-->C:\Users\Public\Documents\Code\wasteof.mobile\node_modules\@yz1311\react-native-intent-launcher\android\src\main\AndroidManifest.xml:6:13-67
++11            android:exported="false"
++11-->C:\Users\Public\Documents\Code\wasteof.mobile\node_modules\@yz1311\react-native-intent-launcher\android\src\main\AndroidManifest.xml:7:13-37
++12            android:grantUriPermissions="true" >
++12-->C:\Users\Public\Documents\Code\wasteof.mobile\node_modules\@yz1311\react-native-intent-launcher\android\src\main\AndroidManifest.xml:8:13-47
++13            <meta-data
++13-->C:\Users\Public\Documents\Code\wasteof.mobile\node_modules\@yz1311\react-native-intent-launcher\android\src\main\AndroidManifest.xml:9:13-11:61
++14                android:name="android.support.FILE_PROVIDER_PATHS"
++14-->C:\Users\Public\Documents\Code\wasteof.mobile\node_modules\@yz1311\react-native-intent-launcher\android\src\main\AndroidManifest.xml:10:17-67
++15                android:resource="@xml/intent_file_paths" />
++15-->C:\Users\Public\Documents\Code\wasteof.mobile\node_modules\@yz1311\react-native-intent-launcher\android\src\main\AndroidManifest.xml:11:17-58
++16        </provider>
++17    </application>
++18
++19</manifest>
+diff --git a/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml
+new file mode 100644
+index 0000000..b7a0902
+--- /dev/null
++++ b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml
+@@ -0,0 +1,19 @@
++<?xml version="1.0" encoding="utf-8"?>
++<manifest xmlns:android="http://schemas.android.com/apk/res/android"
++    package="com.poberwong.launcher" >
++
++    <uses-sdk android:minSdkVersion="23" />
++
++    <application>
++        <provider
++            android:name="com.poberwong.launcher.FileProviderClass"
++            android:authorities="${applicationId}.intent_provider"
++            android:exported="false"
++            android:grantUriPermissions="true" >
++            <meta-data
++                android:name="android.support.FILE_PROVIDER_PATHS"
++                android:resource="@xml/intent_file_paths" />
++        </provider>
++    </application>
++
++</manifest>
+\ No newline at end of file
+diff --git a/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/navigation_json/debug/navigation.json b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/navigation_json/debug/navigation.json
+new file mode 100644
+index 0000000..0637a08
+--- /dev/null
++++ b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/navigation_json/debug/navigation.json
+@@ -0,0 +1 @@
++[]
+\ No newline at end of file
+diff --git a/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/packaged_res/debug/xml/intent_file_paths.xml b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/packaged_res/debug/xml/intent_file_paths.xml
+new file mode 100644
+index 0000000..62ea88d
+--- /dev/null
++++ b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/packaged_res/debug/xml/intent_file_paths.xml
+@@ -0,0 +1,8 @@
++<?xml version="1.0" encoding="utf-8"?>
++<paths xmlns:android="http://schemas.android.com/apk/res/android">
++    <cache-path name="intent_name" path="." />
++    <files-path name="intent_files" path="." />
++    <external-files-path name="intent_external_files" path="." />
++    <external-path name="intent_external" path="." />
++    <external-cache-path name="intent_external_cached" path="." />
++</paths>
+\ No newline at end of file
+diff --git a/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/runtime_library_classes_jar/debug/classes.jar b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/runtime_library_classes_jar/debug/classes.jar
+new file mode 100644
+index 0000000..fe2acd5
+Binary files /dev/null and b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/runtime_library_classes_jar/debug/classes.jar differ
+diff --git a/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/symbol_list_with_package_name/debug/package-aware-r.txt b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/symbol_list_with_package_name/debug/package-aware-r.txt
+new file mode 100644
+index 0000000..835a7e9
+--- /dev/null
++++ b/node_modules/@yz1311/react-native-intent-launcher/android/build/intermediates/symbol_list_with_package_name/debug/package-aware-r.txt
+@@ -0,0 +1,2 @@
++com.poberwong.launcher
++xml intent_file_paths
+diff --git a/node_modules/@yz1311/react-native-intent-launcher/android/build/outputs/logs/manifest-merger-debug-report.txt b/node_modules/@yz1311/react-native-intent-launcher/android/build/outputs/logs/manifest-merger-debug-report.txt
+new file mode 100644
+index 0000000..ea63ca0
+--- /dev/null
++++ b/node_modules/@yz1311/react-native-intent-launcher/android/build/outputs/logs/manifest-merger-debug-report.txt
+@@ -0,0 +1,35 @@
++-- Merging decision tree log ---
++manifest
++ADDED from C:\Users\Public\Documents\Code\wasteof.mobile\node_modules\@yz1311\react-native-intent-launcher\android\src\main\AndroidManifest.xml:1:1-14:12
++INJECTED from C:\Users\Public\Documents\Code\wasteof.mobile\node_modules\@yz1311\react-native-intent-launcher\android\src\main\AndroidManifest.xml:1:1-14:12
++	package
++		ADDED from C:\Users\Public\Documents\Code\wasteof.mobile\node_modules\@yz1311\react-native-intent-launcher\android\src\main\AndroidManifest.xml:2:5-37
++		INJECTED from C:\Users\Public\Documents\Code\wasteof.mobile\node_modules\@yz1311\react-native-intent-launcher\android\src\main\AndroidManifest.xml
++	xmlns:android
++		ADDED from C:\Users\Public\Documents\Code\wasteof.mobile\node_modules\@yz1311\react-native-intent-launcher\android\src\main\AndroidManifest.xml:1:11-69
++application
++ADDED from C:\Users\Public\Documents\Code\wasteof.mobile\node_modules\@yz1311\react-native-intent-launcher\android\src\main\AndroidManifest.xml:3:5-13:19
++provider#com.poberwong.launcher.FileProviderClass
++ADDED from C:\Users\Public\Documents\Code\wasteof.mobile\node_modules\@yz1311\react-native-intent-launcher\android\src\main\AndroidManifest.xml:4:9-12:20
++	android:grantUriPermissions
++		ADDED from C:\Users\Public\Documents\Code\wasteof.mobile\node_modules\@yz1311\react-native-intent-launcher\android\src\main\AndroidManifest.xml:8:13-47
++	android:authorities
++		ADDED from C:\Users\Public\Documents\Code\wasteof.mobile\node_modules\@yz1311\react-native-intent-launcher\android\src\main\AndroidManifest.xml:6:13-67
++	android:exported
++		ADDED from C:\Users\Public\Documents\Code\wasteof.mobile\node_modules\@yz1311\react-native-intent-launcher\android\src\main\AndroidManifest.xml:7:13-37
++	android:name
++		ADDED from C:\Users\Public\Documents\Code\wasteof.mobile\node_modules\@yz1311\react-native-intent-launcher\android\src\main\AndroidManifest.xml:5:13-46
++meta-data#android.support.FILE_PROVIDER_PATHS
++ADDED from C:\Users\Public\Documents\Code\wasteof.mobile\node_modules\@yz1311\react-native-intent-launcher\android\src\main\AndroidManifest.xml:9:13-11:61
++	android:resource
++		ADDED from C:\Users\Public\Documents\Code\wasteof.mobile\node_modules\@yz1311\react-native-intent-launcher\android\src\main\AndroidManifest.xml:11:17-58
++	android:name
++		ADDED from C:\Users\Public\Documents\Code\wasteof.mobile\node_modules\@yz1311\react-native-intent-launcher\android\src\main\AndroidManifest.xml:10:17-67
++uses-sdk
++INJECTED from C:\Users\Public\Documents\Code\wasteof.mobile\node_modules\@yz1311\react-native-intent-launcher\android\src\main\AndroidManifest.xml reason: use-sdk injection requested
++INJECTED from C:\Users\Public\Documents\Code\wasteof.mobile\node_modules\@yz1311\react-native-intent-launcher\android\src\main\AndroidManifest.xml
++INJECTED from C:\Users\Public\Documents\Code\wasteof.mobile\node_modules\@yz1311\react-native-intent-launcher\android\src\main\AndroidManifest.xml
++	android:targetSdkVersion
++		INJECTED from C:\Users\Public\Documents\Code\wasteof.mobile\node_modules\@yz1311\react-native-intent-launcher\android\src\main\AndroidManifest.xml
++	android:minSdkVersion
++		INJECTED from C:\Users\Public\Documents\Code\wasteof.mobile\node_modules\@yz1311\react-native-intent-launcher\android\src\main\AndroidManifest.xml
+diff --git a/node_modules/@yz1311/react-native-intent-launcher/android/build/tmp/compileDebugJavaWithJavac/previous-compilation-data.bin b/node_modules/@yz1311/react-native-intent-launcher/android/build/tmp/compileDebugJavaWithJavac/previous-compilation-data.bin
+new file mode 100644
+index 0000000..0b2c203
+Binary files /dev/null and b/node_modules/@yz1311/react-native-intent-launcher/android/build/tmp/compileDebugJavaWithJavac/previous-compilation-data.bin differ
+diff --git a/node_modules/@yz1311/react-native-intent-launcher/android/src/main/java/com/poberwong/launcher/VibrateUtilsModule.java b/node_modules/@yz1311/react-native-intent-launcher/android/src/main/java/com/poberwong/launcher/VibrateUtilsModule.java
+index 07de814..a0df182 100644
+--- a/node_modules/@yz1311/react-native-intent-launcher/android/src/main/java/com/poberwong/launcher/VibrateUtilsModule.java
++++ b/node_modules/@yz1311/react-native-intent-launcher/android/src/main/java/com/poberwong/launcher/VibrateUtilsModule.java
+@@ -26,10 +26,8 @@ import java.util.Iterator;
+ 
+ import androidx.annotation.Nullable;
+ 
+-
+ public class VibrateUtilsModule extends ReactContextBaseJavaModule {
+ 
+-
+     public VibrateUtilsModule(ReactApplicationContext reactContext) {
+         super(reactContext);
+     }
+@@ -46,9 +44,9 @@ public class VibrateUtilsModule extends ReactContextBaseJavaModule {
+     }
+ 
+     @ReactMethod
+-    public void vibrate(long milliseconds) {
++    public void vibrate(double milliseconds) {
+         try {
+-            VibrateUtils.vibrate(milliseconds);
++            VibrateUtils.vibrate((long) milliseconds);
+         } catch (Exception e) {
+ 
+         }
+@@ -57,7 +55,7 @@ public class VibrateUtilsModule extends ReactContextBaseJavaModule {
+     @ReactMethod
+     public void vibrateByPattern(ReadableArray pattern, int repeat) {
+         long[] patterns = new long[pattern.size()];
+-        for (int i=0;i<pattern.size();i++) {
++        for (int i = 0; i < pattern.size(); i++) {
+             patterns[i] = pattern.getInt(i);
+         }
+         try {

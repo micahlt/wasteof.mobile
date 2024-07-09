@@ -61,7 +61,13 @@ const App = () => {
     }
   }, [didGet]);
   const genTabIcon = (e, active, inactive) => {
-    return <Icon name={e.focused ? active : inactive || active} size={24} />;
+    return (
+      <Icon
+        name={e.focused ? active : inactive || active}
+        size={24}
+        color={theme.colors.onSurfaceVariant}
+      />
+    );
   };
   return (
     <GlobalContext.Provider
@@ -93,54 +99,54 @@ const App = () => {
               }}>
               <Stack.Screen name="parent">
                 {() => (
-            <Tab.Navigator
-              sceneAnimationType="shifting"
-              sceneAnimationEnabled={true}
-              sceneAnimationEasing={Easing.ease}
-              shifting={true}
-              initialRouteName="home"
-              renderTouchable={props => (
-                <TouchableWithoutFeedback {...props} />
-              )}>
-              <Tab.Screen
-                name="explore"
-                component={Explore}
-                options={{
-                  tabBarIcon: p => genTabIcon(p, 'earth'),
-                }}
-              />
-              <Tab.Screen
-                name="search"
-                component={Search}
-                options={{
-                  tabBarIcon: p => genTabIcon(p, 'magnify'),
-                }}
-              />
-              <Tab.Screen
-                name="home"
-                component={Feed}
-                options={{
-                  tabBarIcon: p =>
-                    genTabIcon(p, 'home-variant', 'home-variant-outline'),
-                }}
-              />
-              <Tab.Screen
-                name="notifications"
-                component={Notifications}
-                options={{
-                  tabBarIcon: p => genTabIcon(p, 'bell', 'bell-outline'),
-                  tabBarLabel: 'notifs',
-                  tabBarBadge: notificationCount > 0,
-                }}
-              />
-              <Tab.Screen
-                name="settings"
-                component={Settings}
-                options={{
-                  tabBarIcon: p => genTabIcon(p, 'cog', 'cog-outline'),
-                }}
-              />
-            </Tab.Navigator>
+                  <Tab.Navigator
+                    sceneAnimationType="shifting"
+                    sceneAnimationEnabled={true}
+                    sceneAnimationEasing={Easing.bezier(0.4, 0, 0.2, 1)}
+                    shifting={true}
+                    initialRouteName="home"
+                    renderTouchable={props => (
+                      <TouchableWithoutFeedback {...props} />
+                    )}>
+                    <Tab.Screen
+                      name="explore"
+                      component={Explore}
+                      options={{
+                        tabBarIcon: p => genTabIcon(p, 'earth'),
+                      }}
+                    />
+                    <Tab.Screen
+                      name="search"
+                      component={Search}
+                      options={{
+                        tabBarIcon: p => genTabIcon(p, 'magnify'),
+                      }}
+                    />
+                    <Tab.Screen
+                      name="home"
+                      component={Feed}
+                      options={{
+                        tabBarIcon: p =>
+                          genTabIcon(p, 'home-variant', 'home-variant-outline'),
+                      }}
+                    />
+                    <Tab.Screen
+                      name="notifications"
+                      component={Notifications}
+                      options={{
+                        tabBarIcon: p => genTabIcon(p, 'bell', 'bell-outline'),
+                        tabBarLabel: 'notifs',
+                        tabBarBadge: notificationCount > 0,
+                      }}
+                    />
+                    <Tab.Screen
+                      name="settings"
+                      component={Settings}
+                      options={{
+                        tabBarIcon: p => genTabIcon(p, 'cog', 'cog-outline'),
+                      }}
+                    />
+                  </Tab.Navigator>
                 )}
               </Stack.Screen>
               <Stack.Screen

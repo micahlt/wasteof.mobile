@@ -129,7 +129,6 @@ const UserPage = ({ route, navigation }) => {
         buttonText: colors.onSecondaryContainer,
       });
       if (token) {
-        refresh();
         fetch(`${apiURL}/users/${username}/followers/${myUsername}`)
           .then(res => {
             return res.json();
@@ -142,6 +141,7 @@ const UserPage = ({ route, navigation }) => {
             }
           });
       }
+      refresh();
     }, [token, route]),
   );
   const toggleFollow = () => {

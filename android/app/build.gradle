@@ -78,8 +78,8 @@ android {
         applicationId "com.micahlindley.wasteofmobile"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 34
-        versionName "2.6.5"
+        versionCode 35
+        versionName "2.6.7"
     }
 
     signingConfigs {
@@ -114,7 +114,6 @@ dependencies {
     // GIF support - WOM CUSTOM
     implementation 'com.facebook.fresco:animated-gif:2.5.0'
 
-    implementation("com.facebook.react:flipper-integration")
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")
     } else {
