@@ -23,13 +23,10 @@ const Changelog = ({ closeExternal, dismissable }) => {
         </Dialog.Title>
         <Dialog.ScrollArea style={{ padding: 10 }}>
           <Paragraph style={{ marginBottom: 5 }}>
-            This release includes features and bug fixes. Here's what's new:
+            This release includes bug fixes. Here's what's new:
           </Paragraph>
           <Paragraph style={{ marginLeft: 10 }}>
-            &bull; Hide big repost chains for performance reasons
-          </Paragraph>
-          <Paragraph style={{ marginLeft: 10 }}>
-            &bull; Bring search UI in line with Material 3 guidelines
+            &bull; Roll back issues caused by the previous update
           </Paragraph>
         </Dialog.ScrollArea>
         <Dialog.Actions>
