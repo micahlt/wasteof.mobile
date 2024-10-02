@@ -23,10 +23,13 @@ const Changelog = ({ closeExternal, dismissable }) => {
         </Dialog.Title>
         <Dialog.ScrollArea style={{ padding: 10 }}>
           <Paragraph style={{ marginBottom: 5 }}>
-            This release includes bug fixes. Here's what's new:
+            This release bumps some dependencies. Here's what's new:
           </Paragraph>
           <Paragraph style={{ marginLeft: 10 }}>
-            &bull; Roll back issues caused by the previous update
+            &bull; React Native core upgrade
+          </Paragraph>
+          <Paragraph style={{ marginLeft: 10 }}>
+            &bull; Paper UI upgrade
           </Paragraph>
         </Dialog.ScrollArea>
         <Dialog.Actions>
