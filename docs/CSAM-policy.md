@@ -12,7 +12,7 @@ We have a zero-tolerance policy for Child Sexual Abuse Material (CSAM) or any se
 If any CSAM is discovered in content rendered by the app, we will:
 
 - Immediately disable access to the content within the app (if possible).
-- Report the material to [Platform Name] for moderation or removal.
+- Report the material to wasteof.money for moderation or removal.
 - Report the material to relevant authorities, such as the National Center for Missing & Exploited Children (NCMEC), if required.
 
 ## Reporting Mechanism
