@@ -1,4 +1,7 @@
 {
   "name": "wasteofmobile",
-  "displayName": "wasteof for Android"
+  "displayName": "wasteof for Android",
+  "plugins": [
+    "expo-web-browser"
+  ]
 }

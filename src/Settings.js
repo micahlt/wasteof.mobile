@@ -18,7 +18,7 @@ import {
   Avatar,
   Tooltip,
 } from 'react-native-paper';
-import IntentLauncher from '@yz1311/react-native-intent-launcher';
+import { startActivityAsync, ActivityAction } from 'expo-intent-launcher';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Logo from '../static/logo.svg';
 import RNRestart from 'react-native-restart';
@@ -28,7 +28,6 @@ import Changelog from './components/Changelog';
 import { apiURL } from './apiURL';
 import links from '../utils/links';
 import initBackgroundFetch from '../utils/initBackgroundFetch';
-import BackgroundFetch from 'react-native-background-fetch';
 
 function Settings() {
   const { colors } = useTheme();
@@ -76,14 +75,14 @@ function Settings() {
   }, [showPinnedPosts]);
   React.useEffect(() => {
     AsyncStorage.setItem('localNotifsEnabled', String(pushNotifs)).then(() => {
-      if (pushNotifs) {
-        console.log('BackgroundFetch: STARTED');
-        initBackgroundFetch();
-        BackgroundFetch.start();
-      } else {
-        console.log('BackgroundFetch: STOPPED');
-        BackgroundFetch.stop();
-      }
+      // if (pushNotifs) {
+      //   console.log('BackgroundFetch: STARTED');
+      //   initBackgroundFetch();
+      //   BackgroundFetch.start();
+      // } else {
+      //   console.log('BackgroundFetch: STOPPED');
+      //   BackgroundFetch.stop();
+      // }
     });
   }, [pushNotifs]);
   const handleCheckbox = () => {
@@ -177,19 +176,20 @@ function Settings() {
       'Select wasteof.money as a link to handle',
       ToastAndroid.LONG,
     );
-    IntentLauncher.isIntentAvailable({
-      action: 'android.settings.APP_OPEN_BY_DEFAULT_SETTINGS',
-      data: 'package:com.micahlindley.wasteofmobile',
-    }).then(val => {
-      if (val) {
-        IntentLauncher.startActivity({
-          action: 'android.settings.APP_OPEN_BY_DEFAULT_SETTINGS',
-          data: 'package:com.micahlindley.wasteofmobile',
-        });
-      } else {
-        Linking.openSettings();
-      }
-    });
+    startActivityAsync(ActivityAction.MANAGE_DEFAULT_APPS_SETTINGS).catch(Linking.openSettings());
+    // IntentLauncher.isIntentAvailable({
+    //   action: 'android.settings.APP_OPEN_BY_DEFAULT_SETTINGS',
+    //   data: 'package:com.micahlindley.wasteofmobile',
+    // }).then(val => {
+    //   if (val) {
+    //     IntentLauncher.startActivity({
+    //       action: 'android.settings.APP_OPEN_BY_DEFAULT_SETTINGS',
+    //       data: 'package:com.micahlindley.wasteofmobile',
+    //     });
+    //   } else {
+    //     Linking.openSettings();
+    //   }
+    // });
   };
   const authButtons = () => {
     return (

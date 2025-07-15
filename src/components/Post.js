@@ -28,7 +28,7 @@ import ShowMoreReposts from './ShowMoreReposts';
 const MAX_REPOSTS = 5;
 
 const Post = React.memo(
-  ({ post, isRepost, repostCount, hideUser, isPinned, brush }) => {
+  ({ post, isRepost, repostCount = 1, hideUser, isPinned, brush, isInNotification }) => {
     const { colors } = useTheme();
     const { width } = useWindowDimensions();
     const [filteredHTML, setFilteredHTML] = React.useState(null);
@@ -38,9 +38,6 @@ const Post = React.memo(
     const [modalMode, setModalMode] = React.useState('');
     const showModal = () => setModalOpen(true);
     const hideModal = () => setModalOpen(false);
-    const [localRepostCount, setLocalRepostCount] = React.useState(
-      repostCount || 1,
-    );
     const { shouldFilter, username, token } = React.useContext(GlobalContext);
     const viewRef = React.useRef();
     React.useEffect(() => {
@@ -118,7 +115,7 @@ const Post = React.memo(
       return (
         <AutoImage
           source={tnode.attributes.src}
-          fitWidth={width - 65 * localRepostCount}
+          fitWidth={repostCount > 1 ? width - 48 * repostCount : width - (isInNotification ? 80 : 65)}
         />
       );
     };
@@ -128,7 +125,7 @@ const Post = React.memo(
           source={{
             html: linkify(filteredHTML),
           }}
-          contentWidth={width - 65 * localRepostCount}
+          contentWidth={width - 65 * repostCount}
           tagsStyles={{
             a: { color: colors.primary },
             p: {
@@ -217,11 +214,11 @@ const Post = React.memo(
               </View>
             )}
             {filteredHTML && <WebDisplay html={post.content} />}
-            {post.repost && localRepostCount < MAX_REPOSTS ? (
+            {post.repost && repostCount < MAX_REPOSTS ? (
               <Post
                 post={post.repost}
                 isRepost={true}
-                repostCount={localRepostCount + 1}
+                repostCount={repostCount + 1}
               />
             ) : (
               post.repost && <ShowMoreReposts />

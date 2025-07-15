@@ -31,6 +31,9 @@ const Changelog = ({ closeExternal, dismissable }) => {
           <Paragraph style={{ marginLeft: 10 }}>
             &bull; Paper UI upgrade
           </Paragraph>
+          <Paragraph style={{ marginLeft: 10 }}>
+            &bull; Edge-to-edge support for Android 14+
+          </Paragraph>
         </Dialog.ScrollArea>
         <Dialog.Actions>
           <Button onPress={close}>Close</Button>
