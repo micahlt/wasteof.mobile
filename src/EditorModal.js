@@ -16,7 +16,8 @@ import { GlobalContext } from '../App';
 import markdownItUnderline from '@accordproject/markdown-it-underline';
 import markdownItMark from 'markdown-it-mark';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { StatusBar } from 'react-native';
+import { KeyboardStickyView } from 'react-native-keyboard-controller';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const EditorModal = ({ closeModal, repostId }) => {
   const { colors } = useTheme();
@@ -26,6 +27,7 @@ const EditorModal = ({ closeModal, repostId }) => {
   const [isPosting, setIsPosting] = React.useState(false);
   const [showBanner, setShowBanner] = React.useState(null);
   const inputRef = React.useRef(null);
+  const insets = useSafeAreaInsets();
   React.useEffect(() => {
     AsyncStorage.getItem('editorBanner').then(value => {
       if (value == 'seen') {
@@ -142,8 +144,7 @@ const EditorModal = ({ closeModal, repostId }) => {
   };
   return (
     <>
-      <StatusBar backgroundColor={colors.elevation.level2} animated={true} />
-      <Appbar style={{ backgroundColor: colors.elevation.level2, zIndex: 1 }}>
+      <Appbar.Header style={{ backgroundColor: colors.elevation.level2, zIndex: 1 }}>
         <Appbar.BackAction onPress={() => closeModal(false)} />
         <Appbar.Content title={repostId ? 'New repost' : 'New post'} />
         <Appbar.Action
@@ -160,7 +161,7 @@ const EditorModal = ({ closeModal, repostId }) => {
           accessibilityLabel="Share post"
           disabled={isPosting}
         />
-      </Appbar>
+      </Appbar.Header>
       <View style={{ flex: 1, backgroundColor: colors.surfaceVariant }}>
         <Banner
           visible={showBanner === true}
@@ -195,7 +196,8 @@ const EditorModal = ({ closeModal, repostId }) => {
           value={postContent}
           selection={selection}
         />
-        <View
+        <KeyboardStickyView
+          offset={{ opened: insets.bottom }}
           style={{ ...s.toolbar, backgroundColor: colors.elevation.level1 }}>
           <IconButton
             icon="format-bold"
@@ -237,7 +239,7 @@ const EditorModal = ({ closeModal, repostId }) => {
             onPress={() => alert('This feature is coming soon!')}
             style={s.formatIcon}
           />
-        </View>
+        </KeyboardStickyView>
       </View>
     </>
   );

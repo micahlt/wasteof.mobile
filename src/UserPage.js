@@ -10,7 +10,6 @@ import {
   Divider,
 } from 'react-native-paper';
 import { useFocusEffect } from '@react-navigation/core';
-import { InAppBrowser } from 'react-native-inappbrowser-reborn';
 import Post from './components/Post';
 import s from '../styles/UserModal.module.css';
 import { GlobalContext } from '../App';
@@ -23,6 +22,7 @@ import ErrorCard from './components/ErrorCard';
 import linkify from '../utils/linkify';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import links from '../utils/links';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const UserPage = ({ route, navigation }) => {
   const { username } = route.params;
@@ -166,13 +166,7 @@ const UserPage = ({ route, navigation }) => {
     });
   };
   const openUser = async () => {
-    if (await InAppBrowser.isAvailable()) {
-      await InAppBrowser.open(`${wasteofURL}/@${username}`, {
-        toolbarColor: brush.headerColor,
-      });
-    } else {
-      Linking.open(`${wasteofURL}/@${username}`);
-    }
+    links.open(`${wasteofURL}/@${username}`, brush.headerColor);
   };
   const listLoading = () => {
     return (
@@ -208,7 +202,7 @@ const UserPage = ({ route, navigation }) => {
             marginBottom: 0,
           },
         }}
-        baseStyle={s.bio}
+        baseStyle={{ ...s.bio, color: colors.onSurfaceVariant }}
       />
     );
   });
@@ -300,9 +294,10 @@ const UserPage = ({ route, navigation }) => {
     );
   };
   const renderItem = React.useCallback(({ item }) => <Post post={item} />, []);
+  const insets = useSafeAreaInsets();
   return (
     <>
-      <Appbar style={{ backgroundColor: brush.headerColor, zIndex: 1 }}>
+      <Appbar.Header style={{ backgroundColor: brush.headerColor, zIndex: 1 }}>
         <Appbar.BackAction
           onPress={() => goBackIfCan(navigation)}
           color={headerTextColor || colors.secondary}
@@ -313,7 +308,7 @@ const UserPage = ({ route, navigation }) => {
         />
         <Appbar.Action
           icon="flag-remove-outline"
-          onPress={() => {}}
+          onPress={() => { }}
           iconColor={headerTextColor || colors.secondary}
         />
         <Appbar.Action
@@ -326,7 +321,7 @@ const UserPage = ({ route, navigation }) => {
           onPress={openUser}
           iconColor={headerTextColor || colors.secondary}
         />
-      </Appbar>
+      </Appbar.Header>
       {error && (
         <ErrorCard errorCode={error.code} errorMessage={error.message} />
       )}

@@ -7,6 +7,7 @@ import {
   Portal,
   Dialog,
   RadioButton,
+  PaperProvider,
 } from 'react-native-paper';
 import Post from './components/Post';
 import UserChip from './components/UserChip';
@@ -117,58 +118,54 @@ function Explore() {
         backgroundColor: colors.background,
       }}>
       <Portal>
-        <Dialog
-          visible={showTimePicker}
-          onDismiss={() => setShowTimePicker(false)}
-          theme={{
-            colors: {
-              elevation: { ...colors.elevation },
-              background: 'red',
-              backdrop: 'red !important',
-            },
-          }}>
-          <Dialog.Title>Choose time period</Dialog.Title>
-          <Dialog.Content>
-            <RadioButton.Group onValueChange={handleChangeTime}>
-              <View style={{ ...g.inline, marginBottom: 10 }}>
-                <RadioButton
-                  value="day"
-                  uncheckedColor={colors.onSecondaryContainer}
-                  color={colors.primary}
-                  status={timePeriod.slug == 'day' ? 'checked' : 'unchecked'}
-                />
-                <Text variant="bodyLarge">Today</Text>
-              </View>
-              <View style={{ ...g.inline, marginBottom: 10 }}>
-                <RadioButton
-                  value="week"
-                  uncheckedColor={colors.onSecondaryContainer}
-                  color={colors.primary}
-                  status={timePeriod.slug == 'week' ? 'checked' : 'unchecked'}
-                />
-                <Text variant="bodyLarge">This week</Text>
-              </View>
-              <View style={{ ...g.inline, marginBottom: 10 }}>
-                <RadioButton
-                  value="month"
-                  uncheckedColor={colors.onSecondaryContainer}
-                  color={colors.primary}
-                  status={timePeriod.slug == 'month' ? 'checked' : 'unchecked'}
-                />
-                <Text variant="bodyLarge">This month</Text>
-              </View>
-              <View style={{ ...g.inline, marginBottom: 10 }}>
-                <RadioButton
-                  value="all"
-                  uncheckedColor={colors.onSecondaryContainer}
-                  color={colors.primary}
-                  status={timePeriod.slug == 'all' ? 'checked' : 'unchecked'}
-                />
-                <Text variant="bodyLarge">All time</Text>
-              </View>
-            </RadioButton.Group>
-          </Dialog.Content>
-        </Dialog>
+        <PaperProvider theme={{ colors: { backdrop: 'green', ...colors } }}>
+          <Dialog
+            visible={showTimePicker}
+            onDismiss={() => setShowTimePicker(false)}
+          >
+            <Dialog.Title>Choose time period</Dialog.Title>
+            <Dialog.Content>
+              <RadioButton.Group onValueChange={handleChangeTime}>
+                <View style={{ ...g.inline, marginBottom: 10 }}>
+                  <RadioButton
+                    value="day"
+                    uncheckedColor={colors.onSecondaryContainer}
+                    color={colors.primary}
+                    status={timePeriod.slug == 'day' ? 'checked' : 'unchecked'}
+                  />
+                  <Text variant="bodyLarge">Today</Text>
+                </View>
+                <View style={{ ...g.inline, marginBottom: 10 }}>
+                  <RadioButton
+                    value="week"
+                    uncheckedColor={colors.onSecondaryContainer}
+                    color={colors.primary}
+                    status={timePeriod.slug == 'week' ? 'checked' : 'unchecked'}
+                  />
+                  <Text variant="bodyLarge">This week</Text>
+                </View>
+                <View style={{ ...g.inline, marginBottom: 10 }}>
+                  <RadioButton
+                    value="month"
+                    uncheckedColor={colors.onSecondaryContainer}
+                    color={colors.primary}
+                    status={timePeriod.slug == 'month' ? 'checked' : 'unchecked'}
+                  />
+                  <Text variant="bodyLarge">This month</Text>
+                </View>
+                <View style={{ ...g.inline, marginBottom: 10 }}>
+                  <RadioButton
+                    value="all"
+                    uncheckedColor={colors.onSecondaryContainer}
+                    color={colors.primary}
+                    status={timePeriod.slug == 'all' ? 'checked' : 'unchecked'}
+                  />
+                  <Text variant="bodyLarge">All time</Text>
+                </View>
+              </RadioButton.Group>
+            </Dialog.Content>
+          </Dialog>
+        </PaperProvider>
       </Portal>
       <AnimatedFAB
         icon="clock-edit-outline"

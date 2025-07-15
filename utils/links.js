@@ -1,4 +1,4 @@
-import { InAppBrowser } from 'react-native-inappbrowser-reborn';
+import * as WebBrowser from 'expo-web-browser';
 import { Linking } from 'react-native';
 import rgbHex from 'rgb-hex';
 /**
@@ -8,17 +8,15 @@ import rgbHex from 'rgb-hex';
  * @param {string} [color] - a color for the InAppBrowser toolbar
  */
 const open = async (url, color) => {
-  if (await InAppBrowser.isAvailable()) {
-    await InAppBrowser.open(url, {
-      toolbarColor: color
-        ? color.includes('rgb')
-          ? `#${rgbHex(color)}`
-          : color
-        : null,
-    });
-  } else {
-    Linking.open(url);
-  }
+  WebBrowser.openBrowserAsync(url, {
+    toolbarColor: color
+      ? color.includes('rgb')
+        ? `#${rgbHex(color)}`
+        : color
+      : null,
+  }).catch(() => {
+    Linking.openURL(url);
+  });
 };
 
 export default { open: open };

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, FlatList, StatusBar } from 'react-native';
+import { View, FlatList } from 'react-native';
 import {
   Appbar,
   ActivityIndicator,
@@ -7,7 +7,6 @@ import {
   Text,
   useTheme,
   TextInput,
-  IconButton,
   FAB,
 } from 'react-native-paper';
 import { GlobalContext } from '../App';
@@ -18,6 +17,8 @@ import timeSort from '../utils/timeSort';
 import Comment from './components/Comment';
 import g from '../styles/Global.module.css';
 import { useNavigation } from '@react-navigation/core';
+import { KeyboardStickyView } from 'react-native-keyboard-controller';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const CommentModal = ({ postId, closeModal }) => {
   const navigation = useNavigation();
@@ -30,6 +31,7 @@ const CommentModal = ({ postId, closeModal }) => {
   const [commentContent, setCommentContent] = React.useState('');
   const [replyMetadata, setReplyMetadata] = React.useState(null);
   const [page, setPage] = React.useState(1);
+  const insets = useSafeAreaInsets();
   const refresh = () => {
     setIsRefreshing(true);
     setPage(1);
@@ -148,11 +150,6 @@ const CommentModal = ({ postId, closeModal }) => {
   );
   return (
     <>
-      <StatusBar
-        backgroundColor={colors.elevation.level2}
-        animated={true}
-        barStyle="light-content"
-      />
       <Appbar.Header
         style={{ backgroundColor: colors.elevation.level2, zIndex: 1 }}>
         <Appbar.BackAction onPress={closeModal} />
@@ -166,13 +163,6 @@ const CommentModal = ({ postId, closeModal }) => {
       </Appbar.Header>
       {startComment && (
         <View style={{ flex: 1 }}>
-          <FAB
-            onPress={
-              isCommenting ? () => sendComment() : () => startComment(null)
-            }
-            icon={isCommenting ? 'send' : 'pencil-plus'}
-            style={g.fab}
-            variant={isCommenting ? 'primary' : 'secondary'}></FAB>
           <FlatList
             style={{
               paddingTop: 10,
@@ -191,18 +181,27 @@ const CommentModal = ({ postId, closeModal }) => {
             windowSize={10}
           />
           {isCommenting ? (
-            <TextInput
-              multiline={true}
-              autoFocus={true}
-              onChangeText={setCommentContent}
-              contentStyle={{ paddingRight: 100 }}
-              label={
-                replyMetadata
-                  ? `Reply to ${replyMetadata.username}`
-                  : `Write your comment`
-              }
+            <KeyboardStickyView offset={{ opened: insets.bottom }}>
+              <TextInput
+                multiline={true}
+                autoFocus={true}
+                onChangeText={setCommentContent}
+                contentStyle={{ paddingRight: 100 }}
+                label={
+                  replyMetadata
+                    ? `Reply to ${replyMetadata.username}`
+                    : `Write your comment`
+                }
               // right={<TextInput.Icon icon="send" onPress={sendComment} />}
-            />
+              />
+              <FAB
+                onPress={
+                  isCommenting ? () => sendComment() : () => startComment(null)
+                }
+                icon={isCommenting ? 'send' : 'pencil-plus'}
+                style={g.fab}
+                variant={isCommenting ? 'primary' : 'secondary'}></FAB>
+            </KeyboardStickyView>
           ) : (
             <></>
           )}
