@@ -180,31 +180,31 @@ const CommentModal = ({ postId, closeModal }) => {
             estimatedItemSize={125}
             windowSize={10}
           />
-          {isCommenting ? (
-            <KeyboardStickyView offset={{ opened: insets.bottom }}>
-              <TextInput
-                multiline={true}
-                autoFocus={true}
-                onChangeText={setCommentContent}
-                contentStyle={{ paddingRight: 100 }}
-                label={
-                  replyMetadata
-                    ? `Reply to ${replyMetadata.username}`
-                    : `Write your comment`
-                }
-              // right={<TextInput.Icon icon="send" onPress={sendComment} />}
-              />
-              <FAB
-                onPress={
-                  isCommenting ? () => sendComment() : () => startComment(null)
-                }
-                icon={isCommenting ? 'send' : 'pencil-plus'}
-                style={g.fab}
-                variant={isCommenting ? 'primary' : 'secondary'}></FAB>
-            </KeyboardStickyView>
-          ) : (
-            <></>
-          )}
+
+          <KeyboardStickyView offset={{ opened: insets.bottom }}>
+            {isCommenting ? (<TextInput
+              multiline={true}
+              autoFocus={true}
+              onChangeText={setCommentContent}
+              contentStyle={{ paddingRight: 100 }}
+              label={
+                replyMetadata
+                  ? `Reply to ${replyMetadata.username}`
+                  : `Write your comment`
+              }
+            // right={<TextInput.Icon icon="send" onPress={sendComment} />}
+            />) : (
+              <></>
+            )}
+            <FAB
+              onPress={
+                isCommenting ? () => sendComment() : () => startComment(null)
+              }
+              icon={isCommenting ? 'send' : 'pencil-plus'}
+              style={g.fab}
+              variant={isCommenting ? 'primary' : 'secondary'}></FAB>
+          </KeyboardStickyView>
+
         </View>
       )}
     </>

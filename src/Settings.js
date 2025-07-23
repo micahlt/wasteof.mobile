@@ -435,7 +435,7 @@ function Settings() {
               Profanity filter
             </Text>
           </View>
-          <View style={g.inline}>
+          {false && <View style={g.inline}>
             <Switch
               value={pushNotifs}
               onValueChange={val => setPushNotifs(val)}
@@ -443,7 +443,7 @@ function Settings() {
             <Text style={{ marginLeft: 10 }} variant="labelLarge">
               Push notifications
             </Text>
-          </View>
+          </View>}
           <View style={{ ...g.inline, marginTop: 10 }}>
             <Button mode="contained-tonal" onPress={openLinkHandlingSettings}>
               Allow handling wasteof links
